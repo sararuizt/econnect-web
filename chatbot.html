@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <link rel="manifest" href="manifest.json">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Econnect - Eko Chatbot</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- ESTILOS BASE (Premium Nature) --- */
+        body {
+            margin: 0; padding: 0; 
+            font-family: 'Poppins', sans-serif; 
+            background: linear-gradient(rgba(10, 30, 15, 0.85), rgba(10, 30, 15, 0.95)), 
+                        url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=2074&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: white; 
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 500px; 
+            height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* --- TARJETA DE CHAT (GLASS) --- */
+        .chat-card {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border-radius: 30px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+        }
+
+        /* CABECERA DEL CHAT */
+        .chat-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255,255,255,0.05);
+        }
+
+        .header-info h1 { font-size: 20px; margin: 0; font-weight: 700; letter-spacing: 0.5px; }
+        .header-info p { font-size: 12px; color: #4ade80; margin: 2px 0 0 0; }
+        
+        .close-btn { font-size: 22px; color: rgba(255,255,255,0.6); cursor: pointer; transition: color 0.2s; }
+        .close-btn:hover { color: white; }
+
+        /* CUERPO DEL CHAT */
+        .chat-body {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .chat-body::-webkit-scrollbar { width: 5px; }
+        .chat-body::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
+
+        /* AVATAR EKO */
+        .eko-avatar-container {
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .eko-img {
+            width: 80px; height: auto;
+            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3));
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+
+        /* MENSAJE DE BIENVENIDA */
+        .greeting {
+            font-size: 18px;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 25px;
+            color: white;
+        }
+
+        /* BOTONES DE PREGUNTAS (Glass Buttons) */
+        .faq-list {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .faq-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255,255,255,0.9);
+            padding: 15px;
+            border-radius: 20px;
+            text-align: left;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .faq-btn:hover {
+            background: rgba(74, 222, 128, 0.2); /* Verde suave */
+            border-color: #4ade80;
+            transform: translateX(5px);
+        }
+        
+        .faq-btn i { color: #4ade80; }
+
+        /* INPUT */
+        .chat-footer {
+            padding: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            background: rgba(0,0,0,0.2);
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .chat-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            padding: 15px 50px 15px 20px;
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            box-sizing: border-box;
+            outline: none;
+        }
+        .chat-input::placeholder { color: rgba(255,255,255,0.4); }
+        .chat-input:focus { background: rgba(255,255,255,0.15); border-color: #4ade80; }
+
+        .send-btn {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #4ade80;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    
+    <div class="chat-card">
+        
+        <div class="chat-header">
+            <div class="header-info">
+                <h1>Eko Bot</h1>
+                <p>En línea • IA Ecológica</p>
+            </div>
+            <i class="fa-solid fa-xmark close-btn" onclick="location.href='mapa.html'"></i>
+        </div>
+
+        <div class="chat-body">
+            
+            <div class="eko-avatar-container">
+                <img src="eko.png" alt="Eko" class="eko-img">
+            </div>
+
+            <div class="greeting" id="greeting-text">¡Hola! Soy Eko. ¿En qué puedo ayudarte hoy?</div>
+
+            <div class="faq-list">
+                <button class="faq-btn" onclick="responder('amarillo')">
+                    <i class="fa-solid fa-recycle"></i> ¿Qué va al contenedor amarillo?
+                </button>
+                <button class="faq-btn" onclick="responder('plastico')">
+                    <i class="fa-solid fa-bottle-water"></i> Reducir consumo de plástico
+                </button>
+                <button class="faq-btn" onclick="responder('huerto')">
+                    <i class="fa-solid fa-seedling"></i> Empezar un huerto urbano
+                </button>
+                <button class="faq-btn" onclick="responder('contaminar')">
+                    <i class="fa-solid fa-smog"></i> Consejos para contaminar menos
+                </button>
+                <button class="faq-btn" onclick="responder('agua')">
+                    <i class="fa-solid fa-faucet-drip"></i> Trucos para ahorrar agua
+                </button>
+            </div>
+
+        </div>
+
+        <div class="chat-footer">
+            <div class="input-wrapper">
+                <input type="text" class="chat-input" placeholder="Escribe tu duda aquí...">
+                <i class="fa-solid fa-paper-plane send-btn"></i>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyA5lPDFaH8W-miDJHB3sDKdD5fiJt8d9-8",
+        authDomain: "ecconect-ae607.firebaseapp.com",
+        projectId: "ecconect-ae607",
+        storageBucket: "ecconect-ae607.firebasestorage.app",
+        messagingSenderId: "241708782882",
+        appId: "1:241708782882:web:514d895119f9f7c3fa817b",
+        measurementId: "G-KJ3FLCHZCG"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            try {
+                const docRef = doc(db, "usuarios", user.uid);
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                    const nombre = docSnap.data().nombre;
+                    document.getElementById("greeting-text").textContent = `¡Hola ${nombre}! Soy Eko. ¿En qué te ayudo?`;
+                }
+            } catch(e) {}
+        }
+    });
+
+    window.responder = function(tema) {
+        let respuesta = "";
+        if (tema === 'amarillo') respuesta = "🚫 Al amarillo NO van juguetes ni cubos. Solo envases de plástico, latas y briks.";
+        if (tema === 'plastico') respuesta = "🛍️ Usa bolsas de tela y evita productos de un solo uso como pajitas.";
+        if (tema === 'huerto') respuesta = "🌱 Empieza con aromáticas en tu ventana. Necesitas luz y agua regular.";
+        if (tema === 'contaminar') respuesta = "🚲 Usa transporte público o bici y apaga luces que no uses.";
+        if (tema === 'agua') respuesta = "💧 Cierra el grifo al lavarte los dientes.";
+
+        alert("🤖 Eko dice:\n\n" + respuesta);
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <link rel="manifest" href="manifest.json">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Econnect - Amigos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- ESTILOS GENERALES --- */
+        body {
+            margin: 0; padding: 0; 
+            font-family: 'Poppins', sans-serif; 
+            /* Mismo fondo de bosque oscuro para coherencia */
+            background: linear-gradient(rgba(10, 30, 15, 0.85), rgba(10, 30, 15, 0.95)), 
+                        url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=2074&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: white; 
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 500px; 
+            padding: 20px;
+            padding-bottom: 100px; /* Espacio para el menú flotante */
+            box-sizing: border-box;
+        }
+
+        /* --- CABECERA --- */
+        h1 {
+            text-align: left;
+            font-size: 28px;
+            font-weight: 700;
+            margin: 10px 0 25px 0;
+            color: white;
+            letter-spacing: 0.5px;
+        }
+
+        /* --- SECCIONES (SOLICITUDES) --- */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            margin-top: 20px;
+            padding: 0 5px;
+        }
+
+        .section-title {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 600;
+        }
+
+        /* Cápsula de Solicitudes (Destacada) */
+        .request-capsule {
+            background: rgba(74, 222, 128, 0.2); /* Verde neón transparente */
+            border: 1px solid rgba(74, 222, 128, 0.3);
+            border-radius: 20px;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 30px;
+            backdrop-filter: blur(5px);
+        }
+        .request-capsule:hover { background: rgba(74, 222, 128, 0.3); }
+
+        .request-text { font-weight: 600; color: #4ade80; font-size: 15px; }
+        
+        .notification-badge {
+            background-color: #ff4081; /* Rosa vibrante */
+            color: white;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 12px;
+            box-shadow: 0 0 10px rgba(255, 64, 129, 0.4);
+        }
+
+        /* --- LISTA DE AMIGOS (TARJETAS DE CRISTAL) --- */
+        .friends-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px; /* Espacio entre amigos */
+        }
+
+        .friend-item {
+            display: flex;
+            align-items: center;
+            /* Efecto Cristal */
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(5px);
+            border-radius: 20px;
+            padding: 12px 15px;
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        .friend-item:hover {
+            transform: scale(1.02);
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        /* Avatar y Racha */
+        .avatar-container {
+            position: relative;
+            margin-right: 15px;
+        }
+
+        .friend-avatar {
+            width: 55px; height: 55px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .streak-badge {
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: white; /* Fondo blanco para contraste máximo del fuego */
+            border-radius: 12px;
+            padding: 2px 8px;
+            font-size: 10px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            min-width: max-content;
+        }
+        .fire-icon { color: #ff6d00; font-size: 11px; } /* Naranja fuego intenso */
+        .streak-number { color: #333; }
+
+        /* Información del amigo */
+        .friend-info {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .friend-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 2px;
+        }
+
+        .friend-username {
+            font-size: 13px;
+            font-weight: 400;
+            color: #4ade80; /* Verde neón para los @usuarios */
+        }
+
+        .more-options {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.6);
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            transition: background 0.2s;
+        }
+        .more-options:hover { background: rgba(255,255,255,0.1); color: white; }
+
+        /* --- MENÚ FLOTANTE (Igual que Home) --- */
+        .bottom-nav {
+            position: fixed;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%; max-width: 400px;
+            background: rgba(20, 20, 20, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+            z-index: 1000;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.5);
+            text-decoration: none;
+            cursor: pointer;
+            font-size: 10px;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .nav-item:hover i { transform: translateY(-3px); color: white; }
+        .nav-item i { font-size: 20px; margin-bottom: 4px; transition: transform 0.3s; }
+
+        .nav-item.active { color: #4ade80; font-weight: 600; }
+        .nav-item.active i { transform: translateY(-2px); }
+        .nav-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            width: 5px; height: 5px;
+            background-color: #4ade80;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #4ade80;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    
+    <h1>Social</h1>
+
+    <div class="request-capsule">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <i class="fa-solid fa-user-plus" style="color: #4ade80;"></i>
+            <span class="request-text">Solicitudes de Amistad</span>
+        </div>
+        <div class="notification-badge">3</div>
+    </div>
+
+    <div class="section-header">
+        <span class="section-title">Mis amigos (47)</span>
+        <i class="fa-solid fa-arrow-down-a-z" style="color:rgba(255,255,255,0.5); cursor:pointer;"></i>
+    </div>
+
+    <div class="friends-list">
+
+        <div class="friend-item">
+            <div class="avatar-container">
+                <img src="https://picsum.photos/seed/sunflower/150" class="friend-avatar">
+                <div class="streak-badge">
+                    <i class="fa-solid fa-fire fire-icon"></i> 
+                    <span class="streak-number">168</span>
+                </div>
+            </div>
+            <div class="friend-info">
+                <span class="friend-name">Pedro García</span>
+                <span class="friend-username">@Expertos_reciclaje</span>
+            </div>
+            <i class="fa-solid fa-ellipsis-vertical more-options"></i>
+        </div>
+
+        <div class="friend-item">
+            <div class="avatar-container">
+                <img src="https://picsum.photos/seed/kitten/150" class="friend-avatar">
+                <div class="streak-badge">
+                    <i class="fa-solid fa-fire fire-icon"></i> 
+                    <span class="streak-number">42</span>
+                </div>
+            </div>
+            <div class="friend-info">
+                <span class="friend-name">Protectora Gatuna</span>
+                <span class="friend-username">@FabulasdeunGato</span>
+            </div>
+            <i class="fa-solid fa-ellipsis-vertical more-options"></i>
+        </div>
+
+        <div class="friend-item">
+            <div class="avatar-container">
+                <img src="https://picsum.photos/seed/salad/150" class="friend-avatar">
+                <div class="streak-badge">
+                    <i class="fa-solid fa-fire fire-icon"></i> 
+                    <span class="streak-number">63</span>
+                </div>
+            </div>
+            <div class="friend-info">
+                <span class="friend-name">María Dolores</span>
+                <span class="friend-username">@Recetas_Abuela</span>
+            </div>
+            <i class="fa-solid fa-ellipsis-vertical more-options"></i>
+        </div>
+
+        <div class="friend-item">
+            <div class="avatar-container">
+                <img src="https://picsum.photos/seed/hamster/150" class="friend-avatar">
+                <div class="streak-badge">
+                    <i class="fa-solid fa-fire fire-icon"></i> 
+                    <span class="streak-number">142</span>
+                </div>
+            </div>
+            <div class="friend-info">
+                <span class="friend-name">Tara León</span>
+                <span class="friend-username">@Traveling_Tara</span>
+            </div>
+            <i class="fa-solid fa-ellipsis-vertical more-options"></i>
+        </div>
+
+        <div class="friend-item">
+            <div class="avatar-container">
+                <img src="https://i.pravatar.cc/150?u=guille_unique_1" class="friend-avatar">
+                <div class="streak-badge">
+                    <i class="fa-solid fa-fire fire-icon"></i> 
+                    <span class="streak-number">72</span>
+                </div>
+            </div>
+            <div class="friend-info">
+                <span class="friend-name">Guille Arenas</span>
+                <span class="friend-username">@GuilleArenas17</span>
+            </div>
+            <i class="fa-solid fa-ellipsis-vertical more-options"></i>
+        </div>
+
+        <div class="friend-item">
+            <div class="avatar-container">
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" class="friend-avatar" style="background:white;">
+                <div class="streak-badge">
+                    <i class="fa-solid fa-fire fire-icon"></i> 
+                    <span class="streak-number">32</span>
+                </div>
+            </div>
+            <div class="friend-info">
+                <span class="friend-name">Max Serrano</span>
+                <span class="friend-username">@Eldiariode_Max</span>
+            </div>
+            <i class="fa-solid fa-ellipsis-vertical more-options"></i>
+        </div>
+
+        <div class="friend-item">
+            <div class="avatar-container">
+                <img src="https://i.pravatar.cc/150?u=marta_nortes" class="friend-avatar">
+                <div class="streak-badge">
+                    <i class="fa-solid fa-fire fire-icon"></i> 
+                    <span class="streak-number">187</span>
+                </div>
+            </div>
+            <div class="friend-info">
+                <span class="friend-name">Marta Nortes</span>
+                <span class="friend-username">@Marta.np2000</span>
+            </div>
+            <i class="fa-solid fa-ellipsis-vertical more-options"></i>
+        </div>
+
+         <div class="friend-item">
+            <div class="avatar-container">
+                <img src="https://i.pravatar.cc/150?u=isaac_delgado" class="friend-avatar">
+                <div class="streak-badge">
+                    <i class="fa-solid fa-fire fire-icon"></i> 
+                    <span class="streak-number">2</span>
+                </div>
+            </div>
+            <div class="friend-info">
+                <span class="friend-name">Isaac Delgado</span>
+                <span class="friend-username">@de1gad0</span>
+            </div>
+            <i class="fa-solid fa-ellipsis-vertical more-options"></i>
+        </div>
+
+    </div>
+
+    <nav class="bottom-nav">
+        <div class="nav-item" onclick="location.href='home.html'">
+            <i class="fa-solid fa-house"></i>
+            <span>Inicio</span>
+        </div>
+        <div class="nav-item" onclick="location.href='mapa.html'">
+            <i class="fa-solid fa-map-location-dot"></i>
+            <span>Mapa</span>
+        </div>
+        <div class="nav-item active" onclick="location.href='amigos.html'">
+            <i class="fa-solid fa-user-group"></i>
+            <span>Amigos</span>
+        </div>
+        <div class="nav-item" onclick="location.href='racha.html'">
+            <i class="fa-solid fa-fire"></i>
+            <span>Racha</span>
+        </div>
+        <div class="nav-item" onclick="location.href='perfil.html'">
+            <i class="fa-solid fa-user"></i>
+            <span>Perfil</span>
+        </div>
+    </nav>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyA5lPDFaH8W-miDJHB3sDKdD5fiJt8d9-8",
+        authDomain: "ecconect-ae607.firebaseapp.com",
+        projectId: "ecconect-ae607",
+        storageBucket: "ecconect-ae607.firebasestorage.app",
+        messagingSenderId: "241708782882",
+        appId: "1:241708782882:web:514d895119f9f7c3fa817b",
+        measurementId: "G-KJ3FLCHZCG"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    onAuthStateChanged(auth, (user) => {
+        if (!user) {
+            window.location.href = "index.html";
+        }
+    });
+
+</script>
+
+</body>
+</html>

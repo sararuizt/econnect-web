@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <link rel="manifest" href="manifest.json">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Econnect - Amigos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- ESTILOS GENERALES --- */
+        body {
+            margin: 0; padding: 0; 
+            font-family: 'Poppins', sans-serif; 
+            background: linear-gradient(rgba(30, 113, 51, 0.85), rgba(10, 30, 15, 0.95)), 
+                        url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=2074&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: white; 
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 500px; 
+            padding: 20px;
+            padding-bottom: 100px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        h1 {
+            text-align: left;
+            font-size: 28px;
+            font-weight: 700;
+            margin: 10px 0 20px 0;
+            color: white;
+            letter-spacing: 0.5px;
+        }
+
+        /* --- BARRA DE BÚSQUEDA --- */
+        .search-container { display: flex; gap: 10px; margin-bottom: 25px; }
+        .search-input-wrapper { flex-grow: 1; position: relative; }
+        .search-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: rgba(255,255,255,0.5); }
+        .search-input { width: 100%; padding: 12px 15px 12px 45px; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 50px; color: white; font-family: 'Poppins', sans-serif; font-size: 14px; box-sizing: border-box; outline: none; backdrop-filter: blur(5px); }
+        .qr-btn { width: 45px; height: 45px; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; cursor: pointer; backdrop-filter: blur(5px); flex-shrink: 0; }
+
+        /* --- SOLICITUDES (Tu diseño original intacto) --- */
+        .requests-section { margin-bottom: 30px; }
+        .request-capsule { background: rgba(74, 222, 128, 0.15); border: 1px solid rgba(74, 222, 128, 0.3); border-radius: 20px; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: all 0.3s; backdrop-filter: blur(5px); }
+        .request-text { font-weight: 600; color: #4ade80; font-size: 15px; display: flex; align-items: center; gap: 10px; }
+        .notification-badge { background-color: #ff4081; color: white; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 12px; }
+        
+        .requests-list-dropdown { display: none; margin-top: 10px; background: rgba(0, 0, 0, 0.2); border-radius: 15px; padding: 10px; animation: slideDown 0.3s ease-out; }
+        .requests-list-dropdown.show { display: flex; flex-direction: column; gap: 10px; }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .request-item { display: flex; align-items: center; background: rgba(255,255,255,0.05); padding: 10px; border-radius: 12px; transition: all 0.3s; }
+        .req-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; margin-right: 10px; }
+        .req-info { flex-grow: 1; }
+        .req-name { font-size: 14px; font-weight: 600; display: block; }
+        .req-id { font-size: 11px; color: rgba(255,255,255,0.5); }
+        .req-actions { display: flex; gap: 10px; }
+        .req-btn { width: 30px; height: 30px; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; border: none; font-size: 14px; transition: transform 0.2s; }
+        .btn-accept { background: #4ade80; color: #064e3b; }
+        .btn-reject { background: rgba(255,255,255,0.1); color: #ff8a80; }
+
+        /* --- AMIGOS --- */
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding: 0 5px; }
+        .section-title { font-size: 14px; text-transform: uppercase; letter-spacing: 1.5px; color: rgba(255, 255, 255, 0.6); font-weight: 600; }
+        .friends-list { display: flex; flex-direction: column; gap: 12px; }
+
+        /* ANIMACIÓN AL AÑADIR AMIGO */
+        @keyframes slideInNew {
+            from { opacity: 0; transform: translateY(-20px); background-color: rgba(74, 222, 128, 0.3); }
+            to { opacity: 1; transform: translateY(0); background-color: rgba(255, 255, 255, 0.07); }
+        }
+
+        .friend-item { display: flex; align-items: center; background: rgba(255, 255, 255, 0.07); border: 1px solid rgba(255, 255, 255, 0.05); backdrop-filter: blur(5px); border-radius: 20px; padding: 12px 15px; transition: transform 0.2s; cursor: pointer; }
+        .friend-item:hover { transform: scale(1.02); background: rgba(255, 255, 255, 0.12); }
+        
+        .friend-item.new-friend { animation: slideInNew 0.8s ease-out; }
+
+        .avatar-container { position: relative; margin-right: 15px; }
+        .friend-avatar { width: 55px; height: 55px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(255, 255, 255, 0.2); }
+        .streak-badge { position: absolute; bottom: -5px; left: 50%; transform: translateX(-50%); background-color: white; border-radius: 12px; padding: 2px 8px; font-size: 10px; font-weight: 800; display: flex; align-items: center; gap: 3px; box-shadow: 0 2px 8px rgba(0,0,0,0.3); min-width: max-content; color: #333; }
+        .fire-icon { color: #ff6d00; font-size: 11px; }
+        .friend-info { flex-grow: 1; display: flex; flex-direction: column; justify-content: center; }
+        .friend-name { font-size: 15px; font-weight: 600; color: white; margin-bottom: 2px; }
+        .friend-username { font-size: 13px; font-weight: 400; color: #4ade80; }
+        .friend-id { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 2px; display: flex; align-items: center; gap: 4px; }
+        .more-options { font-size: 18px; color: rgba(255, 255, 255, 0.6); cursor: pointer; padding: 8px; border-radius: 50%; }
+
+        /* MENSAJE NO ENCONTRADO */
+        #no-results-message {
+            display: none; text-align: center; color: rgba(255,255,255,0.5);
+            margin-top: 30px; padding: 20px; background: rgba(255,255,255,0.05); border-radius: 20px;
+        }
+
+        /* --- MODAL DE PERFIL AMIGO (NUEVO) --- */
+        .friend-modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8); backdrop-filter: blur(5px);
+            z-index: 2000; display: none; justify-content: center; align-items: flex-end;
+        }
+        .friend-modal-overlay.show { display: flex; animation: fadeUp 0.3s ease-out; }
+        
+        .friend-modal {
+            background: #1e1e1e; width: 100%; max-width: 500px;
+            border-top-left-radius: 30px; border-top-right-radius: 30px;
+            padding: 30px; box-sizing: border-box; text-align: center;
+            position: relative; border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .close-modal { position: absolute; top: 20px; right: 20px; font-size: 24px; color: rgba(255,255,255,0.5); cursor: pointer; }
+        
+        .modal-avatar { width: 100px; height: 100px; border-radius: 50%; border: 3px solid #4ade80; margin-bottom: 15px; object-fit: cover; }
+        .modal-name { font-size: 22px; font-weight: 700; margin: 0; color: white; }
+        .modal-username { color: #4ade80; font-size: 14px; margin-bottom: 5px; }
+        .modal-id { color: rgba(255,255,255,0.5); font-size: 12px; margin-bottom: 20px; }
+        
+        .modal-stats { display: flex; justify-content: space-around; margin-bottom: 25px; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 15px; }
+        .m-stat span { display: block; font-size: 18px; font-weight: 700; color: white; }
+        .m-stat label { font-size: 10px; color: rgba(255,255,255,0.5); text-transform: uppercase; }
+
+        .modal-actions { display: flex; gap: 15px; }
+        .m-btn { flex: 1; padding: 12px; border-radius: 15px; border: none; font-weight: 600; cursor: pointer; }
+        .m-btn.chat { background: #4ade80; color: #064e3b; }
+        .m-btn.delete { background: rgba(255, 68, 68, 0.2); color: #ff4444; }
+
+        @keyframes fadeUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+        /* MENÚ FLOTANTE */
+        .bottom-nav { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 400px; background: rgba(20, 20, 20, 0.6); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 50px; display: flex; justify-content: space-around; padding: 15px 0; z-index: 1000; box-shadow: 0 10px 40px rgba(0,0,0,0.4); }
+        .nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; color: rgba(255,255,255,0.5); text-decoration: none; cursor: pointer; font-size: 10px; transition: all 0.3s; position: relative; }
+        .nav-item:hover i { transform: translateY(-3px); color: white; }
+        .nav-item i { font-size: 20px; margin-bottom: 4px; transition: transform 0.3s; }
+        .nav-item.active { color: #4ade80; font-weight: 600; }
+        .nav-item.active i { transform: translateY(-2px); }
+        .nav-item.active::after { content: ''; position: absolute; bottom: -8px; width: 5px; height: 5px; background-color: #4ade80; border-radius: 50%; box-shadow: 0 0 10px #4ade80; }
+
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    
+    <h1>Social</h1>
+
+    <div class="search-container">
+        <div class="search-input-wrapper">
+            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            <input type="text" class="search-input" placeholder="Buscar amigos por nombre o ID..." onkeyup="filtrarAmigos()">
+        </div>
+        <div class="qr-btn" onclick="alert('📸 Abriendo cámara para escanear QR...')">
+            <i class="fa-solid fa-qrcode"></i>
+        </div>
+    </div>
+
+    <div class="requests-section">
+        <div class="request-capsule" onclick="toggleRequests()">
+            <div class="request-text">
+                <i class="fa-solid fa-user-plus"></i> Solicitudes de Amistad
+            </div>
+            <div class="notification-badge" id="req-badge">3</div>
+        </div>
+
+        <div class="requests-list-dropdown" id="requests-list">
+            <div class="request-item" id="req-1">
+                <img src="https://i.pravatar.cc/150?u=lucia" class="req-avatar">
+                <div class="req-info">
+                    <span class="req-name">Lucía Méndez</span>
+                    <span class="req-id">ID: LM9821</span>
+                </div>
+                <div class="req-actions">
+                    <button class="req-btn btn-reject" onclick="rechazar(this)"><i class="fa-solid fa-xmark"></i></button>
+                    <button class="req-btn btn-accept" onclick="aceptar(this)"><i class="fa-solid fa-check"></i></button>
+                </div>
+            </div>
+            <div class="request-item" id="req-2">
+                <img src="https://i.pravatar.cc/150?u=marcos" class="req-avatar">
+                <div class="req-info">
+                    <span class="req-name">Marcos P.</span>
+                    <span class="req-id">ID: MP1102</span>
+                </div>
+                <div class="req-actions">
+                    <button class="req-btn btn-reject" onclick="rechazar(this)"><i class="fa-solid fa-xmark"></i></button>
+                    <button class="req-btn btn-accept" onclick="aceptar(this)"><i class="fa-solid fa-check"></i></button>
+                </div>
+            </div>
+            <div class="request-item" id="req-3">
+                <img src="https://i.pravatar.cc/150?u=ana" class="req-avatar">
+                <div class="req-info">
+                    <span class="req-name">Ana Torres</span>
+                    <span class="req-id">ID: AT5543</span>
+                </div>
+                <div class="req-actions">
+                    <button class="req-btn btn-reject" onclick="rechazar(this)"><i class="fa-solid fa-xmark"></i></button>
+                    <button class="req-btn btn-accept" onclick="aceptar(this)"><i class="fa-solid fa-check"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-header">
+        <span class="section-title">Mis amigos (<span id="friends-count">47</span>)</span>
+        <i class="fa-solid fa-arrow-down-a-z" style="color:rgba(255,255,255,0.5); cursor:pointer;"></i>
+    </div>
+
+    <div class="friends-list" id="friends-list-container">
+
+        <div class="friend-item" onclick="verPerfil('Sara Ruiz', '@sararuuiiiz__', '88214', 'saraperfil.jpeg', '168')">
+            <div class="avatar-container">
+                <img src="saraperfil.jpeg" class="friend-avatar" onerror="this.src='https://i.pravatar.cc/150?u=sara'">
+                <div class="streak-badge"><i class="fa-solid fa-fire fire-icon"></i> <span class="streak-number">168</span></div>
+            </div>
+            <div class="friend-info">
+                <span class="friend-name">Sara Ruiz</span>
+                <span class="friend-username">@sararuuiiiz__</span>
+                <span class="friend-id"><i class="fa-solid fa-hashtag" style="font-size:9px;"></i> ID: 88214</span>
+            </div>
+            <i class="fa-solid fa-ellipsis-vertical more-options"></i>
+        </div>
+
+        <div class="friend-item" onclick="verPerfil('Daniela González', '@danielagp_10', '33901', 'danielaperfil.jpg', '42')">
+            <div class="avatar-container">
+                <img src="danielaperfil.jpg" class="friend-avatar" onerror="this.src='https://i.pravatar.cc/150?u=daniela'">
+                <div class="streak-badge"><i class="fa-solid fa-fire fire-icon"></i> <span class="streak-number">42</span></div>
+            </div>
+            <div class="friend-info">
+                <span class="friend-name">Daniela González</span>
+                <span class="friend-username">@danielagp_10</span>
+                <span class="friend-id"><i class="fa-solid fa-hashtag" style="font-size:9px;"></i> ID: 33901</span>
+            </div>
+            <i class="fa-solid fa-ellipsis-vertical more-options"></i>
+        </div>
+
+        <div class="friend-item" onclick="verPerfil('Melany Acosta', '@mmchellx_av', '12094', 'melanyperfil.jpg', '63')">
+            <div class="avatar-container">
+                <img src="melanyperfil.jpg" class="friend-avatar" onerror="this.src='https://i.pravatar.cc/150?u=melany'">
+                <div class="streak-badge"><i class="fa-solid fa-fire fire-icon"></i> <span class="streak-number">63</span></div>
+            </div>
+            <div class="friend-info">
+                <span class="friend-name">Melany Acosta</span>
+                <span class="friend-username">@mmchellx_av</span>
+                <span class="friend-id"><i class="fa-solid fa-hashtag" style="font-size:9px;"></i> ID: 12094</span>
+            </div>
+            <i class="fa-solid fa-ellipsis-vertical more-options"></i>
+        </div>
+
+        <div class="friend-item" onclick="verPerfil('Ada Gracia', '@adaagratoo_', '99123', 'adaperfil.jpg', '142')">
+            <div class="avatar-container">
+                <img src="adaperfil.jpg" class="friend-avatar" onerror="this.src='https://i.pravatar.cc/150?u=ada'">
+                <div class="streak-badge"><i class="fa-solid fa-fire fire-icon"></i> <span class="streak-number">142</span></div>
+            </div>
+            <div class="friend-info">
+                <span class="friend-name">Ada Gracia</span>
+                <span class="friend-username">@adaagratoo_</span>
+                <span class="friend-id"><i class="fa-solid fa-hashtag" style="font-size:9px;"></i> ID: 99123</span>
+            </div>
+            <i class="fa-solid fa-ellipsis-vertical more-options"></i>
+        </div>
+
+        <div class="friend-item" onclick="verPerfil('Alejandro Rodrigo', '@alexrodriigo_', '74821', 'alexperfil.jpg', '72')">
+            <div class="avatar-container">
+                <img src="alexperfil.jpg" class="friend-avatar" onerror="this.src='https://i.pravatar.cc/150?u=alex'">
+                <div class="streak-badge"><i class="fa-solid fa-fire fire-icon"></i> <span class="streak-number">72</span></div>
+            </div>
+            <div class="friend-info">
+                <span class="friend-name">Alejandro Rodrigo</span>
+                <span class="friend-username">@alexrodriigo_</span>
+                <span class="friend-id"><i class="fa-solid fa-hashtag" style="font-size:9px;"></i> ID: 74821</span>
+            </div>
+            <i class="fa-solid fa-ellipsis-vertical more-options"></i>
+        </div>
+
+        <div class="friend-item" onclick="verPerfil('Max Serrano', '@Eldiariode_Max', '55201', 'https://api.dicebear.com/7.x/avataaars/svg?seed=Felix', '32')">
+            <div class="avatar-container">
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" class="friend-avatar" style="background:white;">
+                <div class="streak-badge"><i class="fa-solid fa-fire fire-icon"></i> <span class="streak-number">32</span></div>
+            </div>
+            <div class="friend-info">
+                <span class="friend-name">Max Serrano</span>
+                <span class="friend-username">@Eldiariode_Max</span>
+                <span class="friend-id"><i class="fa-solid fa-hashtag" style="font-size:9px;"></i> ID: 55201</span>
+            </div>
+            <i class="fa-solid fa-ellipsis-vertical more-options"></i>
+        </div>
+
+        <div class="friend-item" onclick="verPerfil('Marta Nortes', '@Marta.np2000', '21004', 'https://i.pravatar.cc/150?u=marta_nortes', '187')">
+            <div class="avatar-container">
+                <img src="https://i.pravatar.cc/150?u=marta_nortes" class="friend-avatar">
+                <div class="streak-badge"><i class="fa-solid fa-fire fire-icon"></i> <span class="streak-number">187</span></div>
+            </div>
+            <div class="friend-info">
+                <span class="friend-name">Marta Nortes</span>
+                <span class="friend-username">@Marta.np2000</span>
+                <span class="friend-id"><i class="fa-solid fa-hashtag" style="font-size:9px;"></i> ID: 21004</span>
+            </div>
+            <i class="fa-solid fa-ellipsis-vertical more-options"></i>
+        </div>
+
+        <div class="friend-item" onclick="verPerfil('Isaac Delgado', '@de1gad0', '00392', 'https://i.pravatar.cc/150?u=isaac_delgado', '2')">
+            <div class="avatar-container">
+                <img src="https://i.pravatar.cc/150?u=isaac_delgado" class="friend-avatar">
+                <div class="streak-badge"><i class="fa-solid fa-fire fire-icon"></i> <span class="streak-number">2</span></div>
+            </div>
+            <div class="friend-info">
+                <span class="friend-name">Isaac Delgado</span>
+                <span class="friend-username">@de1gad0</span>
+                <span class="friend-id"><i class="fa-solid fa-hashtag" style="font-size:9px;"></i> ID: 00392</span>
+            </div>
+            <i class="fa-solid fa-ellipsis-vertical more-options"></i>
+        </div>
+
+        <div id="no-results-message">
+            <i class="fa-solid fa-circle-exclamation" style="font-size: 40px; margin-bottom: 10px; color: #ff8a80;"></i><br>
+            No hemos encontrado a nadie con ese ID.
+        </div>
+
+    </div>
+
+    <div class="friend-modal-overlay" id="friend-modal" onclick="cerrarPerfil(event)">
+        <div class="friend-modal">
+            <i class="fa-solid fa-xmark close-modal" onclick="document.getElementById('friend-modal').classList.remove('show')"></i>
+            
+            <img src="" id="modal-img" class="modal-avatar">
+            <h2 id="modal-name" class="modal-name">Nombre</h2>
+            <div id="modal-user" class="modal-username">@usuario</div>
+            <div id="modal-id" class="modal-id">ID: 00000</div>
+
+            <div class="modal-stats">
+                <div class="m-stat"><span>15</span><label>Retos</label></div>
+                <div class="m-stat"><span>320</span><label>Puntos</label></div>
+                <div class="m-stat"><span id="modal-racha">0</span><label>Racha</label></div>
+            </div>
+
+            <div class="modal-actions">
+                <button class="m-btn chat">Enviar Mensaje</button>
+                <button class="m-btn delete">Eliminar</button>
+            </div>
+        </div>
+    </div>
+
+    <nav class="bottom-nav">
+        <div class="nav-item" onclick="location.href='mapa.html'"><i class="fa-solid fa-map-location-dot"></i><span>Mapa</span></div>
+        <div class="nav-item" onclick="location.href='retos.html'"><i class="fa-solid fa-trophy"></i><span>Retos</span></div>
+        <div class="nav-item" onclick="location.href='home.html'"><i class="fa-solid fa-users-line"></i><span>Social</span></div>
+        <div class="nav-item active" onclick="location.href='amigos.html'"><i class="fa-solid fa-user-group"></i><span>Amigos</span></div>
+        <div class="nav-item" onclick="location.href='perfil.html'"><i class="fa-solid fa-user"></i><span>Perfil</span></div>
+    </nav>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+    const firebaseConfig = { apiKey: "AIzaSyA5lPDFaH8W-miDJHB3sDKdD5fiJt8d9-8", authDomain: "ecconect-ae607.firebaseapp.com", projectId: "ecconect-ae607", storageBucket: "ecconect-ae607.firebasestorage.app", messagingSenderId: "241708782882", appId: "1:241708782882:web:514d895119f9f7c3fa817b", measurementId: "G-KJ3FLCHZCG" };
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    onAuthStateChanged(auth, (user) => { if (!user) window.location.href = "index.html"; });
+
+    window.toggleRequests = function() {
+        document.getElementById('requests-list').classList.toggle('show');
+    }
+
+    // --- NUEVA LÓGICA DE BÚSQUEDA ---
+    window.filtrarAmigos = function() {
+        const input = document.querySelector('.search-input');
+        const filter = input.value.toUpperCase().trim();
+        const list = document.getElementById('friends-list-container');
+        const items = list.getElementsByClassName('friend-item');
+        let visibleCount = 0;
+
+        for (let i = 0; i < items.length; i++) {
+            const idElement = items[i].querySelector('.friend-id');
+            const nameElement = items[i].querySelector('.friend-name');
+            
+            if (idElement || nameElement) {
+                const idText = idElement ? idElement.innerText.toUpperCase() : "";
+                const nameText = nameElement ? nameElement.innerText.toUpperCase() : "";
+                
+                // Buscar por ID o por Nombre
+                if (idText.indexOf(filter) > -1 || nameText.indexOf(filter) > -1) {
+                    items[i].style.display = "flex";
+                    visibleCount++;
+                } else {
+                    items[i].style.display = "none";
+                }
+            }
+        }
+
+        // Mostrar mensaje si no hay resultados
+        const noResultsMsg = document.getElementById('no-results-message');
+        if (visibleCount === 0 && filter !== "") {
+            noResultsMsg.style.display = 'block';
+        } else {
+            noResultsMsg.style.display = 'none';
+        }
+    }
+
+    // Lógica para Aceptar/Rechazar
+    window.rechazar = function(btn) {
+        const item = btn.closest('.request-item');
+        item.style.opacity = '0';
+        setTimeout(() => { item.remove(); actualizarContadores(-1); }, 300);
+    }
+
+    window.aceptar = function(btn) {
+        const item = btn.closest('.request-item');
+        const img = item.querySelector('.req-avatar').src;
+        const name = item.querySelector('.req-name').innerText;
+        const idText = item.querySelector('.req-id').innerText;
+        const username = "@" + name.split(' ')[0].toLowerCase() + "_new";
+
+        const html = `
+            <div class="friend-item new-friend" onclick="verPerfil('${name}', '${username}', '${idText.replace('ID: ', '')}', '${img}', '0')">
+                <div class="avatar-container">
+                    <img src="${img}" class="friend-avatar">
+                    <div class="streak-badge"><i class="fa-solid fa-fire fire-icon"></i> <span class="streak-number">0</span></div>
+                </div>
+                <div class="friend-info">
+                    <span class="friend-name">${name}</span>
+                    <span class="friend-username">${username}</span>
+                    <span class="friend-id"><i class="fa-solid fa-hashtag" style="font-size:9px;"></i> ${idText}</span>
+                </div>
+                <i class="fa-solid fa-ellipsis-vertical more-options"></i>
+            </div>`;
+        
+        // MODIFICACIÓN CLAVE: afterbegin para ponerlo AL PRINCIPIO
+        const container = document.getElementById('friends-list-container');
+        container.insertAdjacentHTML('afterbegin', html);
+
+        item.remove();
+        actualizarContadores(0);
+        
+        const badge = document.getElementById('req-badge');
+        let count = parseInt(badge.innerText);
+        if(count > 0) badge.innerText = count - 1;
+        if(count - 1 === 0) badge.style.display = 'none';
+
+        const friendsCountLabel = document.getElementById('friends-count');
+        let friendsCount = parseInt(friendsCountLabel.innerText);
+        friendsCountLabel.innerText = friendsCount + 1;
+    }
+
+    function actualizarContadores(change) {
+        const badge = document.getElementById('req-badge');
+        let count = parseInt(badge.innerText);
+        if (change === -1 && count > 0) {
+            badge.innerText = count - 1;
+            if(count - 1 === 0) badge.style.display = 'none';
+        }
+    }
+
+    window.verPerfil = function(nombre, user, id, foto, racha) {
+        document.getElementById('modal-name').innerText = nombre;
+        document.getElementById('modal-user').innerText = user;
+        document.getElementById('modal-id').innerText = "ID: " + id;
+        document.getElementById('modal-img').src = foto;
+        document.getElementById('modal-racha').innerText = racha;
+        document.getElementById('friend-modal').classList.add('show');
+    }
+
+    window.cerrarPerfil = function(e) {
+        if(e.target.classList.contains('friend-modal-overlay')) {
+            e.target.classList.remove('show');
+        }
+    }
+
+</script>
+
+</body>
+</html>

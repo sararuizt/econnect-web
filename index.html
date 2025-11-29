@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <link rel="manifest" href="manifest.json">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Econnect - Bienvenida</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* --- CONFIGURACIÓN GENERAL --- */
+        body {
+            margin: 0; padding: 0;
+            font-family: 'Poppins', sans-serif; /* Cambio de tipografía */
+            /* Fondo de imagen con superposición verde oscura */
+            background: linear-gradient(rgba(27, 94, 32, 0.85), rgba(27, 94, 32, 0.95)), 
+                        url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=2074&auto=format&fit=crop'); /* Imagen de bosque de ejemplo */
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: white; /* Texto blanco por defecto */
+        }
+
+        /* --- PANTALLA DE CARGA (NUEVO ESTILO) --- */
+        #splash-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #1b5e20; /* Fondo verde corporativo sólido */
+            display: flex; justify-content: center; align-items: center;
+            z-index: 9999; 
+            transition: opacity 0.5s ease-out;
+        }
+
+        .splash-content { text-align: center; }
+
+        .splash-logo {
+            width: 110px; 
+            height: auto;
+            margin-bottom: 25px;
+            animation: rotar 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite; /* Giro más suave */
+            filter: brightness(0) invert(1); /* Vuelve el logo BLANCO para que se vea sobre el fondo verde */
+        }
+
+        .splash-title {
+            color: white; /* Título blanco */
+            font-size: 32px;
+            margin: 0;
+            letter-spacing: 3px;
+            font-weight: 700;
+        }
+
+        .splash-text {
+            color: rgba(255, 255, 255, 0.8); /* Blanco semitransparente */
+            margin-top: 15px;
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        @keyframes rotar {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .ocultar { opacity: 0; pointer-events: none; }
+
+
+        /* --- CONTENEDOR LOGIN (EFECTO CRISTAL/GLASSMORPHISM) --- */
+        .login-container {
+            /* Efecto de cristal esmerilado */
+            background: rgba(255, 255, 255, 0.1); /* Blanco muy transparente */
+            backdrop-filter: blur(15px); /* Difumina el fondo detrás de la tarjeta */
+            -webkit-backdrop-filter: blur(15px); /* Para Safari */
+            border: 1px solid rgba(255, 255, 255, 0.2); /* Borde sutil */
+            
+            width: 90%;
+            max-width: 420px;
+            padding: 50px 35px;
+            border-radius: 40px; /* Esquinas MUY redondeadas */
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            text-align: center;
+            position: relative;
+        }
+
+        .app-logo {
+            width: 140px;  
+            height: auto;
+            display: block;
+            margin: 0 auto 25px auto;
+            /* Si tu logo.png tiene fondo blanco, esto lo disimula un poco, si es PNG transparente, quita esta línea */
+            border-radius: 30px; 
+        }
+
+        h1 {
+            color: white;
+            font-weight: 700;
+            font-size: 32px;
+            margin: 0;
+            letter-spacing: 1px;
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 15px;
+            margin-top: 10px;
+            margin-bottom: 40px;
+            font-weight: 500;
+        }
+
+        /* --- FORMULARIO (Inputs Estilo Píldora) --- */
+        .input-group {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 8px;
+            margin-left: 15px; /* Un poco de sangría para alinear con la curva del input */
+        }
+
+        input {
+            width: 100%;
+            padding: 16px 25px; /* Más relleno para que sean más altos */
+            border: none;
+            background: rgba(255, 255, 255, 0.85); /* Blanco casi opaco para que se lea bien */
+            border-radius: 50px; /* Forma de PÍLDORA completa */
+            font-size: 16px;
+            box-sizing: border-box;
+            color: #333; /* Texto oscuro dentro del input claro */
+            font-family: 'Poppins', sans-serif;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+        
+        input::placeholder { color: #888; }
+
+        input:focus {
+            outline: none;
+            background: white;
+            box-shadow: 0 4px 20px rgba(27, 94, 32, 0.2); /* Sombra verde suave al enfocar */
+            transform: translateY(-2px);
+        }
+
+        #name-group { display: none; }
+
+        /* --- BOTÓN PRINCIPAL (Estilo Píldora) --- */
+        .btn-primary {
+            background-color: #1b5e20;
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 18px; /* Botón más alto */
+            border-radius: 50px; /* PÍLDORA completa */
+            font-size: 18px;
+            font-weight: 600;
+            margin-top: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(27, 94, 32, 0.3);
+            letter-spacing: 1px;
+        }
+
+        .btn-primary:hover { 
+            background-color: #2e7d32; /* Un verde un poco más claro al pasar el ratón */
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px rgba(27, 94, 32, 0.4);
+        }
+
+        /* --- SEPARADOR --- */
+        .divider {
+            margin: 30px 0;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* --- REDES SOCIALES (Burbujas blancas) --- */
+        .social-buttons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 25px;
+            margin-bottom: 35px;
+        }
+
+        /* Contenedor circular blanco para los iconos */
+        .social-icon-container {
+            width: 55px;
+            height: 55px;
+            background-color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Efecto rebote sutil */
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .social-icon-container:hover { transform: scale(1.15); }
+        .social-icon { font-size: 28px; }
+
+        /* Colores originales de las marcas */
+        .fa-facebook { color: #1877f2; }
+        .fa-telegram { color: #24a1de; }
+        .fa-apple { color: #000; }
+
+        /* --- LINKS INFERIORES --- */
+        .links {
+            font-size: 15px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .forgot-link {
+            color: white; 
+            text-decoration: none;
+            display: block;
+            margin-bottom: 20px;
+            font-weight: 500;
+            transition: opacity 0.2s;
+        }
+        .forgot-link:hover { opacity: 0.8; }
+
+        .toggle-link {
+            color: #4ade80; /* Un verde luminoso para el enlace de acción */
+            text-decoration: none;
+            cursor: pointer;
+            font-weight: 700;
+            margin-left: 5px;
+        }
+
+        .landing-link {
+            display: block;
+            margin-top: 40px;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 13px;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        #mensaje-error {
+            color: #ff8a80; /* Rojo claro para que se vea sobre fondo oscuro */
+            background: rgba(255, 0, 0, 0.1);
+            padding: 10px;
+            border-radius: 15px;
+            font-size: 14px;
+            margin-top: 20px;
+            display: none;
+            font-weight: 500;
+        }
+
+    </style>
+</head>
+<body>
+    
+    <div id="splash-screen">
+        <div class="splash-content">
+            <img src="logo.png" alt="Econnect" class="splash-logo">
+            <h1 class="splash-title">ECONNECT</h1>
+            <p class="splash-text">Cargando tu mundo sostenible...</p>
+        </div>
+    </div>
+
+    <div class="login-container">
+        <img src="logo.png" alt="Logo de la aplicación" class="app-logo">
+        <h1>Bienvenido de nuevo</h1>
+        <p class="subtitle">Conectando con tu entorno sostenible</p>
+
+        <div id="auth-form">
+            <div class="input-group" id="name-group">
+                <label>Nombre completo</label>
+                <input type="text" id="nombre" placeholder="Ej: María García">
+            </div>
+
+            <div class="input-group">
+                <label>Dirección de email</label>
+                <input type="email" id="email" placeholder="ejemplo@email.com">
+            </div>
+
+            <div class="input-group">
+                <label>Contraseña</label>
+                <input type="password" id="password" placeholder="••••••••">
+            </div>
+
+            <button class="btn-primary" id="btn-submit">Iniciar sesión</button>
+            <div id="mensaje-error"></div>
+        </div>
+
+        <div class="divider">o continúa con</div>
+
+        <div class="social-buttons">
+            <div class="social-icon-container">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" 
+                     alt="Google" style="width: 28px; height: 28px;">
+            </div>
+
+            <div class="social-icon-container">
+                <i class="fa-brands fa-facebook social-icon"></i>
+            </div>
+            <div class="social-icon-container">
+                <i class="fa-brands fa-telegram social-icon"></i>
+            </div>
+            <div class="social-icon-container">
+                <i class="fa-brands fa-apple social-icon"></i>
+            </div>
+        </div>
+
+        <div class="links">
+            <a href="#" class="forgot-link">¿Olvidaste tu contraseña?</a>
+            <span id="text-toggle">¿Aún no tienes cuenta?</span>
+            <span class="toggle-link" id="btn-toggle">Regístrate</span>
+        </div>
+
+        <a href="#" class="landing-link">Volver a la página de inicio</a>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const splash = document.getElementById('splash-screen');
+            setTimeout(() => {
+                splash.classList.add('ocultar');
+                setTimeout(() => { splash.style.display = 'none'; }, 500); 
+            }, 2500);
+        });
+    </script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } 
+        from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc } 
+        from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    
+        const firebaseConfig = {
+            apiKey: "AIzaSyA5lPDFaH8W-miDJHB3sDKdD5fiJt8d9-8",
+            authDomain: "ecconect-ae607.firebaseapp.com",
+            projectId: "ecconect-ae607",
+            storageBucket: "ecconect-ae607.firebasestorage.app",
+            messagingSenderId: "241708782882",
+            appId: "1:241708782882:web:514d895119f9f7c3fa817b",
+            measurementId: "G-KJ3FLCHZCG"
+        };
+    
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let isLoginMode = true; 
+        let isSigningUp = false; 
+    
+        const nameGroup = document.getElementById('name-group');
+        const btnSubmit = document.getElementById('btn-submit');
+        const btnToggle = document.getElementById('btn-toggle');
+        const textToggle = document.getElementById('text-toggle');
+        const msgError = document.getElementById('mensaje-error');
+        const titleText = document.querySelector('h1'); // Para cambiar el título
+
+        btnToggle.addEventListener('click', () => {
+            isLoginMode = !isLoginMode;
+            msgError.style.display = 'none';
+    
+            if (isLoginMode) {
+                nameGroup.style.display = 'none';
+                titleText.textContent = "Bienvenido de nuevo";
+                btnSubmit.textContent = "Iniciar sesión";
+                textToggle.textContent = "¿Aún no tienes cuenta?";
+                btnToggle.textContent = "Regístrate";
+            } else {
+                nameGroup.style.display = 'block';
+                titleText.textContent = "Crear cuenta";
+                btnSubmit.textContent = "Registrarse";
+                textToggle.textContent = "¿Ya tienes cuenta?";
+                btnToggle.textContent = "Inicia sesión";
+            }
+        });
+    
+        btnSubmit.addEventListener('click', async () => {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const nombre = document.getElementById('nombre').value;
+    
+            try {
+                if (isLoginMode) {
+                    await signInWithEmailAndPassword(auth, email, password);
+                } else {
+                    if (!nombre) throw new Error("Por favor, escribe tu nombre.");
+                    isSigningUp = true;
+                    const credencial = await createUserWithEmailAndPassword(auth, email, password);
+                    const user = credencial.user;
+                    await setDoc(doc(db, "usuarios", user.uid), {
+                        nombre: nombre,
+                        email: email,
+                        creado: new Date()
+                    });
+                    window.location.href = "mapa.html";
+                }
+            } catch (error) {
+                isSigningUp = false;
+                msgError.style.display = 'block';
+                // Mensajes de error simplificados para el nuevo diseño
+                if (error.code === 'auth/email-already-in-use') {
+                    msgError.textContent = "Email ya registrado.";
+                } else if (error.code === 'auth/weak-password') {
+                    msgError.textContent = "Contraseña muy débil (mín. 6 caracteres).";
+                } else if (error.code === 'auth/invalid-email') {
+                     msgError.textContent = "Formato de email incorrecto.";
+                } else {
+                    msgError.textContent = "Error de autenticación. Revisa tus datos.";
+                }
+            }
+        });
+    
+        onAuthStateChanged(auth, (user) => {
+            if (user && !isSigningUp) {
+                window.location.href = "home.html";
+            }
+        });
+    </script>
+</body>
+</html>

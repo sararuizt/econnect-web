@@ -11,18 +11,77 @@
     <style>
         /* --- ESTILOS GENERALES --- */
         body {
-            margin: 0; padding: 0; 
-            font-family: 'Poppins', sans-serif; 
-            background: linear-gradient(rgba(30, 113, 51, 0.85), rgba(10, 30, 15, 0.95)), 
+            margin: 0; padding: 0;
+            font-family: 'Poppins', sans-serif;
+            /* Nueva imagen más clara con un degradado verde más suave encima */
+            background: linear-gradient(rgba(34, 85, 45, 0.5), rgba(10, 40, 20, 0.75)),
                         url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=2074&auto=format&fit=crop');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
-            color: white; 
+            color: white;
             min-height: 100vh;
             display: flex;
             justify-content: center;
         }
+
+        /* --- TEMA OSCURO (CORREGIDO: CRISTAL NEGRO) --- */
+body.dark-theme {
+    /* Fondo bosque muy oscuro */
+    background: linear-gradient(rgba(10, 30, 15, 0.8), rgba(10, 30, 15, 0.9)), 
+                        url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=2074&auto=format&fit=crop') !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-attachment: fixed !important;
+}
+
+/* Ajuste CRUCIAL: El cristal ahora es NEGRO translúcido, no blanco */
+body.dark-theme .glass-card,
+body.dark-theme .profile-card,
+body.dark-theme .settings-group,
+body.dark-theme .request-capsule,
+body.dark-theme .friend-item,
+body.dark-theme .search-input,
+body.dark-theme .challenge-card,
+body.dark-theme .calendar-card,
+body.dark-theme .ranking-list,
+body.dark-theme .profile-rank-card,
+body.dark-theme .challenge-history-item,
+body.dark-theme .qr-btn,
+body.dark-theme .action-btn,
+body.dark-theme .gallery-item {
+    background: rgba(30, 30, 30, 0.4) !important; /* Gris oscuro transparente */
+    border: 1px solid rgba(255, 255, 255, 0.08); /* Borde muy sutil */
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4); /* Sombra más fuerte */
+}
+
+/* Ajuste específico para el MENÚ INFERIOR en modo noche */
+body.dark-theme .bottom-nav {
+    background: rgba(20, 20, 20, 0.95) !important; /* Casi negro sólido */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 -5px 20px rgba(0,0,0,0.5); /* Sombra superior para separar del fondo */
+}
+
+/* Ajuste para MODALES y PANTALLAS EMERGENTES */
+body.dark-theme .modal-box,
+body.dark-theme .app-container.modal-view { /* Si usas contenedores tipo página */
+    background: #181818 !important; /* Fondo sólido gris muy oscuro */
+    border: 1px solid rgba(255,255,255,0.15); /* Borde más visible para separar */
+    box-shadow: 0 0 50px rgba(0,0,0,0.8); /* Sombra intensa alrededor */
+}
+
+/* Ajuste para textos en modo oscuro */
+body.dark-theme h1, 
+body.dark-theme h2, 
+body.dark-theme strong,
+body.dark-theme .item-text {
+    color: #ffffff !important;
+}
+body.dark-theme p, 
+body.dark-theme .section-label,
+body.dark-theme .desc {
+    color: #bbbbbb !important;
+}
 
         .app-container {
             width: 100%;
@@ -280,27 +339,27 @@
             <i class="fa-solid fa-ellipsis-vertical more-options"></i>
         </div>
 
-        <div class="friend-item" onclick="verPerfil('Max Serrano', '@Eldiariode_Max', '55201', 'https://api.dicebear.com/7.x/avataaars/svg?seed=Felix', '32')">
+        <div class="friend-item" onclick="verPerfil('Max Serrano', '@eldiariode_Max', '55201', 'https://api.dicebear.com/7.x/avataaars/svg?seed=Felix', '32')">
             <div class="avatar-container">
-                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" class="friend-avatar" style="background:white;">
+                <img src="max_perfil.jpg" class="friend-avatar" style="background:white;">
                 <div class="streak-badge"><i class="fa-solid fa-fire fire-icon"></i> <span class="streak-number">32</span></div>
             </div>
             <div class="friend-info">
                 <span class="friend-name">Max Serrano</span>
-                <span class="friend-username">@Eldiariode_Max</span>
+                <span class="friend-username">@eldiariode_Max</span>
                 <span class="friend-id"><i class="fa-solid fa-hashtag" style="font-size:9px;"></i> ID: 55201</span>
             </div>
             <i class="fa-solid fa-ellipsis-vertical more-options"></i>
         </div>
 
-        <div class="friend-item" onclick="verPerfil('Marta Nortes', '@Marta.np2000', '21004', 'https://i.pravatar.cc/150?u=marta_nortes', '187')">
+        <div class="friend-item" onclick="verPerfil('Marta Nortes', '@marta.np2000', '21004', 'https://i.pravatar.cc/150?u=marta_nortes', '187')">
             <div class="avatar-container">
-                <img src="https://i.pravatar.cc/150?u=marta_nortes" class="friend-avatar">
+                <img src="marta_perfil.jpg" class="friend-avatar">
                 <div class="streak-badge"><i class="fa-solid fa-fire fire-icon"></i> <span class="streak-number">187</span></div>
             </div>
             <div class="friend-info">
                 <span class="friend-name">Marta Nortes</span>
-                <span class="friend-username">@Marta.np2000</span>
+                <span class="friend-username">@marta.np2000</span>
                 <span class="friend-id"><i class="fa-solid fa-hashtag" style="font-size:9px;"></i> ID: 21004</span>
             </div>
             <i class="fa-solid fa-ellipsis-vertical more-options"></i>
@@ -308,13 +367,104 @@
 
         <div class="friend-item" onclick="verPerfil('Isaac Delgado', '@de1gad0', '00392', 'https://i.pravatar.cc/150?u=isaac_delgado', '2')">
             <div class="avatar-container">
-                <img src="https://i.pravatar.cc/150?u=isaac_delgado" class="friend-avatar">
+                <img src="isaac_perfil.jpg" class="friend-avatar">
                 <div class="streak-badge"><i class="fa-solid fa-fire fire-icon"></i> <span class="streak-number">2</span></div>
             </div>
             <div class="friend-info">
                 <span class="friend-name">Isaac Delgado</span>
                 <span class="friend-username">@de1gad0</span>
                 <span class="friend-id"><i class="fa-solid fa-hashtag" style="font-size:9px;"></i> ID: 00392</span>
+            </div>
+            <i class="fa-solid fa-ellipsis-vertical more-options"></i>
+        </div>
+
+        <div class="friend-item" onclick="verPerfil('Mar Sampere', '@_maaar_', '74201', 'https://api.dicebear.com/7.x/avataaars/svg?seed=Felix', '16')">
+            <div class="avatar-container">
+                <img src="mar_perfil.jpg" class="friend-avatar" style="background:white;">
+                <div class="streak-badge"><i class="fa-solid fa-fire fire-icon"></i> <span class="streak-number">16</span></div>
+            </div>
+            <div class="friend-info">
+                <span class="friend-name">Mar Sampere</span>
+                <span class="friend-username">@_maaar_</span>
+                <span class="friend-id"><i class="fa-solid fa-hashtag" style="font-size:9px;"></i> ID: 74201</span>
+            </div>
+            <i class="fa-solid fa-ellipsis-vertical more-options"></i>
+        </div>
+
+        <div class="friend-item" onclick="verPerfil('Los López', '@familia_lopez', '24711', 'https://api.dicebear.com/7.x/avataaars/svg?seed=Felix', '227')">
+            <div class="avatar-container">
+                <img src="lopez_perfil.jpg" class="friend-avatar" style="background:white;">
+                <div class="streak-badge"><i class="fa-solid fa-fire fire-icon"></i> <span class="streak-number">227</span></div>
+            </div>
+            <div class="friend-info">
+                <span class="friend-name">Los López</span>
+                <span class="friend-username">@familia_lopez</span>
+                <span class="friend-id"><i class="fa-solid fa-hashtag" style="font-size:9px;"></i> ID: 24711</span>
+            </div>
+            <i class="fa-solid fa-ellipsis-vertical more-options"></i>
+        </div>
+
+        <div class="friend-item" onclick="verPerfil('Guille Arenas', '@guillearenas_17', '02361', 'https://api.dicebear.com/7.x/avataaars/svg?seed=Felix', '199')">
+            <div class="avatar-container">
+                <img src="guille_perfil.jpg" class="friend-avatar" style="background:white;">
+                <div class="streak-badge"><i class="fa-solid fa-fire fire-icon"></i> <span class="streak-number">199</span></div>
+            </div>
+            <div class="friend-info">
+                <span class="friend-name">Guille Arenas</span>
+                <span class="friend-username">@guillearenas_17</span>
+                <span class="friend-id"><i class="fa-solid fa-hashtag" style="font-size:9px;"></i> ID: 02361</span>
+            </div>
+            <i class="fa-solid fa-ellipsis-vertical more-options"></i>
+        </div>
+
+        <div class="friend-item" onclick="verPerfil('Tara León', '@travelling_tara', '36405', 'https://api.dicebear.com/7.x/avataaars/svg?seed=Felix', '6')">
+            <div class="avatar-container">
+                <img src="tara_perfil.jpg" class="friend-avatar" style="background:white;">
+                <div class="streak-badge"><i class="fa-solid fa-fire fire-icon"></i> <span class="streak-number">6</span></div>
+            </div>
+            <div class="friend-info">
+                <span class="friend-name">Tara León</span>
+                <span class="friend-username">@travelling_tara</span>
+                <span class="friend-id"><i class="fa-solid fa-hashtag" style="font-size:9px;"></i> ID: 36405</span>
+            </div>
+            <i class="fa-solid fa-ellipsis-vertical more-options"></i>
+        </div>
+
+        <div class="friend-item" onclick="verPerfil('María Dolores', '@lasRecetasDeLa_Abuela', '43250', 'https://api.dicebear.com/7.x/avataaars/svg?seed=Felix', '112')">
+            <div class="avatar-container">
+                <img src="maria_perfil.jpg" class="friend-avatar" style="background:white;">
+                <div class="streak-badge"><i class="fa-solid fa-fire fire-icon"></i> <span class="streak-number">112</span></div>
+            </div>
+            <div class="friend-info">
+                <span class="friend-name">María Dolores</span>
+                <span class="friend-username">@lasRecetasDeLa_Abuela</span>
+                <span class="friend-id"><i class="fa-solid fa-hashtag" style="font-size:9px;"></i> ID: 43250</span>
+            </div>
+            <i class="fa-solid fa-ellipsis-vertical more-options"></i>
+        </div>
+
+        <div class="friend-item" onclick="verPerfil('Protectora Gatuna', '@fabulasdeun_Gato', '64282', 'https://api.dicebear.com/7.x/avataaars/svg?seed=Felix', '38')">
+            <div class="avatar-container">
+                <img src="gato_perfil.jpg" class="friend-avatar" style="background:white;">
+                <div class="streak-badge"><i class="fa-solid fa-fire fire-icon"></i> <span class="streak-number">38</span></div>
+            </div>
+            <div class="friend-info">
+                <span class="friend-name">Protectora Gatuna</span>
+                <span class="friend-username">@fabulasdeun_Gato</span>
+                <span class="friend-id"><i class="fa-solid fa-hashtag" style="font-size:9px;"></i> ID: 64282</span>
+            </div>
+            <i class="fa-solid fa-ellipsis-vertical more-options"></i>
+        </div>
+
+        <div class="friend-item" onclick="verPerfil('Pedro García', '@expertos_reciclaje', '48728', 'https://api.dicebear.com/7.x/avataaars/svg?seed=Felix', '304')">
+            <div class="avatar-container">
+                <img src="pedro_perfil.jpg" class="friend-avatar" style="background:white;">
+                <div class="streak-badge"><i class="fa-solid fa-fire fire-icon"></i> <span class="streak-number">304</span></div>
+            </div>
+            <div class="friend-info">
+                <span class="friend-name">Pedro García</span>
+                <span class="friend-username">@expertos_reciclaje</span>
+                <span class="friend-id"><i class="fa-solid fa-hashtag" style="font-size:9px;"></i> ID: 48728</span>
             </div>
             <i class="fa-solid fa-ellipsis-vertical more-options"></i>
         </div>
@@ -475,6 +625,10 @@
     }
 
 </script>
-
+<script>
+    if (localStorage.getItem('darkMode') === 'enabled') {
+        document.body.classList.add('dark-theme');
+    }
+</script>
 </body>
 </html>

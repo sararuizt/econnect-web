@@ -13,323 +13,357 @@
         body {
             margin: 0; padding: 0; 
             font-family: 'Poppins', sans-serif; 
-            /* Fondo Bosque Oscuro */
-            background: linear-gradient(rgba(30, 113, 51, 0.85), rgba(10, 30, 15, 0.95)), 
+            background: linear-gradient(rgba(34, 85, 45, 0.5), rgba(10, 40, 20, 0.75)),
             url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=2074&auto=format&fit=crop');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            color: white; 
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
+            background-size: cover; background-position: center; background-attachment: fixed;
+            color: white; min-height: 100vh; display: flex; justify-content: center;
         }
+/* --- TEMA OSCURO (CORREGIDO: CRISTAL NEGRO) --- */
+body.dark-theme {
+    /* Fondo bosque muy oscuro */
+    background: linear-gradient(rgba(10, 30, 15, 0.8), rgba(10, 30, 15, 0.9)), 
+                        url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=2074&auto=format&fit=crop') !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-attachment: fixed !important;
+}
+
+/* Ajuste CRUCIAL: El cristal ahora es NEGRO translúcido, no blanco */
+body.dark-theme .glass-card,
+body.dark-theme .profile-card,
+body.dark-theme .settings-group,
+body.dark-theme .request-capsule,
+body.dark-theme .friend-item,
+body.dark-theme .search-input,
+body.dark-theme .challenge-card,
+body.dark-theme .calendar-card,
+body.dark-theme .ranking-list,
+body.dark-theme .profile-rank-card,
+body.dark-theme .challenge-history-item,
+body.dark-theme .qr-btn,
+body.dark-theme .action-btn,
+body.dark-theme .gallery-item {
+    background: rgba(30, 30, 30, 0.4) !important; /* Gris oscuro transparente */
+    border: 1px solid rgba(255, 255, 255, 0.08); /* Borde muy sutil */
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4); /* Sombra más fuerte */
+}
+
+/* Ajuste específico para el MENÚ INFERIOR en modo noche */
+body.dark-theme .bottom-nav {
+    background: rgba(20, 20, 20, 0.95) !important; /* Casi negro sólido */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 -5px 20px rgba(0,0,0,0.5); /* Sombra superior para separar del fondo */
+}
+
+/* Ajuste para MODALES y PANTALLAS EMERGENTES */
+body.dark-theme .modal-box,
+body.dark-theme .app-container.modal-view { /* Si usas contenedores tipo página */
+    background: #181818 !important; /* Fondo sólido gris muy oscuro */
+    border: 1px solid rgba(255,255,255,0.15); /* Borde más visible para separar */
+    box-shadow: 0 0 50px rgba(0,0,0,0.8); /* Sombra intensa alrededor */
+}
+
+/* Ajuste para textos en modo oscuro */
+body.dark-theme h1, 
+body.dark-theme h2, 
+body.dark-theme strong,
+body.dark-theme .item-text {
+    color: #ffffff !important;
+}
+body.dark-theme p, 
+body.dark-theme .section-label,
+body.dark-theme .desc {
+    color: #bbbbbb !important;
+}
 
         .app-container {
-            width: 100%;
-            max-width: 500px; 
-            padding: 20px;
-            padding-bottom: 110px; /* Espacio extra para menú flotante */
-            box-sizing: border-box;
+            width: 100%; max-width: 500px; 
+            /* AUMENTADO EL PADDING INFERIOR PARA QUE NO SE CORTE */
+            padding: 20px 20px 130px 20px; 
+            box-sizing: border-box; display: flex; flex-direction: column; position: relative;
+            /* Asegura que el scroll funcione en toda la página */
+            overflow-y: auto; 
+            height: 100vh; 
         }
 
-        /* --- TARJETA DE PERFIL (Glassmorphism) --- */
+        /* Ocultar scrollbar fea pero permitir scroll */
+        .app-container::-webkit-scrollbar { width: 0; background: transparent; }
+
+
+        /* --- TARJETA DE PERFIL --- */
         .profile-card {
             background: rgba(255, 255, 255, 0.08);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 30px;
-            padding: 30px 20px;
-            text-align: center;
-            margin-bottom: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            position: relative;
-            overflow: hidden;
+            backdrop-filter: blur(10px); border-radius: 30px;
+            padding: 30px 20px; text-align: center; margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2); position: relative; overflow: hidden;
+            flex-shrink: 0; /* Evita que se aplaste */
         }
-
-        /* Efecto de luz decorativo arriba */
         .profile-card::before {
-            content: '';
-            position: absolute;
-            top: -50px; left: -50px;
-            width: 150px; height: 150px;
+            content: ''; position: absolute; top: -50px; left: -50px; width: 150px; height: 150px;
             background: radial-gradient(circle, rgba(74, 222, 128, 0.2) 0%, transparent 70%);
-            border-radius: 50%;
-            pointer-events: none;
+            border-radius: 50%; pointer-events: none;
         }
 
         .profile-img {
-            width: 110px; height: 110px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid rgba(255, 255, 255, 0.2);
-            padding: 3px; /* Espacio entre foto y borde */
-            margin-bottom: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            width: 110px; height: 110px; border-radius: 50%; object-fit: cover;
+            border: 3px solid rgba(255, 255, 255, 0.2); padding: 3px; margin-bottom: 15px;
         }
 
-        h1 {
-            font-size: 22px;
-            font-weight: 700;
-            margin: 0;
-            color: white;
-            letter-spacing: 0.5px;
-        }
+        h1 { font-size: 22px; font-weight: 700; margin: 0; color: white; }
+        .username { font-size: 14px; font-weight: 500; color: #4ade80; margin-bottom: 15px; display: block; }
 
-        .username {
-            font-size: 14px;
-            font-weight: 500;
-            color: #4ade80; /* Verde neón */
-            margin-bottom: 15px;
-            display: block;
-        }
-
-        /* Bio Capsula */
         .bio-tag {
-            display: inline-block;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 11px;
-            color: rgba(255, 255, 255, 0.8);
-            margin-bottom: 25px;
+            display: inline-block; background: rgba(255, 255, 255, 0.1);
+            padding: 5px 12px; border-radius: 20px; font-size: 11px;
+            color: rgba(255, 255, 255, 0.8); margin-bottom: 25px;
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        /* --- ESTADÍSTICAS --- */
-        .stats-container {
-            display: flex;
-            justify-content: space-around;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .stat-item { text-align: center; }
-
-        .stat-number {
-            font-size: 20px;
-            font-weight: 700;
-            display: block;
-            color: white;
-        }
-
-        .stat-label {
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: rgba(255, 255, 255, 0.5);
-            margin-top: 4px;
-        }
+        .stats-container { display: flex; justify-content: space-around; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.1); }
+        .stat-number { font-size: 20px; font-weight: 700; display: block; color: white; }
+        .stat-label { font-size: 11px; text-transform: uppercase; color: rgba(255, 255, 255, 0.5); }
 
         /* --- BOTONES DE ACCIÓN --- */
-        .action-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-
+        .action-buttons { display: flex; justify-content: center; gap: 20px; margin-bottom: 30px; flex-shrink: 0; }
         .action-btn {
-            width: 45px; height: 45px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            width: 50px; height: 50px; border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.1);
             display: flex; justify-content: center; align-items: center;
-            color: white;
-            font-size: 18px;
-            cursor: pointer;
-            transition: all 0.3s;
+            color: white; font-size: 20px; cursor: pointer; transition: all 0.3s;
         }
-        .action-btn:hover {
-            background: #4ade80;
-            color: #064e3b;
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(74, 222, 128, 0.3);
-        }
+        .action-btn:hover { background: #4ade80; color: #064e3b; transform: translateY(-3px); }
 
-        /* --- PESTAÑAS (TABS) --- */
-        .tabs-container {
-            display: flex;
-            justify-content: space-around;
-            margin-bottom: 15px;
-            padding-bottom: 5px;
+        /* --- PESTAÑAS --- */
+        .tabs-container { 
+            display: flex; justify-content: space-around; margin-bottom: 20px; 
+            border-bottom: 1px solid rgba(255,255,255,0.1); flex-shrink: 0; 
         }
+        .tab-item { padding: 10px 20px; cursor: pointer; color: rgba(255, 255, 255, 0.4); font-size: 22px; position: relative; transition: 0.3s; }
+        .tab-item.active { color: #4ade80; }
+        .tab-item.active::after { content: ''; position: absolute; bottom: -1px; left: 50%; transform: translateX(-50%); width: 30px; height: 3px; background-color: #4ade80; border-radius: 10px; box-shadow: 0 -5px 10px rgba(74, 222, 128, 0.5); }
 
-        .tab-item {
-            padding: 10px 20px;
-            cursor: pointer;
-            color: rgba(255, 255, 255, 0.4);
-            font-size: 22px;
-            transition: color 0.3s;
-            position: relative;
-        }
-
-        .tab-item.active {
-            color: white;
-        }
-        /* Punto brillante debajo del activo */
-        .tab-item.active::after {
-            content: '';
-            position: absolute;
-            bottom: 0; left: 50%; transform: translateX(-50%);
-            width: 6px; height: 6px;
-            background-color: #4ade80;
-            border-radius: 50%;
-            box-shadow: 0 0 10px #4ade80;
-        }
-
-        /* --- GRID DE FOTOS --- */
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px; /* Espacio entre fotos */
-        }
-
-        .gallery-item {
-            width: 100%;
-            aspect-ratio: 1 / 1;
-            object-fit: cover;
-            border-radius: 12px; /* Fotos redondeadas */
-            background-color: rgba(255,255,255,0.1);
-            transition: opacity 0.2s;
-            cursor: pointer;
-        }
-        .gallery-item:hover { opacity: 0.8; }
-
-
-        /* --- BOTÓN CERRAR SESIÓN --- */
-        .logout-btn-container {
-            margin-top: 40px;
-            text-align: center;
-        }
-        .btn-logout {
-            background: rgba(239, 68, 68, 0.15); /* Rojo transparente */
-            color: #fca5a5; /* Rojo claro */
-            border: 1px solid rgba(239, 68, 68, 0.3);
-            padding: 12px 30px;
-            border-radius: 30px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            font-family: 'Poppins', sans-serif;
-            transition: all 0.3s;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .btn-logout:hover {
-            background: rgba(239, 68, 68, 0.3);
-            color: white;
-        }
-
-        /* --- MENÚ FLOTANTE --- */
-        .bottom-nav {
-            position: fixed;
-            bottom: 25px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 90%; max-width: 400px;
-            background: rgba(20, 20, 20, 0.6);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 50px;
-            display: flex;
-            justify-content: space-around;
-            padding: 15px 0;
-            z-index: 1000;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
-        }
-
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: rgba(255,255,255,0.5);
-            text-decoration: none;
-            cursor: pointer;
-            font-size: 10px;
-            transition: all 0.3s;
-            position: relative;
-        }
+        /* --- CONTENIDO PESTAÑAS --- */
+        .content-section { display: none; animation: fadeIn 0.3s ease; padding-bottom: 20px; }
+        .content-section.active { display: grid; } /* Grid por defecto para galerías */
         
+        /* Clase específica para cuando el contenido NO es grid (como la lista de logros) */
+        .content-section.active.no-grid { display: block; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Grid Fotos y Guardados */
+        .gallery-grid { 
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 5px; 
+            /* Asegura que las fotos no se estiren */
+            align-content: start; 
+        }
+        .gallery-item { 
+            width: 100%; 
+            aspect-ratio: 1 / 1; /* Mantiene cuadrado perfecto */
+            object-fit: cover; 
+            border-radius: 8px; 
+            background-color: rgba(255,255,255,0.1); 
+            cursor: pointer; 
+            transition: transform 0.2s; 
+        }
+        .gallery-item:hover { transform: scale(1.02); filter: brightness(1.1); }
+
+        /* --- ESTILOS NUEVOS: SECCIÓN RETOS/RANKING --- */
+        .profile-rank-card {
+            background: linear-gradient(135deg, rgba(74, 222, 128, 0.2), rgba(255, 255, 255, 0.05));
+            border: 1px solid #4ade80;
+            border-radius: 20px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(74, 222, 128, 0.1);
+        }
+        .rank-left { display: flex; align-items: center; gap: 15px; }
+        .rank-icon-circle { width: 50px; height: 50px; background: #4ade80; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: #064e3b; font-size: 24px; }
+        .rank-big-num { font-size: 28px; font-weight: 800; color: white; line-height: 1; }
+        .rank-desc { text-align: right; color: #4ade80; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+
+        .section-title { font-size: 14px; font-weight: 600; color: rgba(255,255,255,0.7); margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; }
+
+        .challenge-history-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            border-left: 4px solid #4ade80;
+            transition: background 0.2s;
+        }
+        .challenge-history-item:hover { background: rgba(255, 255, 255, 0.1); }
+        
+        .chal-icon { width: 30px; text-align: center; color: #4ade80; margin-right: 10px; font-size: 18px; }
+        .chal-info { flex-grow: 1; text-align: left; }
+        .chal-title { font-size: 14px; font-weight: 600; display: block; color: white; }
+        .chal-date { font-size: 10px; color: rgba(255,255,255,0.5); }
+        .chal-points { font-weight: 700; color: white; font-size: 13px; background: rgba(74, 222, 128, 0.2); padding: 4px 8px; border-radius: 10px; }
+
+
+        /* --- MODALES --- */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8); backdrop-filter: blur(5px);
+            z-index: 2000; display: none; justify-content: center; align-items: center;
+            padding: 20px; box-sizing: border-box;
+        }
+        .modal-overlay.show { display: flex; animation: popIn 0.3s ease; }
+        .modal-box { background: #1a1a1a; width: 100%; max-width: 400px; border-radius: 30px; padding: 30px; position: relative; border: 1px solid rgba(255,255,255,0.1); text-align: center; }
+        .close-modal { position: absolute; top: 15px; right: 15px; font-size: 24px; cursor: pointer; color: rgba(255,255,255,0.5); }
+
+        /* QR Modal */
+        .qr-image { width: 200px; height: 200px; border-radius: 15px; margin-bottom: 15px; border: 5px solid white; }
+        .user-id-display { font-family: monospace; font-size: 18px; background: rgba(255,255,255,0.1); padding: 10px 20px; border-radius: 10px; letter-spacing: 2px; color: #4ade80; }
+
+        /* Edit Modal */
+        .edit-input { width: 100%; padding: 15px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 15px; color: white; margin-bottom: 15px; box-sizing: border-box; outline: none; }
+        .edit-input:focus { border-color: #4ade80; }
+        .save-btn { width: 100%; background: #4ade80; color: #064e3b; border: none; padding: 15px; border-radius: 30px; font-weight: 700; cursor: pointer; }
+
+        /* Settings Modal */
+        .settings-option { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); text-align: left; font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; }
+        .settings-option:hover { background: rgba(255,255,255,0.05); }
+        .settings-option.logout { color: #ff6b6b; border-bottom: none; margin-top: 10px; justify-content: flex-start; gap: 15px; }
+
+        /* Switch para notificaciones */
+        .switch { position: relative; display: inline-block; width: 40px; height: 22px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255,255,255,0.2); transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: #4ade80; }
+        input:checked + .slider:before { transform: translateX(18px); }
+
+        /* Soporte Modal */
+        .support-option { background: rgba(255,255,255,0.08); padding: 15px; border-radius: 15px; margin-bottom: 10px; cursor: pointer; display: flex; align-items: center; gap: 15px; transition: 0.2s; }
+        .support-option:hover { background: rgba(255,255,255,0.15); }
+        .support-icon { font-size: 20px; color: #4ade80; width: 30px; text-align: center; }
+
+        /* MENÚ FLOTANTE */
+        .bottom-nav { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 400px; background: rgba(20, 20, 20, 0.6); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 50px; display: flex; justify-content: space-around; padding: 15px 0; z-index: 1000; box-shadow: 0 10px 40px rgba(0,0,0,0.4); }
+        .nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; color: rgba(255,255,255,0.5); text-decoration: none; cursor: pointer; font-size: 10px; transition: all 0.3s; position: relative; }
         .nav-item:hover i { transform: translateY(-3px); color: white; }
         .nav-item i { font-size: 20px; margin-bottom: 4px; transition: transform 0.3s; }
-
         .nav-item.active { color: #4ade80; font-weight: 600; }
         .nav-item.active i { transform: translateY(-2px); }
-        .nav-item.active::after {
-            content: '';
-            position: absolute;
-            bottom: -8px;
-            width: 5px; height: 5px;
-            background-color: #4ade80;
-            border-radius: 50%;
-            box-shadow: 0 0 10px #4ade80;
-        }
-
+        .nav-item.active::after { content: ''; position: absolute; bottom: -8px; width: 5px; height: 5px; background-color: #4ade80; border-radius: 50%; box-shadow: 0 0 10px #4ade80; }
     </style>
 </head>
 <body>
 
-
 <div class="app-container">
     
     <div class="profile-card">
-        <img src="https://i.pravatar.cc/300?u=my_profile" class="profile-img">
+        <img src="perfil.jpg" class="profile-img">
         
-        <h1 id="user-name">Cargando...</h1>
-        <span class="username" id="user-handle">@...</span>
+        <h1 id="user-name">Usuario</h1>
+        <span class="username" id="user-handle">@usuario</span>
         
-        <div class="bio-tag">🌿 Entusiasta • 🤝 Amigable • 🌍 Eco-Lover</div>
+        <div class="bio-tag" id="user-bio">🌿 Entusiasta • 🤝 Amigable • 🌍 Eco-Lover</div>
 
         <div class="stats-container">
-            <div class="stat-item">
-                <span class="stat-number">123</span>
-                <span class="stat-label">Seguidos</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-number">20</span>
-                <span class="stat-label">Seguidores</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-number">5</span>
-                <span class="stat-label">Likes</span>
-            </div>
+            <div class="stat-item"><span class="stat-number">123</span><span class="stat-label">Seguidos</span></div>
+            <div class="stat-item"><span class="stat-number">20</span><span class="stat-label">Seguidores</span></div>
+            <div class="stat-item"><span class="stat-number">5</span><span class="stat-label">Likes</span></div>
         </div>
     </div>
 
     <div class="action-buttons">
-        <div class="action-btn"><i class="fa-solid fa-pen"></i></div>
-        <div class="action-btn"><i class="fa-solid fa-share-nodes"></i></div>
-        <div class="action-btn"><i class="fa-solid fa-qrcode"></i></div>
-        <div class="action-btn"><i class="fa-solid fa-gear"></i></div>
+        <div class="action-btn" onclick="abrirEditar()"><i class="fa-solid fa-pen"></i></div>
+        <div class="action-btn" onclick="abrirQR()"><i class="fa-solid fa-qrcode"></i></div>
+        <div class="action-btn" onclick="abrirAjustes()"><i class="fa-solid fa-gear"></i></div>
     </div>
 
     <div class="tabs-container">
-        <div class="tab-item active"><i class="fa-solid fa-border-all"></i></div>
-        <div class="tab-item"><i class="fa-solid fa-play"></i></div>
-        <div class="tab-item"><i class="fa-solid fa-user-tag"></i></div> </div>
-
-    <div class="gallery-grid">
-        <img src="https://picsum.photos/seed/treeplanting/300" class="gallery-item">
-        <img src="https://picsum.photos/seed/cookingveg/300" class="gallery-item">
-        <img src="https://picsum.photos/seed/wildflowers/300" class="gallery-item">
-        
-        <img src="https://picsum.photos/seed/sunsetfriends/300" class="gallery-item">
-        <img src="https://picsum.photos/seed/gardening/300" class="gallery-item">
-        <img src="https://picsum.photos/seed/shells/300" class="gallery-item">
-
-        <img src="https://picsum.photos/seed/picnic/300" class="gallery-item">
-        <img src="https://picsum.photos/seed/harvest/300" class="gallery-item">
-        <img src="https://picsum.photos/seed/dogshelter/300" class="gallery-item">
+        <div class="tab-item active" onclick="switchTab('photos')"><i class="fa-solid fa-border-all"></i></div>
+        <div class="tab-item" onclick="switchTab('achievements')"><i class="fa-solid fa-medal"></i></div>
+        <div class="tab-item" onclick="switchTab('saved')"><i class="fa-solid fa-bookmark"></i></div>
     </div>
 
-    <div class="logout-btn-container">
-        <button id="btn-logout" class="btn-logout">
-            <i class="fa-solid fa-arrow-right-from-bracket"></i> Cerrar Sesión
-        </button>
+    <div id="content-photos" class="content-section gallery-grid active">
+        <img src="publi1.jpg" class="gallery-item">
+        <img src="publi2.jpg" class="gallery-item">
+        <img src="publi3.jpg" class="gallery-item">
+        <img src="publi4.jpg" class="gallery-item">
+        <img src="publi5.jpg" class="gallery-item">
+        <img src="publi6.jpg" class="gallery-item">
+        <img src="publi7.jpg" class="gallery-item">
+        <img src="publi8.jpg" class="gallery-item">
+        <img src="publi9.jpg" class="gallery-item">
+    </div>
+
+    <div id="content-achievements" class="content-section no-grid">
+        
+        <div class="profile-rank-card">
+            <div class="rank-left">
+                <div class="rank-icon-circle"><i class="fa-solid fa-trophy"></i></div>
+                <div>
+                    <span class="rank-big-num">#54</span>
+                    <div style="font-size:11px; color:rgba(255,255,255,0.6);">Entre amigos</div>
+                </div>
+            </div>
+            <div class="rank-desc">
+                Ranking <br> Global #342
+            </div>
+        </div>
+
+        <div class="section-title">Historial de Retos</div>
+
+        <div class="challenge-history-item">
+            <div class="chal-icon"><i class="fa-solid fa-bicycle"></i></div>
+            <div class="chal-info">
+                <span class="chal-title">Transporte Verde</span>
+                <span class="chal-date">Completado: Hoy</span>
+            </div>
+            <div class="chal-points">+50 pts</div>
+        </div>
+
+        <div class="challenge-history-item">
+            <div class="chal-icon"><i class="fa-solid fa-tree"></i></div>
+            <div class="chal-info">
+                <span class="chal-title">Planta un Árbol</span>
+                <span class="chal-date">Completado: Ayer</span>
+            </div>
+            <div class="chal-points">+100 pts</div>
+        </div>
+
+        <div class="challenge-history-item">
+            <div class="chal-icon"><i class="fa-solid fa-trash-arrow-up"></i></div>
+            <div class="chal-info">
+                <span class="chal-title">Reciclaje Perfecto</span>
+                <span class="chal-date">Completado: 24 Oct</span>
+            </div>
+            <div class="chal-points">+30 pts</div>
+        </div>
+
+        <div class="challenge-history-item">
+            <div class="chal-icon"><i class="fa-solid fa-lightbulb"></i></div>
+            <div class="chal-info">
+                <span class="chal-title">Ahorro de Energía</span>
+                <span class="chal-date">Completado: 20 Oct</span>
+            </div>
+            <div class="chal-points">+20 pts</div>
+        </div>
+
+    </div>
+
+    <div id="content-saved" class="content-section gallery-grid">
+        <div class="gallery-item" style="position:relative;"><img src="https://picsum.photos/seed/forest/300" style="width:100%; height:100%; object-fit:cover; border-radius:8px;"><i class="fa-solid fa-bookmark" style="position:absolute; top:5px; right:5px; color:white; filter:drop-shadow(0 0 2px black);"></i></div>
+        <div class="gallery-item" style="position:relative;"><img src="https://picsum.photos/seed/ocean/300" style="width:100%; height:100%; object-fit:cover; border-radius:8px;"><i class="fa-solid fa-bookmark" style="position:absolute; top:5px; right:5px; color:white; filter:drop-shadow(0 0 2px black);"></i></div>
+        <div class="gallery-item" style="position:relative;"><img src="https://picsum.photos/seed/mountain/300" style="width:100%; height:100%; object-fit:cover; border-radius:8px;"><i class="fa-solid fa-bookmark" style="position:absolute; top:5px; right:5px; color:white; filter:drop-shadow(0 0 2px black);"></i></div>
+        <div class="gallery-item" style="position:relative;"><img src="https://picsum.photos/seed/river/300" style="width:100%; height:100%; object-fit:cover; border-radius:8px;"><i class="fa-solid fa-bookmark" style="position:absolute; top:5px; right:5px; color:white; filter:drop-shadow(0 0 2px black);"></i></div>
+        <div class="gallery-item" style="position:relative;"><img src="https://picsum.photos/seed/fox/300" style="width:100%; height:100%; object-fit:cover; border-radius:8px;"><i class="fa-solid fa-bookmark" style="position:absolute; top:5px; right:5px; color:white; filter:drop-shadow(0 0 2px black);"></i></div>
+        <div class="gallery-item" style="position:relative;"><img src="https://picsum.photos/seed/camping/300" style="width:100%; height:100%; object-fit:cover; border-radius:8px;"><i class="fa-solid fa-bookmark" style="position:absolute; top:5px; right:5px; color:white; filter:drop-shadow(0 0 2px black);"></i></div>
+        <div class="gallery-item" style="position:relative;"><img src="https://picsum.photos/seed/leaf/300" style="width:100%; height:100%; object-fit:cover; border-radius:8px;"><i class="fa-solid fa-bookmark" style="position:absolute; top:5px; right:5px; color:white; filter:drop-shadow(0 0 2px black);"></i></div>
+        <div class="gallery-item" style="position:relative;"><img src="https://picsum.photos/seed/bird/300" style="width:100%; height:100%; object-fit:cover; border-radius:8px;"><i class="fa-solid fa-bookmark" style="position:absolute; top:5px; right:5px; color:white; filter:drop-shadow(0 0 2px black);"></i></div>
+        <div class="gallery-item" style="position:relative;"><img src="https://picsum.photos/seed/waterfall/300" style="width:100%; height:100%; object-fit:cover; border-radius:8px;"><i class="fa-solid fa-bookmark" style="position:absolute; top:5px; right:5px; color:white; filter:drop-shadow(0 0 2px black);"></i></div>
     </div>
 
     <nav class="bottom-nav">
@@ -341,40 +375,118 @@
     </nav>
 </div>
 
+<div id="qr-modal" class="modal-overlay" onclick="cerrarModal(event, 'qr-modal')">
+    <div class="modal-box">
+        <i class="fa-solid fa-xmark close-modal" onclick="document.getElementById('qr-modal').classList.remove('show')"></i>
+        <h2>Tu Código Econnect</h2>
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=EconnectUser123" class="qr-image">
+        <div class="user-id-display" id="modal-user-id">ID: ...</div>
+        <p style="font-size:12px; color:rgba(255,255,255,0.5); margin-top:10px;">Escanea para agregar amigo</p>
+    </div>
+</div>
+
+<div id="edit-modal" class="modal-overlay" onclick="cerrarModal(event, 'edit-modal')">
+    <div class="modal-box">
+        <i class="fa-solid fa-xmark close-modal" onclick="document.getElementById('edit-modal').classList.remove('show')"></i>
+        <h2>Editar Perfil</h2>
+        <input type="text" id="edit-name" class="edit-input" placeholder="Nombre">
+        <input type="text" id="edit-bio" class="edit-input" placeholder="Tu frase o bio">
+        <button class="save-btn" onclick="guardarPerfil()">Guardar Cambios</button>
+    </div>
+</div>
+
+<div id="settings-modal" class="modal-overlay" onclick="cerrarModal(event, 'settings-modal')">
+    <div class="modal-box" style="text-align:left;">
+        <i class="fa-solid fa-xmark close-modal" onclick="document.getElementById('settings-modal').classList.remove('show')"></i>
+        <h2 style="text-align:center;">Ajustes</h2>
+        
+        <div class="settings-option" onclick="window.location.href='privacidad.html'">
+            <div><i class="fa-solid fa-lock" style="margin-right:10px; color:#4ade80;"></i> Política de Privacidad</div>
+            <i class="fa-solid fa-chevron-right" style="font-size:12px; opacity:0.5;"></i>
+        </div>
+        
+        <div class="settings-option">
+            <div><i class="fa-solid fa-bell" style="margin-right:10px; color:#4ade80;"></i> Notificaciones</div>
+            <label class="switch">
+                <input type="checkbox" checked onchange="alert('Configuración de notificaciones actualizada')">
+                <span class="slider"></span>
+            </label>
+        </div>
+        
+        <div class="settings-option" onclick="abrirSoporte()">
+            <div><i class="fa-solid fa-circle-question" style="margin-right:10px; color:#4ade80;"></i> Ayuda y Soporte</div>
+            <i class="fa-solid fa-chevron-right" style="font-size:12px; opacity:0.5;"></i>
+        </div>
+        
+        <div class="settings-option logout" id="btn-logout">
+            <i class="fa-solid fa-arrow-right-from-bracket"></i> Cerrar Sesión
+        </div>
+    </div>
+</div>
+
+<div id="support-modal" class="modal-overlay" onclick="cerrarModal(event, 'support-modal')">
+    <div class="modal-box">
+        <i class="fa-solid fa-xmark close-modal" onclick="document.getElementById('support-modal').classList.remove('show')"></i>
+        <h2>¿Cómo podemos ayudarte?</h2>
+        <p style="font-size:12px; color:#aaa; margin-bottom:20px;">Selecciona una opción para contactar</p>
+        
+        <div class="support-option" onclick="location.href='chatbot.html'">
+            <div class="support-icon"><i class="fa-solid fa-robot"></i></div>
+            <div style="text-align:left;">
+                <span style="display:block; font-weight:600;">Chat con Eko</span>
+                <span style="font-size:11px; color:#aaa;">Respuesta inmediata con IA</span>
+            </div>
+        </div>
+
+        <div class="support-option" onclick="window.open('mailto:soporte@econnect.com')">
+            <div class="support-icon"><i class="fa-solid fa-envelope"></i></div>
+            <div style="text-align:left;">
+                <span style="display:block; font-weight:600;">Enviar Correo</span>
+                <span style="font-size:11px; color:#aaa;">Te respondemos en 24h</span>
+            </div>
+        </div>
+
+        <div class="support-option" onclick="alert('Gracias por reportar. El equipo técnico revisará el problema.')">
+            <div class="support-icon"><i class="fa-solid fa-bug"></i></div>
+            <div style="text-align:left;">
+                <span style="display:block; font-weight:600;">Reportar Error</span>
+                <span style="font-size:11px; color:#aaa;">Ayúdanos a mejorar la app</span>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-
-    const firebaseConfig = {
-        apiKey: "AIzaSyA5lPDFaH8W-miDJHB3sDKdD5fiJt8d9-8",
-        authDomain: "ecconect-ae607.firebaseapp.com",
-        projectId: "ecconect-ae607",
-        storageBucket: "ecconect-ae607.firebasestorage.app",
-        messagingSenderId: "241708782882",
-        appId: "1:241708782882:web:514d895119f9f7c3fa817b",
-        measurementId: "G-KJ3FLCHZCG"
-    };
-
+    const firebaseConfig = { apiKey: "AIzaSyA5lPDFaH8W-miDJHB3sDKdD5fiJt8d9-8", authDomain: "ecconect-ae607.firebaseapp.com", projectId: "ecconect-ae607", storageBucket: "ecconect-ae607.firebasestorage.app", messagingSenderId: "241708782882", appId: "1:241708782882:web:514d895119f9f7c3fa817b", measurementId: "G-KJ3FLCHZCG" };
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
 
+    let currentUserUid = null;
+
     // 1. CARGAR DATOS
     onAuthStateChanged(auth, async (user) => {
         if (user) {
+            currentUserUid = user.uid;
             try {
                 const docRef = doc(db, "usuarios", user.uid);
                 const docSnap = await getDoc(docRef);
 
                 if (docSnap.exists()) {
                     const data = docSnap.data();
-                    
                     document.getElementById("user-name").textContent = data.nombre;
                     
                     const handle = "@" + data.nombre.replace(/\s+/g, '').toLowerCase();
                     document.getElementById("user-handle").textContent = handle;
+                    
+                    if(data.bio) document.getElementById("user-bio").textContent = data.bio;
+
+                    const visualID = "ID: #" + user.uid.substring(0, 6).toUpperCase();
+                    document.getElementById("modal-user-id").textContent = visualID;
                 }
             } catch(e) { console.log(e); }
         } else {
@@ -382,13 +494,75 @@
         }
     });
 
-    // 2. CERRAR SESIÓN
+    // 2. FUNCIONES MODALES
+    window.abrirQR = function() { document.getElementById('qr-modal').classList.add('show'); }
+    
+    window.abrirEditar = function() { 
+        document.getElementById('edit-name').value = document.getElementById('user-name').textContent;
+        document.getElementById('edit-bio').value = document.getElementById('user-bio').textContent;
+        document.getElementById('edit-modal').classList.add('show'); 
+    }
+    
+    window.abrirAjustes = function() { document.getElementById('settings-modal').classList.add('show'); }
+    
+    window.abrirSoporte = function() { 
+        // Cerrar ajustes y abrir soporte
+        document.getElementById('settings-modal').classList.remove('show');
+        document.getElementById('support-modal').classList.add('show'); 
+    }
+
+    window.cerrarModal = function(e, id) {
+        if(e.target.classList.contains('modal-overlay') || e.target.classList.contains('close-modal')) {
+            document.getElementById(id).classList.remove('show');
+        }
+    }
+
+    // 3. GUARDAR PERFIL
+    window.guardarPerfil = async function() {
+        const newName = document.getElementById('edit-name').value;
+        const newBio = document.getElementById('edit-bio').value;
+
+        if(currentUserUid && newName) {
+            try {
+                const userRef = doc(db, "usuarios", currentUserUid);
+                await updateDoc(userRef, {
+                    nombre: newName,
+                    bio: newBio
+                });
+                document.getElementById('user-name').textContent = newName;
+                document.getElementById('user-handle').textContent = "@" + newName.replace(/\s+/g, '').toLowerCase();
+                document.getElementById('user-bio').textContent = newBio;
+                document.getElementById('edit-modal').classList.remove('show');
+                alert("Perfil actualizado correctamente ✅");
+            } catch (error) {
+                console.error("Error actualizando: ", error);
+                alert("Error al guardar.");
+            }
+        }
+    }
+
+    // 4. CERRAR SESIÓN
     document.getElementById('btn-logout').addEventListener('click', async () => {
         await signOut(auth);
         window.location.href = "index.html";
     });
 
+    // 5. CAMBIAR PESTAÑAS
+    window.switchTab = function(tabName) {
+        document.querySelectorAll('.content-section').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.tab-item').forEach(el => el.classList.remove('active'));
+        document.getElementById('content-' + tabName).classList.add('active');
+        
+        const tabs = document.querySelectorAll('.tab-item');
+        if(tabName === 'photos') tabs[0].classList.add('active');
+        if(tabName === 'achievements') tabs[1].classList.add('active');
+        if(tabName === 'saved') tabs[2].classList.add('active');
+    }
 </script>
-
+<script>
+    if (localStorage.getItem('darkMode') === 'enabled') {
+        document.body.classList.add('dark-theme');
+    }
+</script>
 </body>
 </html>

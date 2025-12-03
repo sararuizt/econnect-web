@@ -9,99 +9,224 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
-        body { margin: 0; padding: 0; font-family: 'Poppins', sans-serif; background: linear-gradient(rgba(10, 30, 15, 0.85), rgba(10, 30, 15, 0.95)), url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=2074&auto=format&fit=crop'); background-size: cover; background-position: center; background-attachment: fixed; color: white; min-height: 100vh; display: flex; justify-content: center; }
+        /* --- ESTILOS GENERALES --- */
+        body {
+            margin: 0; padding: 0; 
+            font-family: 'Poppins', sans-serif; 
+            /* Fondo Día (Por defecto) */
+            background: linear-gradient(rgba(34, 85, 45, 0.5), rgba(10, 40, 20, 0.75)),
+            url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=2074&auto=format&fit=crop');
+            background-size: cover; background-position: center; background-attachment: fixed;
+            color: white; min-height: 100vh; display: flex; justify-content: center;
+            transition: background 0.3s ease;
+        }
         
-        .app-container { width: 100%; max-width: 500px; padding: 20px; box-sizing: border-box; display: flex; flex-direction: column; }
+/* --- TEMA OSCURO (CORREGIDO) --- */
+body.dark-theme {
+    background: linear-gradient(rgba(10, 30, 15, 0.8), rgba(10, 30, 15, 0.9)), 
+    url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=2074&auto=format&fit=crop') !important;
+            background-size: cover !important; background-position: center !important; background-attachment: fixed !important;
+        }
+
+        /* Cristal Negro para Modo Noche */
+        body.dark-theme .settings-group,
+        body.dark-theme .modal-box {
+            background: rgba(30, 30, 30, 0.6) !important; /* Gris oscuro */
+            border: 1px solid rgba(255, 255, 255, 0.15); /* Borde más claro para resaltar */
+            box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+        }
+        
+        /* Texto grisáceo en modo noche */
+        body.dark-theme .section-label, 
+        body.dark-theme .item-right {
+            color: #aaaaaa !important;
+        }
+
+        .app-container {
+            width: 100%; max-width: 500px; padding: 20px; 
+            box-sizing: border-box; display: flex; flex-direction: column;
+            padding-bottom: 50px;
+        }
 
         /* CABECERA */
-        .header { display: flex; align-items: center; margin-bottom: 30px; margin-top: 10px; }
-        .back-btn { font-size: 24px; color: white; cursor: pointer; background: none; border: none; padding: 0; margin-right: 20px; }
-        h1 { font-size: 24px; font-weight: 700; margin: 0; }
+        .header-profile { display: flex; flex-direction: column; align-items: center; margin-bottom: 30px; position: relative; }
+        .back-btn-abs { position: absolute; left: 0; top: 10px; font-size: 24px; color: white; cursor: pointer; background: none; border: none; padding: 0; }
+        .big-avatar { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid rgba(255,255,255,0.2); margin-bottom: 15px; }
+        .header-profile h1 { font-size: 22px; font-weight: 700; margin: 0; }
 
-        /* PERFIL RESUMEN */
-        .profile-summary { display: flex; align-items: center; background: rgba(255,255,255,0.1); padding: 15px; border-radius: 20px; margin-bottom: 30px; border: 1px solid rgba(255,255,255,0.1); }
-        .mini-avatar { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; margin-right: 15px; }
-        .user-info h2 { font-size: 16px; margin: 0; font-weight: 600; }
-        .user-info p { font-size: 12px; color: #4ade80; margin: 0; }
-
-        /* GRUPOS */
-        .section-label { font-size: 12px; color: rgba(255,255,255,0.5); margin-bottom: 10px; margin-left: 10px; text-transform: uppercase; letter-spacing: 1px; }
+        .main-section-title { font-size: 18px; font-weight: 700; margin-bottom: 15px; margin-top: 10px; }
+        .section-label { font-size: 13px; color: rgba(255,255,255,0.6); margin-bottom: 8px; margin-left: 15px; font-weight: 500; }
         
-        .settings-group { background: rgba(255, 255, 255, 0.05); border-radius: 20px; overflow: hidden; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.05); }
+        .settings-group { background: rgba(255, 255, 255, 0.08); border-radius: 20px; overflow: hidden; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.05); backdrop-filter: blur(10px); }
 
-        .list-item { display: flex; align-items: center; padding: 18px 20px; border-bottom: 1px solid rgba(255,255,255,0.05); cursor: pointer; transition: background 0.2s; }
+        .list-item { display: flex; align-items: center; padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.05); cursor: pointer; transition: background 0.2s; }
         .list-item:last-child { border-bottom: none; }
-        .list-item:hover { background: rgba(255,255,255,0.1); }
+        .list-item:hover { background: rgba(255,255,255,0.15); }
 
-        .item-icon { width: 30px; font-size: 18px; color: #4ade80; margin-right: 10px; }
-        .item-text { flex-grow: 1; font-size: 15px; font-weight: 400; }
-        .item-right { color: rgba(255,255,255,0.3); font-size: 14px; display: flex; align-items: center; gap: 10px; }
+        .item-icon { width: 25px; font-size: 18px; color: #4ade80; margin-right: 15px; text-align: center; }
+        .item-text { flex-grow: 1; font-size: 15px; font-weight: 500; }
+        .item-right { color: rgba(255,255,255,0.4); font-size: 14px; display: flex; align-items: center; }
+        .item-value { font-size: 14px; color: rgba(255,255,255,0.6); margin-right: 10px; }
 
         /* SWITCH */
-        .switch { position: relative; display: inline-block; width: 40px; height: 22px; }
+        .switch { position: relative; display: inline-block; width: 44px; height: 24px; }
         .switch input { opacity: 0; width: 0; height: 0; }
-        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255,255,255,0.2); transition: .4s; border-radius: 34px; }
-        .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255,255,255,0.3); transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
         input:checked + .slider { background-color: #4ade80; }
-        input:checked + .slider:before { transform: translateX(18px); }
+        input:checked + .slider:before { transform: translateX(20px); }
 
-        /* LOGOUT */
         .logout-item { color: #fca5a5; }
         .logout-item .item-icon { color: #fca5a5; }
+        .mini-avatar-small { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; margin-right: 10px; border: 2px solid rgba(255,255,255,0.2); }
+
+        /* --- MODALES --- */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); backdrop-filter: blur(5px);
+            z-index: 2000; display: none; justify-content: center; align-items: center;
+            padding: 20px; box-sizing: border-box;
+        }
+        .modal-overlay.show { display: flex; animation: popIn 0.2s ease-out; }
+        @keyframes popIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+
+        .modal-box { background: #222; width: 100%; max-width: 400px; border-radius: 25px; padding: 30px; text-align: center; border: 1px solid rgba(255,255,255,0.1); position: relative; }
+        .modal-title { font-size: 18px; font-weight: 700; margin-bottom: 10px; }
+        .modal-desc { font-size: 14px; color: #aaa; margin-bottom: 25px; line-height: 1.5; }
+        
+        .modal-btns { display: flex; gap: 10px; flex-direction: column; }
+        .btn-modal { padding: 14px; border-radius: 15px; border: none; font-weight: 600; cursor: pointer; font-size: 14px; }
+        .btn-primary { background: #4ade80; color: #064e3b; }
+        .btn-secondary { background: rgba(255,255,255,0.1); color: white; }
+        .close-cross { position: absolute; top: 15px; right: 20px; font-size: 24px; cursor: pointer; color: #666; }
     </style>
 </head>
 <body>
 
+    <script>
+        if (localStorage.getItem('darkMode') === 'enabled') {
+            document.body.classList.add('dark-theme');
+        }
+    </script>
+
 <div class="app-container">
     
-    <div class="header">
-        <button class="back-btn" onclick="location.href='mapa.html'"><i class="fa-solid fa-chevron-left"></i></button>
-        <h1>Ajustes</h1>
+    <div class="header-profile">
+        <button class="back-btn-abs" onclick="location.href='mapa.html'"><i class="fa-solid fa-chevron-left"></i></button>
+        <img src="https://i.pravatar.cc/300?u=my_profile" class="big-avatar" id="user-avatar-settings">
+        <h1 id="user-name-settings">Cargando...</h1>
     </div>
 
-    <div class="profile-summary">
-        <img src="https://i.pravatar.cc/300?u=maria_navarro" class="mini-avatar">
-        <div class="user-info">
-            <h2 id="user-name-settings">Cargando...</h2>
-            <p>Gestionar cuenta</p>
-        </div>
-    </div>
+    <div class="main-section-title">Ajustes y privacidad</div>
 
-    <div class="section-label">General</div>
+    <div class="section-label">Cuenta</div>
     <div class="settings-group">
-        <div class="list-item">
+        <div class="list-item" onclick="location.href='cuenta.html'">
             <i class="fa-regular fa-circle-user item-icon"></i>
-            <span class="item-text">Editar Perfil</span>
+            <span class="item-text">Datos de Cuenta</span>
             <i class="fa-solid fa-chevron-right item-right"></i>
         </div>
-        <div class="list-item">
-            <i class="fa-solid fa-bell item-icon"></i>
+        <div class="list-item" onclick="window.location.href='privacidad.html'">
+            <i class="fa-solid fa-lock item-icon"></i>
+            <span class="item-text">Privacidad</span>
+            <i class="fa-solid fa-chevron-right item-right"></i>
+        </div>
+        <div class="list-item" onclick="location.href='seguridad.html'">
+            <i class="fa-solid fa-shield-halved item-icon"></i>
+            <span class="item-text">Seguridad y permisos</span>
+            <i class="fa-solid fa-chevron-right item-right"></i>
+        </div>
+        <div class="list-item" onclick="location.href='compartir_perfil.html'">
+            <i class="fa-solid fa-share-nodes item-icon"></i>
+            <span class="item-text">Compartir perfil</span>
+            <i class="fa-solid fa-chevron-right item-right"></i>
+        </div>
+    </div>
+
+    <div class="section-label">Contenido y pantalla</div>
+    <div class="settings-group">
+        <div class="list-item" onclick="location.href='notificaciones.html'">
+            <i class="fa-regular fa-bell item-icon"></i>
             <span class="item-text">Notificaciones</span>
             <i class="fa-solid fa-chevron-right item-right"></i>
         </div>
+        <div class="list-item" onclick="location.href='guardados.html'">
+            <i class="fa-regular fa-bookmark item-icon"></i>
+            <span class="item-text">Guardados</span>
+            <i class="fa-solid fa-chevron-right item-right"></i>
+        </div>
+        <div class="list-item" onclick="location.href='idioma.html'">
+            <i class="fa-solid fa-globe item-icon"></i>
+            <span class="item-text">Idioma</span>
+            <div class="item-right">
+                <span class="item-value">Español</span>
+                <i class="fa-solid fa-chevron-right"></i>
+            </div>
+        </div>
         <div class="list-item">
-            <i class="fa-solid fa-moon item-icon"></i>
-            <span class="item-text">Modo Oscuro</span>
+            <i class="fa-regular fa-moon item-icon"></i>
+            <span class="item-text">Modo oscuro</span>
             <label class="switch">
-                <input type="checkbox" checked disabled> <span class="slider"></span>
+                <input type="checkbox" id="dark-mode-toggle">
+                <span class="slider"></span>
             </label>
         </div>
     </div>
 
-    <div class="section-label">Soporte</div>
+    <div class="section-label">Inicio de sesión</div>
     <div class="settings-group">
-        <div class="list-item">
-            <i class="fa-solid fa-circle-question item-icon"></i>
+        <div class="list-item" onclick="abrirModal('modal-cambiar-cuenta')">
+            <i class="fa-solid fa-repeat item-icon"></i>
+            <span class="item-text">Cambiar de cuenta</span>
+            <div class="item-right">
+                <img src="https://i.pravatar.cc/100?u=other_account" class="mini-avatar-small">
+                <i class="fa-solid fa-chevron-right"></i>
+            </div>
+        </div>
+        <div class="list-item" onclick="abrirModal('modal-ayuda')">
+            <i class="fa-regular fa-circle-question item-icon"></i>
             <span class="item-text">Ayuda</span>
             <i class="fa-solid fa-chevron-right item-right"></i>
         </div>
         <div class="list-item logout-item" id="btn-logout">
             <i class="fa-solid fa-arrow-right-from-bracket item-icon"></i>
-            <span class="item-text">Cerrar Sesión</span>
+            <span class="item-text">Cerrar sesión</span>
         </div>
     </div>
 
 </div>
+
+<div id="modal-cambiar-cuenta" class="modal-overlay" onclick="cerrarModal(event, 'modal-cambiar-cuenta')">
+    <div class="modal-box">
+        <i class="fa-solid fa-xmark close-cross" onclick="document.getElementById('modal-cambiar-cuenta').classList.remove('show')"></i>
+        <div class="modal-title">Cambiar de cuenta</div>
+        <p class="modal-desc">¿Deseas cerrar la sesión actual para iniciar con otra cuenta?</p>
+        <div class="modal-btns">
+            <button class="btn-modal btn-primary" onclick="cerrarSesion()">Iniciar con otra cuenta</button>
+            <button class="btn-modal btn-secondary" onclick="document.getElementById('modal-cambiar-cuenta').classList.remove('show')">Cancelar (Seguir aquí)</button>
+        </div>
+    </div>
+</div>
+
+<div id="modal-ayuda" class="modal-overlay" onclick="cerrarModal(event, 'modal-ayuda')">
+    <div class="modal-box" style="text-align:left;">
+        <i class="fa-solid fa-xmark close-cross" onclick="document.getElementById('modal-ayuda').classList.remove('show')"></i>
+        <div class="modal-title" style="text-align:center;">Ayuda y Soporte</div>
+        <p class="modal-desc" style="text-align:center;">Selecciona una opción</p>
+        
+        <div class="list-item" onclick="window.open('mailto:soporte@econnect.com')">
+            <i class="fa-solid fa-envelope item-icon"></i>
+            <span class="item-text">Enviar Correo</span>
+            <i class="fa-solid fa-chevron-right item-right"></i>
+        </div>
+        <div class="list-item" onclick="alert('Gracias. Reporte enviado al equipo técnico.')">
+            <i class="fa-solid fa-bug item-icon"></i>
+            <span class="item-text">Reportar Error</span>
+            <i class="fa-solid fa-chevron-right item-right"></i>
+        </div>
+    </div>
+</div>
+
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
@@ -119,15 +244,41 @@
             const docSnap = await getDoc(docRef);
             if (docSnap.exists()) {
                 document.getElementById("user-name-settings").textContent = docSnap.data().nombre;
+                if(docSnap.data().photoURL) {
+                     document.getElementById("user-avatar-settings").src = docSnap.data().photoURL;
+                }
             }
         } else {
             window.location.href = "index.html";
         }
     });
 
-    document.getElementById('btn-logout').addEventListener('click', async () => {
+    // Función Global para cerrar sesión
+    window.cerrarSesion = async function() {
         await signOut(auth);
         window.location.href = "index.html";
+    }
+    // Vincular botón normal
+    document.getElementById('btn-logout').addEventListener('click', cerrarSesion);
+
+    // Funciones Modales
+    window.abrirModal = function(id) { document.getElementById(id).classList.add('show'); }
+    window.cerrarModal = function(e, id) {
+        if(e.target.classList.contains('modal-overlay')) document.getElementById(id).classList.remove('show');
+    }
+
+    // Lógica Modo Oscuro
+    const darkModeToggle = document.getElementById('dark-mode-toggle');
+    if(localStorage.getItem('darkMode') === 'enabled') darkModeToggle.checked = true;
+
+    darkModeToggle.addEventListener('change', (e) => {
+        if(e.target.checked) {
+            document.body.classList.add('dark-theme');
+            localStorage.setItem('darkMode', 'enabled');
+        } else {
+            document.body.classList.remove('dark-theme');
+            localStorage.setItem('darkMode', 'disabled');
+        }
     });
 </script>
 

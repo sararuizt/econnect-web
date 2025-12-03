@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Econnect - Mi Cuenta</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- ESTILOS BASE UNIFICADOS --- */
+        body {
+            margin: 0; padding: 0; font-family: 'Poppins', sans-serif;
+            background: linear-gradient(rgba(34, 85, 45, 0.5), rgba(10, 40, 20, 0.75)),
+            url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=2074&auto=format&fit=crop');
+            background-size: cover; background-position: center; background-attachment: fixed;
+            color: white; min-height: 100vh; display: flex; justify-content: center; transition: background 0.3s ease;
+        }
+        /* --- TEMA OSCURO (MODO BOSQUE NOCTURNO) --- */
+body.dark-theme {
+    background: linear-gradient(rgba(10, 30, 15, 0.8), rgba(10, 30, 15, 0.9)), 
+                        url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=2074&auto=format&fit=crop') !important;
+    background-size: cover !important; 
+    background-position: center !important; 
+    background-attachment: fixed !important;
+}
+body.dark-theme .glass-card, 
+body.dark-theme .profile-card,
+body.dark-theme .settings-group,
+body.dark-theme .nav-item,
+body.dark-theme .modal-box {
+    background: rgba(0, 0, 0, 0.4); /* Más oscuro y transparente */
+    border: 1px solid rgba(255,255,255,0.05);
+}
+        .app-container { width: 100%; max-width: 500px; padding: 20px; box-sizing: border-box; display: flex; flex-direction: column; }
+        
+        /* CABECERA */
+        .header { display: flex; align-items: center; margin-bottom: 25px; margin-top: 10px; }
+        .back-btn { font-size: 24px; color: white; background: none; border: none; cursor: pointer; margin-right: 15px; padding: 0; }
+        h1 { margin: 0; font-size: 20px; font-weight: 600; }
+
+        /* CONTENEDOR GLASS */
+        .settings-group {
+            background: rgba(255, 255, 255, 0.08); border-radius: 20px; overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.05); backdrop-filter: blur(10px);
+        }
+        body.dark-theme .settings-group { background: #1e1e1e; border-color: #333; }
+
+        /* ÍTEMS DE DATOS */
+        .data-item { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .data-item:last-child { border-bottom: none; }
+        .data-label { font-size: 12px; color: rgba(255,255,255,0.5); display: block; margin-bottom: 5px; }
+        .data-value { font-size: 15px; font-weight: 500; color: white; word-break: break-all; }
+        .id-style { font-family: monospace; color: #4ade80; letter-spacing: 1px; }
+    </style>
+</head>
+<body>
+    <script>if (localStorage.getItem('darkMode') === 'enabled') document.body.classList.add('dark-theme');</script>
+
+    <div class="app-container">
+        <div class="header">
+            <button class="back-btn" onclick="window.history.back()"><i class="fa-solid fa-chevron-left"></i></button>
+            <h1>Información de la Cuenta</h1>
+        </div>
+
+        <div class="settings-group">
+            <div class="data-item">
+                <span class="data-label">Nombre público</span>
+                <span class="data-value" id="acc-name">Cargando...</span>
+            </div>
+            <div class="data-item">
+                <span class="data-label">Correo electrónico</span>
+                <span class="data-value" id="acc-email">Cargando...</span>
+            </div>
+            <div class="data-item">
+                <span class="data-label">ID de Usuario Único</span>
+                <span class="data-value id-style" id="acc-id">...</span>
+            </div>
+            <div class="data-item">
+                <span class="data-label">Fecha de registro</span>
+                <span class="data-value" id="acc-date">Cargando...</span>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = { apiKey: "AIzaSyA5lPDFaH8W-miDJHB3sDKdD5fiJt8d9-8", authDomain: "ecconect-ae607.firebaseapp.com", projectId: "ecconect-ae607", storageBucket: "ecconect-ae607.firebasestorage.app", messagingSenderId: "241708782882", appId: "1:241708782882:web:514d895119f9f7c3fa817b", measurementId: "G-KJ3FLCHZCG" };
+        const app = initializeApp(firebaseConfig); const auth = getAuth(app); const db = getFirestore(app);
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                document.getElementById('acc-email').textContent = user.email;
+                document.getElementById('acc-id').textContent = user.uid;
+                
+                // LÓGICA PARA LA FECHA DE REGISTRO
+                if (user.metadata.creationTime) {
+                    const date = new Date(user.metadata.creationTime);
+                    // Formato local (ej: 24/10/2025)
+                    document.getElementById('acc-date').textContent = date.toLocaleDateString('es-ES', {
+                        year: 'numeric', month: 'long', day: 'numeric'
+                    });
+                } else {
+                    document.getElementById('acc-date').textContent = "Desconocida";
+                }
+
+                const docSnap = await getDoc(doc(db, "usuarios", user.uid));
+                if (docSnap.exists()) document.getElementById('acc-name').textContent = docSnap.data().nombre;
+            } else { window.location.href = "index.html"; }
+        });
+    </script>
+    <script>
+        if (localStorage.getItem('darkMode') === 'enabled') {
+            document.body.classList.add('dark-theme');
+        }
+    </script>
+</body>
+</html>

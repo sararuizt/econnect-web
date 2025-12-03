@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seguridad</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- ESTILOS BASE UNIFICADOS --- */
+        body {
+            margin: 0; padding: 0; font-family: 'Poppins', sans-serif;
+            background: linear-gradient(rgba(34, 85, 45, 0.5), rgba(10, 40, 20, 0.75)),
+            url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=2074&auto=format&fit=crop');
+            background-size: cover; background-position: center; background-attachment: fixed;
+            color: white; min-height: 100vh; display: flex; justify-content: center; transition: background 0.3s ease;
+        }
+        body.dark-theme {
+    background: linear-gradient(rgba(10, 30, 15, 0.8), rgba(10, 30, 15, 0.9)), 
+                        url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=2074&auto=format&fit=crop') !important;
+    background-size: cover !important; 
+    background-position: center !important; 
+    background-attachment: fixed !important;
+}
+body.dark-theme .glass-card, 
+body.dark-theme .profile-card,
+body.dark-theme .settings-group,
+body.dark-theme .nav-item,
+body.dark-theme .modal-box {
+    background: rgba(0, 0, 0, 0.4); /* Más oscuro y transparente */
+    border: 1px solid rgba(255,255,255,0.05);
+}
+        .app-container { width: 100%; max-width: 500px; padding: 20px; box-sizing: border-box; display: flex; flex-direction: column; }
+
+        /* CABECERA */
+        .header { display: flex; align-items: center; margin-bottom: 25px; margin-top: 10px; }
+        .back-btn { font-size: 24px; color: white; background: none; border: none; cursor: pointer; margin-right: 15px; padding: 0; }
+        h1 { margin: 0; font-size: 20px; font-weight: 600; }
+
+        /* CONTENEDOR GLASS */
+        .settings-group {
+            background: rgba(255, 255, 255, 0.08); border-radius: 20px; overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.05); backdrop-filter: blur(10px);
+        }
+        body.dark-theme .settings-group { background: #1e1e1e; border-color: #333; }
+
+        /* ÍTEMS CLICKABLES */
+        .list-item { display: flex; align-items: center; padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.05); cursor: pointer; transition: background 0.2s; }
+        .list-item:last-child { border-bottom: none; }
+        .list-item:hover { background: rgba(255,255,255,0.15); }
+        .item-icon { width: 25px; font-size: 18px; color: #4ade80; margin-right: 15px; text-align: center; }
+        .item-text { flex-grow: 1; font-size: 15px; font-weight: 500; }
+    </style>
+</head>
+<body>
+    <script>if (localStorage.getItem('darkMode') === 'enabled') document.body.classList.add('dark-theme');</script>
+
+    <div class="app-container">
+        <div class="header">
+            <button class="back-btn" onclick="window.history.back()"><i class="fa-solid fa-chevron-left"></i></button>
+            <h1>Seguridad y Permisos</h1>
+        </div>
+
+        <div class="settings-group">
+            <div class="list-item" onclick="alert('Te hemos enviado un correo para cambiar tu contraseña')">
+                <i class="fa-solid fa-key item-icon"></i>
+                <span class="item-text">Cambiar Contraseña</span>
+            </div>
+            <div class="list-item">
+                <i class="fa-solid fa-shield item-icon"></i>
+                <span class="item-text">Autenticación en dos pasos (Activo)</span>
+            </div>
+            <div class="list-item">
+                <i class="fa-solid fa-mobile-screen item-icon"></i>
+                <span class="item-text">Dispositivos conectados</span>
+            </div>
+        </div>
+
+        <div class="settings-group" style="margin-top: 20px; border-color: rgba(239, 68, 68, 0.3);">
+             <div class="list-item" style="color:#fca5a5;" onclick="alert('Acción irreversible. Contacta con soporte.')">
+                <i class="fa-solid fa-trash item-icon" style="color:#fca5a5;"></i>
+                <span class="item-text">Eliminar Cuenta</span>
+            </div>
+        </div>
+    </div>
+    <script>
+        if (localStorage.getItem('darkMode') === 'enabled') {
+            document.body.classList.add('dark-theme');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <link rel="manifest" href="manifest.json">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Econnect - Privacidad</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            margin: 0; padding: 0; font-family: 'Poppins', sans-serif; 
+            /* Fondo consistente con la app */
+            background: linear-gradient(rgba(34, 85, 45, 0.5), rgba(10, 40, 20, 0.75)),
+            url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=2074&auto=format&fit=crop');
+            background-size: cover; background-position: center; background-attachment: fixed;
+            color: white; min-height: 100vh; display: flex; justify-content: center;
+        }
+
+        body.dark-theme {
+    background: linear-gradient(rgba(10, 30, 15, 0.8), rgba(10, 30, 15, 0.9)), 
+                        url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=2074&auto=format&fit=crop') !important;
+    background-size: cover !important; 
+    background-position: center !important; 
+    background-attachment: fixed !important;
+}
+body.dark-theme .glass-card, 
+body.dark-theme .profile-card,
+body.dark-theme .settings-group,
+body.dark-theme .nav-item,
+body.dark-theme .modal-box {
+    background: rgba(0, 0, 0, 0.4); /* Más oscuro y transparente */
+    border: 1px solid rgba(255,255,255,0.05);
+}
+        .container { width: 100%; max-width: 500px; padding: 30px 20px; box-sizing: border-box; }
+        
+        /* Header */
+        .header { display: flex; align-items: center; margin-bottom: 30px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 20px; }
+        .back-btn { font-size: 22px; color: white; background: none; border: none; cursor: pointer; margin-right: 20px; transition: transform 0.2s; }
+        .back-btn:hover { transform: translateX(-5px); color: #4ade80; }
+        h1 { margin: 0; font-size: 22px; font-weight: 700; }
+
+        /* Contenido */
+        .policy-section { margin-bottom: 25px; }
+        h2 { font-size: 16px; color: #4ade80; margin-bottom: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+        p { font-size: 14px; line-height: 1.6; color: rgba(255,255,255,0.8); text-align: justify; }
+        
+        .highlight-box {
+            background: rgba(74, 222, 128, 0.1);
+            border: 1px solid #4ade80;
+            border-radius: 15px;
+            padding: 15px;
+            margin-top: 30px;
+            text-align: center;
+            font-size: 13px;
+            color: #4ade80;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <button class="back-btn" onclick="window.history.back()"><i class="fa-solid fa-arrow-left"></i></button>
+            <h1>Política de Privacidad</h1>
+        </div>
+
+        <div class="policy-section">
+            <h2>1. Transparencia</h2>
+            <p>En Econnect, tu privacidad es sagrada. No vendemos tus datos a terceros. La información que recopilamos se utiliza exclusivamente para mejorar tu experiencia de usuario y conectar con otros eco-activistas.</p>
+        </div>
+
+        <div class="policy-section">
+            <h2>2. Datos que recopilamos</h2>
+            <p>Almacenamos tu nombre, correo electrónico, foto de perfil y tus estadísticas de retos (rachas y puntos). Estos datos son necesarios para el funcionamiento de las tablas de clasificación y el perfil social.</p>
+        </div>
+
+        <div class="policy-section">
+            <h2>3. Geolocalización</h2>
+            <p>Tu ubicación solo se utiliza cuando abres el mapa para mostrarte rutas y puntos de interés cercanos en San Vicente del Raspeig. No guardamos un historial de tus movimientos.</p>
+        </div>
+
+        <div class="highlight-box">
+            <i class="fa-solid fa-shield-halved" style="font-size: 24px; margin-bottom: 10px;"></i><br>
+            Tus datos están protegidos con encriptación de extremo a extremo.
+        </div>
+    </div>
+    <script>
+        if (localStorage.getItem('darkMode') === 'enabled') {
+            document.body.classList.add('dark-theme');
+        }
+    </script>
+</body>
+</html>

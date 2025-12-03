@@ -4,7 +4,7 @@
     <link rel="manifest" href="manifest.json">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Econnect - Racha</title>
+    <title>Econnect - Retos</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
@@ -13,9 +13,9 @@
         body {
             margin: 0; padding: 0; 
             font-family: 'Poppins', sans-serif; 
-            /* Fondo Bosque Oscuro */
-            background: linear-gradient(rgba(30, 113, 51, 0.85), rgba(10, 30, 15, 0.95)), 
-            url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=2074&auto=format&fit=crop');
+            /* Fondo luminoso con capa verde, como pediste antes */
+            background: linear-gradient(rgba(34, 85, 45, 0.5), rgba(10, 40, 20, 0.75)),
+                        url('https://images.unsplash.com/photo-1502082553048-f009c37129b9?q=80&w=2070&auto=format&fit=crop');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -33,125 +33,114 @@
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
+            position: relative;
         }
 
-        h1 {
-            text-align: center;
-            font-size: 24px;
-            font-weight: 700;
-            margin: 10px 0 20px 0;
-            letter-spacing: 1px;
-        }
-
-        /* --- TARJETA PRINCIPAL (EL FUEGO) --- */
-        .hero-card {
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        /* --- PESTAÑAS SUPERIORES --- */
+        .tabs-header {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            background: rgba(0, 0, 0, 0.3); /* Fondo oscuro para las pestañas */
+            padding: 5px;
+            border-radius: 50px;
             backdrop-filter: blur(10px);
-            border-radius: 30px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            background: transparent;
+            color: rgba(255,255,255,0.6);
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 13px;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .tab-btn.active {
+            background: #4ade80;
+            color: #064e3b;
+            box-shadow: 0 4px 10px rgba(74, 222, 128, 0.3);
+        }
+
+        /* Contenedor de Pestañas */
+        .tab-content { display: none; animation: fadeIn 0.4s ease; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* =========================================
+           ESTILOS ESPECÍFICOS DE RACHA (COMO LA FOTO)
+           ========================================= */
+        
+        /* Tarjetas estilo "Dark Glass" para que se parezca a la imagen */
+        .racha-card {
+            background: rgba(20, 30, 25, 0.7); /* Verde muy oscuro/negro translúcido */
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border-radius: 35px;
             padding: 30px 20px;
             text-align: center;
-            margin-bottom: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            position: relative;
-            overflow: hidden;
+            margin-bottom: 20px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
         }
 
-        /* Efecto de resplandor naranja detrás del fuego */
-        .hero-card::before {
-            content: '';
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            width: 150px; height: 150px;
-            background: radial-gradient(circle, rgba(255, 109, 0, 0.4) 0%, transparent 70%);
-            border-radius: 50%;
-            pointer-events: none;
+        /* ICONO CUADRADO DE FUEGO */
+        .fire-icon-box {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 15px auto;
+            background: linear-gradient(135deg, #ffc107, #ff5722); /* Degradado Naranja/Amarillo */
+            border-radius: 18px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 35px;
+            color: white;
+            box-shadow: 0 0 25px rgba(255, 152, 0, 0.5); /* Resplandor naranja */
+            animation: pulse 2s infinite;
         }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); box-shadow: 0 0 35px rgba(255, 152, 0, 0.7); } 100% { transform: scale(1); } }
 
-        /* FUEGO ANIMADO */
-        .fire-container {
-            margin-bottom: 10px;
-            position: relative;
-            display: inline-block;
-        }
-
-        .main-fire-icon {
-            font-size: 90px;
-            /* Degradado de Fuego Real en el Icono */
-            background: linear-gradient(to bottom, #ffeb3b 0%, #ff9800 50%, #ff5722 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 15px rgba(255, 87, 34, 0.6));
-            
-            /* Animación de latido */
-            animation: burn 1.5s infinite ease-in-out alternate;
-        }
-
-        @keyframes burn {
-            0% { transform: scale(1); filter: drop-shadow(0 0 10px rgba(255, 87, 34, 0.5)); }
-            100% { transform: scale(1.1); filter: drop-shadow(0 0 20px rgba(255, 87, 34, 0.8)); }
-        }
-
-        /* ESTADO INACTIVO (GRIS) */
-        .main-fire-icon.inactive {
-            background: #9ca3af;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: none;
-            animation: none;
-        }
-
-        .streak-number {
+        .racha-number {
             font-size: 48px;
             font-weight: 800;
-            color: white;
-            display: block;
             line-height: 1;
-            margin-top: 10px;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            color: #fff;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
-        
-        .streak-label {
-            font-size: 14px;
-            font-weight: 500;
+
+        .racha-label {
+            font-size: 11px;
+            font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            color: rgba(255,255,255,0.7);
+            letter-spacing: 3px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 5px;
         }
 
-        .message-box {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 12px 20px;
-            border-radius: 15px;
-            margin-top: 20px;
-            font-size: 13px;
-            color: rgba(255, 255, 255, 0.9);
-            display: inline-block;
-        }
-
-        /* --- CALENDARIO (TARJETA DE CRISTAL) --- */
-        .calendar-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border-radius: 30px;
-            padding: 25px 20px;
-            margin-bottom: 25px;
-        }
-
+        /* CALENDARIO ESTILO IMAGEN */
         .calendar-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            color: white;
-            font-weight: 600;
-            font-size: 16px;
             margin-bottom: 20px;
-            padding: 0 5px;
+            padding: 0 10px;
         }
-        .calendar-arrows i { cursor: pointer; margin-left: 15px; opacity: 0.7; transition: opacity 0.2s; }
-        .calendar-arrows i:hover { opacity: 1; }
+        .month-title { font-weight: 700; font-size: 16px; }
+        
+        .arrow-btn { 
+            cursor: pointer; 
+            padding: 5px; 
+            color: rgba(255,255,255,0.7); 
+            transition: 0.2s; 
+        }
+        .arrow-btn:hover { color: white; }
+        .arrow-btn.hidden { opacity: 0; pointer-events: none; } /* Para ocultar la flecha atrás */
 
         .calendar-grid {
             display: grid;
@@ -160,113 +149,88 @@
             text-align: center;
         }
 
-        .day-name {
-            font-size: 12px;
-            font-weight: 600;
-            color: rgba(255, 255, 255, 0.4);
+        .day-label {
+            font-size: 10px;
+            font-weight: 700;
+            color: rgba(255,255,255,0.3);
             margin-bottom: 5px;
         }
 
-        .date-item {
-            height: 35px;
+        .day-cell {
+            height: 32px;
             display: flex;
             justify-content: center;
             align-items: center;
-            border-radius: 10px;
-            font-size: 14px;
-            font-weight: 500;
+            font-size: 13px;
+            font-weight: 600;
+            border-radius: 8px; /* Cuadrado redondeado */
             color: white;
-            transition: all 0.2s;
         }
 
-        .date-item.faded { color: rgba(255, 255, 255, 0.2); }
-
-        /* DÍAS DE RACHA (ASCUAS ENCENDIDAS) */
-        .date-item.streak-active {
-            background: linear-gradient(135deg, #ff9800 0%, #ff5722 100%);
-            color: white;
-            font-weight: 700;
-            box-shadow: 0 0 10px rgba(255, 87, 34, 0.4);
-            transform: scale(1.05);
+        /* Día completado (Naranja sólido) */
+        .day-cell.completed {
+            background: linear-gradient(to bottom right, #ff9800, #f57c00);
+            box-shadow: 0 2px 8px rgba(245, 124, 0, 0.4);
         }
 
-        /* DÍA ACTUAL (Borde blanco) */
-        .date-item.today {
+        /* Día actual (Borde) */
+        .day-cell.today {
             border: 2px solid rgba(255,255,255,0.8);
-            background: rgba(255,255,255,0.1);
+            background: transparent;
         }
 
-        /* --- BOTÓN COMPARTIR (Gradient) --- */
+        .day-cell.future { color: rgba(255,255,255,0.2); }
+
+        /* Botón compartir */
         .share-btn {
+            width: 100%;
             background: linear-gradient(90deg, #ff9800, #ff5722);
             color: white;
-            width: 100%;
-            padding: 18px;
             border: none;
+            padding: 15px;
             border-radius: 50px;
-            font-size: 16px;
             font-weight: 700;
+            font-size: 15px;
             cursor: pointer;
-            box-shadow: 0 10px 20px rgba(255, 87, 34, 0.3);
-            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 10px 25px rgba(255, 87, 34, 0.3);
+            margin-top: 10px;
+            display: flex; justify-content: center; align-items: center; gap: 10px;
             font-family: 'Poppins', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
         }
 
-        .share-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 30px rgba(255, 87, 34, 0.5);
-        }
+        /* =========================================
+           ESTILOS OTRAS PESTAÑAS (Retos y Ranking)
+           ========================================= */
+        .challenge-card { background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(15px); border-radius: 30px; overflow: hidden; display: flex; flex-direction: column; }
+        .challenge-header-img { width: 100%; height: 180px; object-fit: cover; mask-image: linear-gradient(to bottom, black 70%, transparent 100%); }
+        .content-wrapper { padding: 20px; text-align: center; }
+        .tag { display: inline-block; background: rgba(74, 222, 128, 0.2); color: #4ade80; padding: 5px 12px; border-radius: 15px; font-size: 11px; font-weight: 600; text-transform: uppercase; margin-bottom: 10px; }
+        .desc { font-size: 13px; color: rgba(255,255,255,0.7); line-height: 1.5; margin-bottom: 20px; }
+        .steps-list { text-align: left; margin-bottom: 20px; }
+        .step-item { display: flex; align-items: center; margin-bottom: 12px; color: rgba(255,255,255,0.9); font-size: 13px; }
+        .step-icon { width: 25px; font-size: 18px; color: #4ade80; margin-right: 10px; text-align: center; }
+        .step-icon.pending { color: rgba(255,255,255,0.3); }
+        .action-btn { width: 100%; background: #4ade80; color: #064e3b; border: none; padding: 14px; border-radius: 50px; font-weight: 700; font-size: 15px; cursor: pointer; font-family: 'Poppins', sans-serif; }
 
-        /* --- MENÚ FLOTANTE --- */
-        .bottom-nav {
-            position: fixed;
-            bottom: 25px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 90%; max-width: 400px;
-            background: rgba(20, 20, 20, 0.6);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 50px;
-            display: flex;
-            justify-content: space-around;
-            padding: 15px 0;
-            z-index: 1000;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
-        }
+        /* RANKING STYLES */
+        .podium-container { display: flex; justify-content: center; align-items: flex-end; height: 180px; margin-bottom: 20px; gap: 10px; }
+        .podium-item { display: flex; flex-direction: column; align-items: center; width: 30%; }
+        .podium-avatar { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 3px solid rgba(255,255,255,0.2); margin-bottom: -10px; z-index: 2; }
+        .podium-block { width: 100%; border-top-left-radius: 15px; border-top-right-radius: 15px; display: flex; justify-content: center; align-items: center; font-size: 20px; font-weight: 700; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); }
+        .first .podium-block { height: 100px; background: linear-gradient(to bottom, rgba(253, 216, 53, 0.6), rgba(253, 216, 53, 0.2)); border-top: 2px solid #fdd835; }
+        .second .podium-block { height: 70px; background: linear-gradient(to bottom, rgba(224, 224, 224, 0.6), rgba(224, 224, 224, 0.2)); border-top: 2px solid #e0e0e0; }
+        .third .podium-block { height: 50px; background: linear-gradient(to bottom, rgba(161, 136, 127, 0.6), rgba(161, 136, 127, 0.2)); border-top: 2px solid #a1887f; }
+        .ranking-list { background: rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 5px; }
+        .rank-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 15px; border-bottom: 1px solid rgba(255,255,255,0.05); }
 
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: rgba(255,255,255,0.5);
-            text-decoration: none;
-            cursor: pointer;
-            font-size: 10px;
-            transition: all 0.3s;
-            position: relative;
-        }
-        
+        /* MENÚ FLOTANTE */
+        .bottom-nav { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 400px; background: rgba(20, 20, 20, 0.6); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 50px; display: flex; justify-content: space-around; padding: 15px 0; z-index: 1000; box-shadow: 0 10px 40px rgba(0,0,0,0.4); }
+        .nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; color: rgba(255,255,255,0.5); text-decoration: none; cursor: pointer; font-size: 10px; transition: all 0.3s; position: relative; }
         .nav-item:hover i { transform: translateY(-3px); color: white; }
         .nav-item i { font-size: 20px; margin-bottom: 4px; transition: transform 0.3s; }
-
         .nav-item.active { color: #4ade80; font-weight: 600; }
         .nav-item.active i { transform: translateY(-2px); }
-        .nav-item.active::after {
-            content: '';
-            position: absolute;
-            bottom: -8px;
-            width: 5px; height: 5px;
-            background-color: #4ade80;
-            border-radius: 50%;
-            box-shadow: 0 0 10px #4ade80;
-        }
+        .nav-item.active::after { content: ''; position: absolute; bottom: -8px; width: 5px; height: 5px; background-color: #4ade80; border-radius: 50%; box-shadow: 0 0 10px #4ade80; }
 
     </style>
 </head>
@@ -274,161 +238,184 @@
 
 <div class="app-container">
     
-    <h1>Tu Progreso</h1>
-
-    <div class="hero-card">
-        <div class="fire-container">
-            <i class="fa-solid fa-fire main-fire-icon" id="fire-icon"></i>
-        </div>
-
-        <span class="streak-number" id="streak-number">150</span>
-        <span class="streak-label">Días en Racha</span>
-
-        <div class="message-box" id="streak-message">
-            🔥 ¡Increíble! Llevas 150 días cambiando el mundo.
-        </div>
+    <div class="tabs-header">
+        <button class="tab-btn active" onclick="openTab('diario')">Reto Diario</button>
+        <button class="tab-btn" onclick="openTab('racha')">Mi Racha</button>
+        <button class="tab-btn" onclick="openTab('ranking')">Ranking</button>
     </div>
 
-    <div class="calendar-card">
-        <div class="calendar-header">
-            <span>Octubre 2025</span>
-            <div class="calendar-arrows">
-                <i class="fa-solid fa-chevron-left"></i>
-                <i class="fa-solid fa-chevron-right"></i>
+    <div id="tab-diario" class="tab-content active">
+        <div class="challenge-card">
+            <img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=2013&auto=format&fit=crop" class="challenge-header-img">
+            <div class="content-wrapper">
+                <div><span class="tag">Hoy</span></div>
+                <h1 style="text-align: center;">Planta un Árbol</h1>
+                <p class="desc">Busca un lugar adecuado en tu comunidad y dale vida al planeta sembrando una semilla.</p>
+                <div class="steps-list">
+                    <div class="step-item"><i class="fa-solid fa-circle-check step-icon"></i><span>Encuentra el lugar ideal</span></div>
+                    <div class="step-item"><i class="fa-solid fa-leaf step-icon"></i><span>Siembra tu árbol</span></div>
+                    <div class="step-item"><i class="fa-solid fa-camera step-icon pending" id="icon-camera"></i><span>Sube foto de evidencia</span></div>
+                </div>
+                <button class="action-btn" id="btn-action" onclick="abrirCamara()">Completar Reto</button>
             </div>
         </div>
+    </div>
 
-        <div class="calendar-grid">
-            <div class="day-name">L</div>
-            <div class="day-name">M</div>
-            <div class="day-name">X</div>
-            <div class="day-name">J</div>
-            <div class="day-name">V</div>
-            <div class="day-name">S</div>
-            <div class="day-name">D</div>
+    <div id="tab-racha" class="tab-content">
+        
+        <div class="racha-card">
+            <div class="fire-icon-box">
+                <i class="fa-solid fa-fire"></i>
+            </div>
+            <div class="racha-number">150</div>
+            <div class="racha-label">DÍAS EN RACHA</div>
+        </div>
 
-            <div class="date-item faded">29</div>
-            <div class="date-item faded">30</div>
-            
-            <div class="date-item streak-active">1</div>
-            <div class="date-item streak-active">2</div>
-            <div class="date-item streak-active">3</div>
-            <div class="date-item streak-active">4</div>
-            <div class="date-item streak-active">5</div>
+        <div class="racha-card">
+            <div class="calendar-header">
+                <div class="month-title" id="month-label">Octubre 2025</div>
+                <div class="nav-controls">
+                    <i class="fa-solid fa-chevron-left arrow-btn hidden" id="prev-btn"></i>
+                    <i class="fa-solid fa-chevron-right arrow-btn" id="next-btn" onclick="cambiarMes(1)"></i>
+                </div>
+            </div>
 
-            <div class="date-item streak-active">6</div>
-            <div class="date-item streak-active">7</div>
-            <div class="date-item streak-active">8</div>
-            <div class="date-item streak-active">9</div>
-            
-            <div class="date-item today">10</div>
-            
-            <div class="date-item">11</div>
-            <div class="date-item">12</div>
+            <div class="calendar-grid" id="calendar-grid">
+                </div>
+        </div>
 
-            <div class="date-item">13</div>
-            <div class="date-item">14</div>
-            <div class="date-item">15</div>
-            <div class="date-item">16</div>
-            <div class="date-item">17</div>
-            <div class="date-item">18</div>
-            <div class="date-item">19</div>
+        <button class="share-btn" onclick="alert('¡Compartiendo tu logro! 🚀')">
+            <i class="fa-solid fa-share-nodes"></i> Compartir Logro
+        </button>
 
-            <div class="date-item">20</div>
-            <div class="date-item">21</div>
-            <div class="date-item">22</div>
-            <div class="date-item">23</div>
-            <div class="date-item">24</div>
-            <div class="date-item">25</div>
-            <div class="date-item">26</div>
+    </div>
 
-            <div class="date-item">27</div>
-            <div class="date-item">28</div>
-            <div class="date-item">29</div>
-            <div class="date-item">30</div>
-            <div class="date-item">31</div>
-            <div class="date-item faded">1</div>
-            <div class="date-item faded">2</div>
+    <div id="tab-ranking" class="tab-content">
+        <div class="podium-container">
+            <div class="podium-item second">
+                <span style="font-size:10px; font-weight:600; margin-bottom:5px;">@Tara</span>
+                <img src="https://picsum.photos/seed/hamster/100" class="podium-avatar">
+                <div class="podium-block">2</div>
+            </div>
+            <div class="podium-item first">
+                <span style="font-size:10px; font-weight:600; margin-bottom:5px;">@Abuela</span>
+                <img src="https://picsum.photos/seed/salad/100" class="podium-avatar">
+                <div class="podium-block">1</div>
+            </div>
+            <div class="podium-item third">
+                <span style="font-size:10px; font-weight:600; margin-bottom:5px;">@Max</span>
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" class="podium-avatar" style="background:white">
+                <div class="podium-block">3</div>
+            </div>
+        </div>
+        <div class="ranking-list">
+            <div class="rank-item"><div style="display:flex; gap:15px; align-items:center;"><span style="font-weight:700; color:#aaa;">4</span><span>@Marta.np2000</span></div><span style="font-size:12px; color:#4ade80; font-weight:700;">120 pts</span></div>
+            <div class="rank-item"><div style="display:flex; gap:15px; align-items:center;"><span style="font-weight:700; color:#aaa;">5</span><span>@Guille17</span></div><span style="font-size:12px; color:#4ade80; font-weight:700;">100 pts</span></div>
         </div>
     </div>
 
-    <button class="share-btn">
-        <i class="fa-solid fa-share-nodes"></i> Compartir Logro
-    </button>
-
     <nav class="bottom-nav">
-        <div class="nav-item" onclick="location.href='home.html'">
-            <i class="fa-solid fa-house"></i>
-            <span>Inicio</span>
-        </div>
-        <div class="nav-item" onclick="location.href='mapa.html'">
-            <i class="fa-solid fa-map-location-dot"></i>
-            <span>Mapa</span>
-        </div>
-        <div class="nav-item" onclick="location.href='amigos.html'">
-            <i class="fa-solid fa-user-group"></i>
-            <span>Amigos</span>
-        </div>
-        <div class="nav-item active" onclick="location.href='racha.html'">
-            <i class="fa-solid fa-fire"></i>
-            <span>Racha</span>
-        </div>
-        <div class="nav-item" onclick="location.href='perfil.html'">
-            <i class="fa-solid fa-user"></i>
-            <span>Perfil</span>
-        </div>
+        <div class="nav-item" onclick="location.href='mapa.html'"><i class="fa-solid fa-map-location-dot"></i><span>Mapa</span></div>
+        <div class="nav-item" onclick="location.href='home.html'"><i class="fa-solid fa-users-line"></i><span>Social</span></div>
+        <div class="nav-item" onclick="location.href='amigos.html'"><i class="fa-solid fa-user-group"></i><span>Amigos</span></div>
+        <div class="nav-item active" onclick="location.href='retos.html'"><i class="fa-solid fa-trophy"></i><span>Retos</span></div>
+        <div class="nav-item" onclick="location.href='perfil.html'"><i class="fa-solid fa-user"></i><span>Perfil</span></div>
     </nav>
+
 </div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-
-
-    const firebaseConfig = {
-        apiKey: "AIzaSyA5lPDFaH8W-miDJHB3sDKdD5fiJt8d9-8",
-        authDomain: "ecconect-ae607.firebaseapp.com",
-        projectId: "ecconect-ae607",
-        storageBucket: "ecconect-ae607.firebasestorage.app",
-        messagingSenderId: "241708782882",
-        appId: "1:241708782882:web:514d895119f9f7c3fa817b",
-        measurementId: "G-KJ3FLCHZCG"
-    };
-
+    const firebaseConfig = { apiKey: "AIzaSyA5lPDFaH8W-miDJHB3sDKdD5fiJt8d9-8", authDomain: "ecconect-ae607.firebaseapp.com", projectId: "ecconect-ae607", storageBucket: "ecconect-ae607.firebasestorage.app", messagingSenderId: "241708782882", appId: "1:241708782882:web:514d895119f9f7c3fa817b", measurementId: "G-KJ3FLCHZCG" };
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+    onAuthStateChanged(auth, (user) => { if (!user) window.location.href = "index.html"; });
 
-    onAuthStateChanged(auth, (user) => {
-        if (!user) {
-            window.location.href = "index.html";
-        }
-    });
-
-    // --- LÓGICA DE RACHA ---
-    const diasRacha = 150; 
-
-    if (diasRacha === 0) {
-        // MODO INACTIVO
-        const fireIcon = document.getElementById('fire-icon');
-        fireIcon.classList.add('inactive');
-        fireIcon.classList.remove('fa-beat'); // Quitar latido si está apagado
-        
-        document.getElementById('streak-number').textContent = "0";
-        document.getElementById('streak-number').style.color = "#ccc";
-        document.getElementById('streak-message').textContent = "¡Vuelve a empezar! Tú puedes.";
-        
-        const activeDays = document.querySelectorAll('.streak-active');
-        activeDays.forEach(day => {
-            day.classList.remove('streak-active');
-            day.style.color = "rgba(255,255,255,0.7)";
-        });
-
-    } else {
-        // MODO ACTIVO (Ya configurado en HTML)
-        document.getElementById('streak-number').textContent = diasRacha;
+    // CAMBIAR PESTAÑAS
+    window.openTab = function(tabName) {
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('tab-' + tabName).classList.add('active');
+        // Buscar botón por texto aproximado o index
+        const btns = document.querySelectorAll('.tab-btn');
+        if(tabName == 'diario') btns[0].classList.add('active');
+        if(tabName == 'racha') btns[1].classList.add('active');
+        if(tabName == 'ranking') btns[2].classList.add('active');
     }
 
+    // --- LÓGICA DEL CALENDARIO ---
+    let currentMonthIndex = 0; // 0 = Octubre (Actual), 1 = Noviembre, etc.
+    const monthNames = ["Octubre 2025", "Noviembre 2025", "Diciembre 2025"];
+
+    window.cambiarMes = function(dir) {
+        if (dir === 1) {
+            currentMonthIndex++;
+            if (currentMonthIndex > 2) currentMonthIndex = 2; // Límite demo
+        } else {
+            currentMonthIndex--;
+            if (currentMonthIndex < 0) currentMonthIndex = 0;
+        }
+        renderCalendar();
+    }
+
+    function renderCalendar() {
+        const grid = document.getElementById('calendar-grid');
+        const monthLabel = document.getElementById('month-label');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+
+        // Actualizar etiqueta
+        monthLabel.innerText = monthNames[currentMonthIndex];
+
+        // Controlar flecha ATRÁS (Oculta si es el mes 0)
+        if (currentMonthIndex === 0) {
+            prevBtn.classList.add('hidden');
+            prevBtn.onclick = null;
+        } else {
+            prevBtn.classList.remove('hidden');
+            prevBtn.onclick = function() { cambiarMes(-1); };
+        }
+
+        grid.innerHTML = ''; // Limpiar
+
+        // Headers
+        const days = ['L','M','X','J','V','S','D'];
+        days.forEach(d => {
+            const h = document.createElement('div');
+            h.classList.add('day-label');
+            h.innerText = d;
+            grid.appendChild(h);
+        });
+
+        // Generar días (Demo simple 30 días)
+        // Offset simple para que parezca real
+        let offset = (currentMonthIndex === 0) ? 2 : (currentMonthIndex === 1 ? 5 : 0);
+        
+        for(let i=0; i<offset; i++) { grid.appendChild(document.createElement('div')); }
+
+        for(let i=1; i<=31; i++) {
+            const d = document.createElement('div');
+            d.classList.add('day-cell');
+            d.innerText = i;
+
+            if (currentMonthIndex === 0) {
+                // Mes actual: Días 1-9 naranjas, 10 borde
+                if (i < 10) d.classList.add('completed');
+                else if (i === 10) d.classList.add('today');
+                else d.classList.add('future');
+            } else {
+                // Futuro
+                d.classList.add('future');
+            }
+            grid.appendChild(d);
+        }
+    }
+
+    // Inicializar
+    renderCalendar();
+    window.abrirCamara = function() { document.getElementById('camera-input').click(); }
 </script>
 
 </body>

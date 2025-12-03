@@ -12,6 +12,65 @@
     
     <style>
         body { margin: 0; padding: 0; font-family: 'Poppins', sans-serif; background-color: #111; color: white; height: 100vh; overflow: hidden; display: flex; justify-content: center; }
+        
+        body.dark-theme {
+    /* Fondo bosque muy oscuro */
+    background: linear-gradient(rgba(10, 30, 15, 0.8), rgba(10, 30, 15, 0.9)), 
+                        url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=2074&auto=format&fit=crop') !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-attachment: fixed !important;
+}
+
+/* Ajuste CRUCIAL: El cristal ahora es NEGRO translúcido, no blanco */
+body.dark-theme .glass-card,
+body.dark-theme .profile-card,
+body.dark-theme .settings-group,
+body.dark-theme .request-capsule,
+body.dark-theme .friend-item,
+body.dark-theme .search-input,
+body.dark-theme .challenge-card,
+body.dark-theme .calendar-card,
+body.dark-theme .ranking-list,
+body.dark-theme .profile-rank-card,
+body.dark-theme .challenge-history-item,
+body.dark-theme .qr-btn,
+body.dark-theme .action-btn,
+body.dark-theme .gallery-item {
+    background: rgba(30, 30, 30, 0.4) !important; /* Gris oscuro transparente */
+    border: 1px solid rgba(255, 255, 255, 0.08); /* Borde muy sutil */
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4); /* Sombra más fuerte */
+}
+
+/* Ajuste específico para el MENÚ INFERIOR en modo noche */
+body.dark-theme .bottom-nav {
+    background: rgba(20, 20, 20, 0.95) !important; /* Casi negro sólido */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 -5px 20px rgba(0,0,0,0.5); /* Sombra superior para separar del fondo */
+}
+
+/* Ajuste para MODALES y PANTALLAS EMERGENTES */
+body.dark-theme .modal-box,
+body.dark-theme .app-container.modal-view { /* Si usas contenedores tipo página */
+    background: #181818 !important; /* Fondo sólido gris muy oscuro */
+    border: 1px solid rgba(255,255,255,0.15); /* Borde más visible para separar */
+    box-shadow: 0 0 50px rgba(0,0,0,0.8); /* Sombra intensa alrededor */
+}
+
+/* Ajuste para textos en modo oscuro */
+body.dark-theme h1, 
+body.dark-theme h2, 
+body.dark-theme strong,
+body.dark-theme .item-text {
+    color: #ffffff !important;
+}
+body.dark-theme p, 
+body.dark-theme .section-label,
+body.dark-theme .desc {
+    color: #bbbbbb !important;
+}
+        
+        
         .app-container { 
             width: 100%; max-width: 500px; height: 100vh; position: relative; 
             /* Se hace transparente para ver el mapa */
@@ -66,14 +125,9 @@
         .nav-item.active i { transform: translateY(-2px); }
         .nav-item.active::after { content: ''; position: absolute; bottom: -8px; width: 5px; height: 5px; background-color: #4ade80; border-radius: 50%; box-shadow: 0 0 10px #4ade80; }
 
-        #splash-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #1b5e20; display: flex; justify-content: center; align-items: center; z-index: 9999; transition: opacity 0.5s ease-out; }
-        .splash-logo { width: 100px; height: auto; margin-bottom: 20px; animation: rotar 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite; filter: brightness(0) invert(1); }
-        @keyframes rotar { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        .ocultar { opacity: 0; pointer-events: none; }
     </style>
 </head>
 <body>
-    <div id="splash-screen"><div style="text-align: center;"><img src="logo.png" alt="Econnect" class="splash-logo"></div></div>
 
 <div class="app-container">
     <div id="mapid"></div> 
@@ -86,7 +140,7 @@
                 <h2 class="sidebar-title">Menú</h2>
                 <span class="sidebar-subtitle">Opciones Econnect</span>
             </div>
-            <div class="sidebar-item" onclick="location.href='perfil.html';"><i class="fa-solid fa-user sidebar-icon"></i> <span class="sidebar-text">Mi Perfil</span></div>
+            <div class="sidebar-item" onclick="location.href='perfil_ajustes.html';"><i class="fa-solid fa-user sidebar-icon"></i> <span class="sidebar-text">Mi Perfil</span></div>
             <div class="sidebar-item" onclick="location.href='rutas.html';"><i class="fa-solid fa-signs-post sidebar-icon" style="color: #4ade80;"></i> <span class="sidebar-text">Ver Rutas</span></div>
             <div class="sidebar-item" onclick="location.href='voluntariado.html';"><i class="fa-solid fa-hand-holding-heart sidebar-icon" style="color: #fbbf24;"></i> <span class="sidebar-text">Voluntariado</span></div>
             <div class="sidebar-item" onclick="location.href='informacion.html';"><i class="fa-solid fa-circle-info sidebar-icon" style="color: #9ca3af;"></i> <span class="sidebar-text">Información</span></div>
@@ -106,9 +160,9 @@
 
         <nav class="bottom-nav">
             <div class="nav-item active" onclick="location.href='mapa.html'"><i class="fa-solid fa-map-location-dot"></i><span>Mapa</span></div>
+            <div class="nav-item" onclick="location.href='retos.html'"><i class="fa-solid fa-trophy"></i><span>Retos</span></div>
             <div class="nav-item" onclick="location.href='home.html'"><i class="fa-solid fa-users-line"></i><span>Social</span></div>
             <div class="nav-item" onclick="location.href='amigos.html'"><i class="fa-solid fa-user-group"></i><span>Amigos</span></div>
-            <div class="nav-item" onclick="location.href='retos.html'"><i class="fa-solid fa-trophy"></i><span>Retos</span></div>
             <div class="nav-item" onclick="location.href='perfil.html'"><i class="fa-solid fa-user"></i><span>Perfil</span></div>
         </nav>
     </div>
@@ -123,11 +177,7 @@
     let mymap; // Variable global para el mapa
     const sanVicenteCoords = [38.4000, -0.5233]; // Coordenadas de San Vicente del Raspeig
 
-    document.addEventListener('DOMContentLoaded', () => { 
-        setTimeout(() => { 
-            document.getElementById('splash-screen').classList.add('ocultar'); 
-            setTimeout(() => { document.getElementById('splash-screen').style.display = 'none'; }, 500); 
-        }, 1500); 
+
 
         // 1. INICIALIZACIÓN DEL MAPA
         mymap = L.map('mapid').setView(sanVicenteCoords, 14); // Centrado en San Vicente, Zoom 14
@@ -160,8 +210,6 @@
             alert('Mapa recentrado en San Vicente del Raspeig.');
         }
         
-    });
-
     // Lógica de Firebase y Auth (sin cambios)
     const firebaseConfig = { apiKey: "AIzaSyA5lPDFaH8W-miDJHB3sDKdD5fiJt8d9-8", authDomain: "ecconect-ae607.firebaseapp.com", projectId: "ecconect-ae607", storageBucket: "ecconect-ae607.firebasestorage.app", messagingSenderId: "241708782882", appId: "1:241708782882:web:514d895119f9f7c3fa817b", measurementId: "G-KJ3FLCHZCG" };
     const app = initializeApp(firebaseConfig); 
@@ -180,6 +228,11 @@
             icon.classList.remove('fa-xmark'); 
             icon.classList.add('fa-bars'); 
         } 
+    }
+</script>
+<script>
+    if (localStorage.getItem('darkMode') === 'enabled') {
+        document.body.classList.add('dark-theme');
     }
 </script>
 </body>

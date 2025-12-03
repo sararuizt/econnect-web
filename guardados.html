@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guardados</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- ESTILOS BASE UNIFICADOS --- */
+        body {
+            margin: 0; padding: 0; font-family: 'Poppins', sans-serif;
+            background: linear-gradient(rgba(34, 85, 45, 0.5), rgba(10, 40, 20, 0.75)),
+            url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=2074&auto=format&fit=crop');
+            background-size: cover; background-position: center; background-attachment: fixed;
+            color: white; min-height: 100vh; display: flex; justify-content: center; transition: background 0.3s ease;
+        }
+        body.dark-theme {
+    background: linear-gradient(rgba(10, 30, 15, 0.8), rgba(10, 30, 15, 0.9)), 
+                        url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=2074&auto=format&fit=crop') !important;
+    background-size: cover !important; 
+    background-position: center !important; 
+    background-attachment: fixed !important;
+}
+body.dark-theme .glass-card, 
+body.dark-theme .profile-card,
+body.dark-theme .settings-group,
+body.dark-theme .nav-item,
+body.dark-theme .modal-box {
+    background: rgba(0, 0, 0, 0.4); /* Más oscuro y transparente */
+    border: 1px solid rgba(255,255,255,0.05);
+}
+        .app-container { width: 100%; max-width: 500px; padding: 20px; box-sizing: border-box; display: flex; flex-direction: column; }
+
+        /* CABECERA */
+        .header { display: flex; align-items: center; margin-bottom: 25px; margin-top: 10px; }
+        .back-btn { font-size: 24px; color: white; background: none; border: none; cursor: pointer; margin-right: 15px; padding: 0; }
+        h1 { margin: 0; font-size: 20px; font-weight: 600; }
+
+        /* ESTILOS DEL GRID (Adaptados al contenedor) */
+        .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; }
+        .gallery-item { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 8px; cursor: pointer; position: relative; background-color: rgba(255,255,255,0.1); transition: transform 0.2s; }
+        .gallery-item:hover { transform: scale(1.02); }
+    </style>
+</head>
+<body>
+    <script>if (localStorage.getItem('darkMode') === 'enabled') document.body.classList.add('dark-theme');</script>
+
+    <div class="app-container">
+        <div class="header">
+            <button class="back-btn" onclick="window.history.back()"><i class="fa-solid fa-chevron-left"></i></button>
+            <h1>Publicaciones Guardadas</h1>
+        </div>
+
+        <div id="content-saved" class="gallery-grid">
+            <div class="gallery-item" style="position:relative;"><img src="https://picsum.photos/seed/forest/300" style="width:100%; height:100%; object-fit:cover; border-radius:8px;"><i class="fa-solid fa-bookmark" style="position:absolute; top:5px; right:5px; color:white; filter:drop-shadow(0 0 2px black);"></i></div>
+            <div class="gallery-item" style="position:relative;"><img src="https://picsum.photos/seed/ocean/300" style="width:100%; height:100%; object-fit:cover; border-radius:8px;"><i class="fa-solid fa-bookmark" style="position:absolute; top:5px; right:5px; color:white; filter:drop-shadow(0 0 2px black);"></i></div>
+            <div class="gallery-item" style="position:relative;"><img src="https://picsum.photos/seed/mountain/300" style="width:100%; height:100%; object-fit:cover; border-radius:8px;"><i class="fa-solid fa-bookmark" style="position:absolute; top:5px; right:5px; color:white; filter:drop-shadow(0 0 2px black);"></i></div>
+            <div class="gallery-item" style="position:relative;"><img src="https://picsum.photos/seed/river/300" style="width:100%; height:100%; object-fit:cover; border-radius:8px;"><i class="fa-solid fa-bookmark" style="position:absolute; top:5px; right:5px; color:white; filter:drop-shadow(0 0 2px black);"></i></div>
+            <div class="gallery-item" style="position:relative;"><img src="https://picsum.photos/seed/fox/300" style="width:100%; height:100%; object-fit:cover; border-radius:8px;"><i class="fa-solid fa-bookmark" style="position:absolute; top:5px; right:5px; color:white; filter:drop-shadow(0 0 2px black);"></i></div>
+            <div class="gallery-item" style="position:relative;"><img src="https://picsum.photos/seed/camping/300" style="width:100%; height:100%; object-fit:cover; border-radius:8px;"><i class="fa-solid fa-bookmark" style="position:absolute; top:5px; right:5px; color:white; filter:drop-shadow(0 0 2px black);"></i></div>
+            <div class="gallery-item" style="position:relative;"><img src="https://picsum.photos/seed/leaf/300" style="width:100%; height:100%; object-fit:cover; border-radius:8px;"><i class="fa-solid fa-bookmark" style="position:absolute; top:5px; right:5px; color:white; filter:drop-shadow(0 0 2px black);"></i></div>
+            <div class="gallery-item" style="position:relative;"><img src="https://picsum.photos/seed/bird/300" style="width:100%; height:100%; object-fit:cover; border-radius:8px;"><i class="fa-solid fa-bookmark" style="position:absolute; top:5px; right:5px; color:white; filter:drop-shadow(0 0 2px black);"></i></div>
+            <div class="gallery-item" style="position:relative;"><img src="https://picsum.photos/seed/waterfall/300" style="width:100%; height:100%; object-fit:cover; border-radius:8px;"><i class="fa-solid fa-bookmark" style="position:absolute; top:5px; right:5px; color:white; filter:drop-shadow(0 0 2px black);"></i></div>
+        </div>
+    </div>
+    <script>
+        if (localStorage.getItem('darkMode') === 'enabled') {
+            document.body.classList.add('dark-theme');
+        }
+    </script>
+</body>
+</html>

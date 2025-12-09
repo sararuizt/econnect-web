@@ -1,0 +1,335 @@
+{
+  "contenedores": [
+    {
+      "direccion": "Av. Ancha de Castelar, 16, San Vicente del Raspeig",
+      "tipo": "Orgánico (🟤)",
+      "color": "#5c4c4c",
+      "lat": 38.39565,
+      "lon": -0.52105
+    },
+    {
+      "direccion": "Av. Ancha de Castelar, 16, San Vicente del Raspeig",
+      "tipo": "Vidrio (🟢)",
+      "color": "#53C55E",
+      "lat": 38.39565,
+      "lon": -0.52105
+    },
+    {
+      "direccion": "Av. Ancha de Castelar, 16, San Vicente del Raspeig",
+      "tipo": "Papel y cartón (🔵)",
+      "color": "#3BB9F6",
+      "lat": 38.39565,
+      "lon": -0.52105
+    },
+    {
+      "direccion": "Av. Ancha de Castelar, 16, San Vicente del Raspeig",
+      "tipo": "Plástico (🟡)",
+      "color": "#FACC5A",
+      "lat": 38.39565,
+      "lon": -0.52105
+    },
+    {
+      "direccion": "Calle Blasco Ibáñez 2, San Vicente del Raspeig",
+      "tipo": "Orgánico (🟤)",
+      "color": "#5c4c4c",
+      "lat": 38.3958573382711,
+      "lon": -0.520493106633267
+    },
+    {
+      "direccion": "Calle Blasco Ibáñez 2, San Vicente del Raspeig",
+      "tipo": "Vidrio (🟢)",
+      "color": "#53C55E",
+      "lat": 38.3958573382711,
+      "lon": -0.520493106633267
+    },
+    {
+      "direccion": "Calle Blasco Ibáñez 2, San Vicente del Raspeig",
+      "tipo": "Papel y cartón (🔵)",
+      "color": "#3BB9F6",
+      "lat": 38.3958573382711,
+      "lon": -0.520493106633267
+    },
+    {
+      "direccion": "Calle Blasco Ibáñez 2, San Vicente del Raspeig",
+      "tipo": "Plástico (🟡)",
+      "color": "#FACC5A",
+      "lat": 38.3958573382711,
+      "lon": -0.520493106633267
+    },
+    {
+      "direccion": "Calle Blasco Ibáñez 31, San Vicente del Raspeig",
+      "tipo": "Orgánico (🟤)",
+      "color": "#5c4c4c",
+      "lat": 38.396943657546,
+      "lon": -0.518244548927469
+    },
+    {
+      "direccion": "Calle San Isidro 23, San Vicente del Raspeig",
+      "tipo": "Orgánico (🟤)",
+      "color": "#5c4c4c",
+      "lat": 38.3967302321218,
+      "lon": -0.51878416716201
+    },
+    {
+      "direccion": "Calle San Isidro 23, San Vicente del Raspeig",
+      "tipo": "Vidrio (🟢)",
+      "color": "#53C55E",
+      "lat": 38.3967302321218,
+      "lon": -0.51878416716201
+    },
+    {
+      "direccion": "Calle San Isidro 23, San Vicente del Raspeig",
+      "tipo": "Papel y cartón (🔵)",
+      "color": "#3BB9F6",
+      "lat": 38.3967302321218,
+      "lon": -0.51878416716201
+    },
+    {
+      "direccion": "Calle San Isidro 23, San Vicente del Raspeig",
+      "tipo": "Plástico (🟡)",
+      "color": "#FACC5A",
+      "lat": 38.3967302321218,
+      "lon": -0.51878416716201
+    },
+    {
+      "direccion": "Calle Santiago 85, San Vicente del Raspeig",
+      "tipo": "Orgánico (🟤)",
+      "color": "#5c4c4c",
+      "lat": 38.3951844136713,
+      "lon": -0.516667046633301
+    },
+    {
+      "direccion": "Calle Santiago 85, San Vicente del Raspeig",
+      "tipo": "Vidrio (🟢)",
+      "color": "#53C55E",
+      "lat": 38.3951844136713,
+      "lon": -0.516667046633301
+    },
+    {
+      "direccion": "Calle Santiago 85, San Vicente del Raspeig",
+      "tipo": "Papel y cartón (🔵)",
+      "color": "#3BB9F6",
+      "lat": 38.3951844136713,
+      "lon": -0.516667046633301
+    },
+    {
+      "direccion": "Calle Santiago 85, San Vicente del Raspeig",
+      "tipo": "Plástico (🟡)",
+      "color": "#FACC5A",
+      "lat": 38.3951844136713,
+      "lon": -0.516667046633301
+    }
+  ],
+
+  "rutas": [
+    {
+      "nombre": "Ruta Ecológica CV-828",
+      "color": "#4ade80",
+      "puntos": [
+        [38.397, -0.520],
+        [38.3985, -0.524],
+        [38.4002, -0.5275],
+        [38.4035, -0.530]
+      ]
+    },
+    {
+      "nombre": "Ruta Campus UA",
+      "color": "#d48349",
+      "puntos": [
+        [38.38608, -0.51073],
+        [38.38702, -0.51107],
+        [38.38852, -0.51313],
+        [38.38622, -0.51807],
+        [38.38223, -0.51619],
+        [38.38265, -0.51432],
+        [38.38177, -0.51125],
+        [38.38283, -0.50925],
+        [38.38458, -0.51024],
+        [38.38608, -0.51073]
+      ]
+    },
+    {
+      "nombre": "Biciruta Urbana",
+      "color": "#d48349",
+      "puntos": [
+        [38.3965, -0.517],
+        [38.398, -0.5195],
+        [38.4005, -0.522],
+        [38.403, -0.5255]
+      ]
+    },
+    {
+      "nombre": "Caminata Verde",
+      "color": "#4ade80",
+      "puntos": [
+        [38.4069, -0.5201],
+        [38.409, -0.518],
+        [38.4115, -0.5205],
+        [38.413, -0.523],
+        [38.414, -0.527],
+        [38.4069, -0.5201]
+      ]
+    }
+  ],
+
+  "puntos_de_interes": [
+    {
+      "nombre": "Punto Limpio Municipal",
+      "descripcion": "Residuos de aparatos eléctricos y electrónicos.",
+      "tipo": "Reciclaje",
+      "icono_fa": "fa-recycle",
+      "lat": 38.4035,
+      "lon": -0.53
+    },
+    {
+      "nombre": "Punto Limpio Industrial",
+      "descripcion": "Residuos voluminosos.",
+      "tipo": "Reciclaje",
+      "icono_fa": "fa-recycle",
+      "lat": 38.411,
+      "lon": -0.5185
+    },
+    {
+      "nombre": "Parque Lo Torrent",
+      "descripcion": "Zona verde ideal para relajarse o hacer voluntariado.",
+      "tipo": "Parque",
+      "icono_fa": "fa-tree",
+      "lat": 38.39413,
+      "lon": -0.51187
+    },
+    {
+      "nombre": "Inicio Ruta Larga Sur",
+      "descripcion": "Inicio de camino hacia la Peña Roja.",
+      "tipo": "Ruta_Inicio",
+      "icono_fa": "fa-location-dot",
+      "lat": 38.4015,
+      "lon": -0.54
+    },{
+      "nombre": "Parque Presidente Adolfo Suárez",
+      "descripcion": "Área recreativa y zona de descanso.",
+      "tipo": "Parque",
+      "icono_fa": "fa-tree",
+      "lat": 38.40398,
+      "lon": -0.5339
+    },
+    {
+      "nombre": "Punto de Voluntariado",
+      "descripcion": "Próxima actividad: ¡Planta árboles con nosotros!",
+      "tipo": "Voluntariado",
+      "icono_fa": "fa-people-group",
+      "lat": 38.4095,
+      "lon": -0.5290
+    }
+  ],
+
+  "estacion_bicisanvi": [
+    {
+      "nombre": "Estación Bicisanvi Outlet Centro Comercial",
+      "descripcion": "Estación Bicisanvi al lado del Outlet.",
+      "tipo": "Bicicleta",
+      "icono_fa": "fa-biking",
+      "color": "#c05c3b",
+      "lat": 38.38268,
+      "lon": -0.50611
+    },
+    {
+      "nombre": "Estación Bicisanvi Facultad de Educación",
+      "descripcion": "Estación Bicisanvi al lado de Parole.",
+      "tipo": "Bicicleta",
+      "icono_fa": "fa-biking",
+      "color": "#c05c3b",
+      "lat": 38.38797,
+      "lon": -0.50807
+    },
+    {
+      "nombre": "Estación Bicisanvi Parque Científico",
+      "descripcion": "Estación Bicisanvi al lado del Parque Científico de la UA.",
+      "tipo": "Bicicleta",
+      "icono_fa": "fa-biking",
+      "color": "#c05c3b",
+      "lat": 38.38251,
+      "lon": -0.52553
+    },
+    {
+      "nombre": "Estación Bicisanvi UA Biblioteca 24h",
+      "descripcion": "Estación de Bicisanvi Universidad de Alicante Biblioteca 24h.",
+      "tipo": "Bicicleta",
+      "icono_fa": "fa-biking",
+      "color": "#c05c3b",
+      "lat": 38.38452,
+      "lon": -0.51246
+    },
+    {
+      "nombre": "Estación Bicisanvi Polígono Torregroses",
+      "descripcion": "Estación Bicisanvi al lado de Facultad de Educación.",
+      "tipo": "Bicicleta",
+      "icono_fa": "fa-biking",
+      "color": "#c05c3b",
+      "lat": 38.38872,
+      "lon": -0.51996
+    },
+    {
+      "nombre": "Estación Bicisanvi Plaza Juan Pablo II",
+      "descripcion": "Estación cerca del Synergym de San Vicente del Raspeig Universidad.",
+      "tipo": "Bicicleta",
+      "icono_fa": "fa-biking",
+      "color": "#c05c3b",
+      "lat": 38.39231,
+      "lon": -0.52226
+    },
+    {
+      "nombre": "Estación Bicisanvi Tram",
+      "descripcion": "Estación Bicisanvi al lado de la parada del Tranvía.",
+      "tipo": "Bicicleta",
+      "icono_fa": "fa-biking",
+      "color": "#c05c3b",
+      "lat": 38.39266,
+      "lon": -0.51707
+    },
+    {
+      "nombre": "Estación Bicisanvi Parque Lo Torrent",
+      "descripcion": "Estación Bicisanvi Parque Lo Torrent.",
+      "tipo": "Bicicleta",
+      "icono_fa": "fa-biking",
+      "color": "#c05c3b",
+      "lat": 38.39426,
+      "lon": -0.51446
+    },
+    {
+      "nombre": "Estación Bicisanvi Ayuntamiento de San Vicente",
+      "descripcion": "Estación cerca del centro de San Vicente.",
+      "tipo": "Bicicleta",
+      "icono_fa": "fa-biking",
+      "color": "#c05c3b",
+      "lat": 38.3974,
+      "lon": -0.52259
+    },
+    {
+      "nombre": "Estación Bicisanvi Polideportivo de San Vicente",
+      "descripcion": "Estación cerca de la ciudad deportiva de San Vicente.",
+      "tipo": "Bicicleta",
+      "icono_fa": "fa-biking",
+      "color": "#c05c3b",
+      "lat": 38.40322,
+      "lon": -0.52272
+    },
+    {
+      "nombre": "Estación Bicisanvi Plaza del Maestro",
+      "descripcion": "Estación cerca de la estación de Renfe de San Vicente.",
+      "tipo": "Bicicleta",
+      "icono_fa": "fa-biking",
+      "color": "#c05c3b",
+      "lat": 38.39573,
+      "lon": -0.52866
+    },
+    {
+      "nombre": "Estación Bicisanvi Plaza Cooperante Vicente Ferrer",
+      "descripcion": "Estación cerca al hospital de San Vicente.",
+      "tipo": "Bicicleta",
+      "icono_fa": "fa-biking",
+      "color": "#c05c3b",
+      "lat": 38.4041,
+      "lon": -0.52943
+    }
+  ]
+}

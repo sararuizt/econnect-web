@@ -339,7 +339,7 @@
         from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
     
         const firebaseConfig = {
-            apiKey: "AIzaSyA5lPDFaH8W-miDJHB3sDKdD5fiJt8d9-8",
+            apiKey: "AIzaSyDeIyDCNlBnBIDpcvLfsjiqjEX7Kk8561g",
             authDomain: "ecconect-ae607.firebaseapp.com",
             projectId: "ecconect-ae607",
             storageBucket: "ecconect-ae607.firebasestorage.app",
@@ -385,34 +385,54 @@
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             const nombre = document.getElementById('nombre').value;
-    
+            
+            msgError.style.display = 'none'; // Limpiar error previo
+
             try {
                 if (isLoginMode) {
+                    // INICIO DE SESIÓN
                     await signInWithEmailAndPassword(auth, email, password);
+                    // La redirección la maneja onAuthStateChanged
                 } else {
+                    // REGISTRO
                     if (!nombre) throw new Error("Por favor, escribe tu nombre.");
-                    isSigningUp = true;
+                    
+                    isSigningUp = true; // Evitar redirección prematura
+                    
+                    // 1. Crear usuario en Auth
                     const credencial = await createUserWithEmailAndPassword(auth, email, password);
                     const user = credencial.user;
-                    await setDoc(doc(db, "usuarios", user.uid), {
-                        nombre: nombre,
-                        email: email,
-                        creado: new Date()
-                    });
-                    window.location.href = "mapa.html";
+                    
+                    // 2. Guardar datos en Firestore
+                    try {
+                        await setDoc(doc(db, "usuarios", user.uid), {
+                            nombre: nombre,
+                            email: email,
+                            creado: new Date().toISOString() // Formato seguro
+                        });
+                        console.log("Usuario guardado en DB");
+                        window.location.href = "mapa.html"; // Redirigir manualmente tras éxito
+                    } catch (dbError) {
+                        console.error("Error guardando en Firestore:", dbError);
+                        // Aunque falle la DB, el usuario se creó, así que entramos igual
+                        window.location.href = "mapa.html";
+                    }
                 }
             } catch (error) {
+                console.error("Error general:", error);
                 isSigningUp = false;
                 msgError.style.display = 'block';
-                // Mensajes de error simplificados para el nuevo diseño
+                
                 if (error.code === 'auth/email-already-in-use') {
-                    msgError.textContent = "Email ya registrado.";
+                    msgError.textContent = "Este email ya está registrado.";
                 } else if (error.code === 'auth/weak-password') {
-                    msgError.textContent = "Contraseña muy débil (mín. 6 caracteres).";
+                    msgError.textContent = "Contraseña débil (mín. 6 caracteres).";
                 } else if (error.code === 'auth/invalid-email') {
-                     msgError.textContent = "Formato de email incorrecto.";
+                     msgError.textContent = "El email no es válido.";
+                } else if (error.message === "Por favor, escribe tu nombre.") {
+                     msgError.textContent = error.message;
                 } else {
-                    msgError.textContent = "Error de autenticación. Revisa tus datos.";
+                    msgError.textContent = "Error: " + error.message;
                 }
             }
         });

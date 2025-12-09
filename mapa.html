@@ -1,239 +1,1708 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
+
     <link rel="manifest" href="manifest.json">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Econnect - Mapa</title>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    
+
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
+
     <style>
-        body { margin: 0; padding: 0; font-family: 'Poppins', sans-serif; background-color: #111; color: white; height: 100vh; overflow: hidden; display: flex; justify-content: center; }
-        
-        body.dark-theme {
-    /* Fondo bosque muy oscuro */
-    background: linear-gradient(rgba(10, 30, 15, 0.8), rgba(10, 30, 15, 0.9)), 
-                        url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=2074&auto=format&fit=crop') !important;
-    background-size: cover !important;
-    background-position: center !important;
-    background-attachment: fixed !important;
-}
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background-color: #111;
+            color: white;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+        }
 
-/* Ajuste CRUCIAL: El cristal ahora es NEGRO translúcido, no blanco */
-body.dark-theme .glass-card,
-body.dark-theme .profile-card,
-body.dark-theme .settings-group,
-body.dark-theme .request-capsule,
-body.dark-theme .friend-item,
-body.dark-theme .search-input,
-body.dark-theme .challenge-card,
-body.dark-theme .calendar-card,
-body.dark-theme .ranking-list,
-body.dark-theme .profile-rank-card,
-body.dark-theme .challenge-history-item,
-body.dark-theme .qr-btn,
-body.dark-theme .action-btn,
-body.dark-theme .gallery-item {
-    background: rgba(30, 30, 30, 0.4) !important; /* Gris oscuro transparente */
-    border: 1px solid rgba(255, 255, 255, 0.08); /* Borde muy sutil */
-    box-shadow: 0 4px 20px rgba(0,0,0,0.4); /* Sombra más fuerte */
-}
-
-/* Ajuste específico para el MENÚ INFERIOR en modo noche */
-body.dark-theme .bottom-nav {
-    background: rgba(20, 20, 20, 0.95) !important; /* Casi negro sólido */
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 -5px 20px rgba(0,0,0,0.5); /* Sombra superior para separar del fondo */
-}
-
-/* Ajuste para MODALES y PANTALLAS EMERGENTES */
-body.dark-theme .modal-box,
-body.dark-theme .app-container.modal-view { /* Si usas contenedores tipo página */
-    background: #181818 !important; /* Fondo sólido gris muy oscuro */
-    border: 1px solid rgba(255,255,255,0.15); /* Borde más visible para separar */
-    box-shadow: 0 0 50px rgba(0,0,0,0.8); /* Sombra intensa alrededor */
-}
-
-/* Ajuste para textos en modo oscuro */
-body.dark-theme h1, 
-body.dark-theme h2, 
-body.dark-theme strong,
-body.dark-theme .item-text {
-    color: #ffffff !important;
-}
-body.dark-theme p, 
-body.dark-theme .section-label,
-body.dark-theme .desc {
-    color: #bbbbbb !important;
-}
-        
-        
-        .app-container { 
-            width: 100%; max-width: 500px; height: 100vh; position: relative; 
+        .app-container {
+            width: 100%;
+            max-width: 500px;
+            height: 100vh;
+            position: relative;
             /* Se hace transparente para ver el mapa */
-            background-color: transparent; 
-            overflow: hidden; 
-        }
-        
-        /* NUEVO CONTENEDOR DEL MAPA REAL */
-        #mapid { 
-            position: absolute; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100%; 
-            z-index: 0; 
+            background-color: transparent;
+            overflow: hidden;
         }
 
-        .ui-layer { position: relative; z-index: 10; height: 100%; width: 100%; pointer-events: none; }
-        .ui-layer > * { pointer-events: auto; }
+        /* NUEVO CONTENEDOR DEL MAPA REAL */
+        #mapid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .ui-layer {
+            position: relative;
+            z-index: 10;
+            height: 100%;
+            width: 100%;
+            pointer-events: none;
+        }
+
+        .ui-layer>* {
+            pointer-events: auto;
+        }
 
         /* CONTROLES */
-        .floating-controls { position: absolute; top: 40px; right: 20px; display: flex; flex-direction: column; gap: 15px; }
-        .float-btn { width: 50px; height: 50px; background: rgba(20, 20, 20, 0.6); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 50%; color: white; display: flex; justify-content: center; align-items: center; font-size: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.3); cursor: pointer; transition: all 0.3s; }
-        .float-btn:hover { background: rgba(74, 222, 128, 0.8); transform: scale(1.1); border-color: transparent; }
-        .float-btn.active-route { background: #f59e0b; border-radius: 15px; width: auto; padding: 0 15px; font-size: 14px; font-weight: 700; }
+        .floating-controls {
+            position: absolute;
+            top: 40px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
 
-        /* SIDEBAR (LIMPIO) */
-        .sidebar { position: absolute; top: 0; left: 0; height: 100%; width: 260px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(20px); border-right: 1px solid rgba(255, 255, 255, 0.1); transform: translateX(-100%); transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); z-index: 50; padding-top: 60px; }
-        .sidebar.open { transform: translateX(0); box-shadow: 10px 0 50px rgba(0,0,0,0.5); }
-        .sidebar-header { padding: 0 25px 30px 25px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 20px; }
-        .sidebar-title { font-size: 22px; font-weight: 700; color: white; margin: 0; }
-        .sidebar-subtitle { font-size: 12px; color: #4ade80; text-transform: uppercase; letter-spacing: 1px; }
-        .sidebar-item { display: flex; align-items: center; padding: 15px 25px; cursor: pointer; color: rgba(255, 255, 255, 0.7); transition: all 0.2s; border-left: 3px solid transparent; }
-        .sidebar-item:hover { background: rgba(255, 255, 255, 0.05); color: white; padding-left: 30px; border-left: 3px solid #4ade80; }
-        .sidebar-icon { width: 30px; font-size: 18px; text-align: center; margin-right: 10px; }
-        .toggle-btn { position: absolute; top: 40px; right: -40px; width: 40px; height: 40px; background: rgba(15, 23, 42, 0.9); border-top-right-radius: 12px; border-bottom-right-radius: 12px; display: flex; justify-content: center; align-items: center; cursor: pointer; color: #4ade80; box-shadow: 5px 0 15px rgba(0,0,0,0.2); }
+        .float-btn {
+            width: 50px;
+            height: 50px;
+            background: rgba(20, 20, 20, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .float-btn:hover {
+            background: rgba(74, 222, 128, 0.8);
+            transform: scale(1.1);
+            border-color: transparent;
+        }
+
+        /* MENÚ FLOTANTE CENTRAL (Anteriormente .sidebar) */
+        .sidebar {
+            position: absolute;
+            top: 50%;
+            left: 25px;
+            height: auto;
+            width: 250px;
+            background: #333333;
+            border-radius: 20px;
+            transform: translateX(-110%) translateY(-70%);
+            transition: transform 0.3s ease-out;
+            z-index: 2000;
+            padding: 10px 0;
+            display: flex;
+            flex-direction: column;
+            border: none;
+        }
+
+        .sidebar.open {
+            transform: translateX(0) translateY(-70%);
+        }
+
+        .toggle-btn {
+            position: absolute;
+            top: 50%;
+            right: -15%;
+            transform: translateY(-50%);
+            width: 30px;
+            height: 100px;
+            background: #333333;
+            border-radius: 30px;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+            z-index: 2005;
+        }
+
+        .sidebar.open .toggle-btn i {
+            transform: rotate(180deg);
+        }
+
+        .toggle-btn i {
+            transition: transform 0.3s ease-out;
+            transform: rotate(0deg);
+        }
+
+        .toggle-btn:hover {
+            background: #333333;
+        }
+
+        /* BOTÓN DE CERRAR DENTRO DEL MENÚ (.close-btn) */
+        .close-btn {
+            display: none;
+        }
+
+        /* ÍTEMS DE NAVEGACIÓN (Ajustados para el fondo claro) */
+        .sidebar-nav {
+            padding: 0;
+            margin-top: 1px;
+        }
+
+        /* Damos espacio para el close-btn */
+        .sidebar-item {
+            padding: 12px 20px;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 400;
+        }
+
+        .sidebar-item:hover,
+        .sidebar-item.active-link {
+            background: rgba(74, 222, 128, 0.15);
+            color: white;
+        }
+
+        .sidebar-icon {
+            color: #4ade80;
+            width: 30px;
+            font-size: 18px;
+            text-align: center;
+            margin-right: 30px;
+        }
 
         /* EKO */
-        .eko-container { position: absolute; bottom: 110px; left: 20px; z-index: 20; display: flex; align-items: flex-end; gap: 5px; }
-        .eko-avatar { width: 85px; height: auto; cursor: pointer; transition: transform 0.2s; display: flex; justify-content: center; align-items: flex-end; }
-        .eko-avatar img { width: 100%; height: auto; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.5)); }
-        .eko-avatar:hover { transform: scale(1.1) rotate(-5deg); }
-        .eko-bubble { background: white; color: #333; padding: 10px 15px; border-radius: 15px; border-bottom-left-radius: 0; font-size: 12px; font-weight: 500; box-shadow: 0 5px 15px rgba(0,0,0,0.2); max-width: 180px; animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); margin-bottom: 30px; }
-        @keyframes popIn { from { opacity: 0; transform: scale(0.8) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+        .eko-container {
+            position: absolute;
+            bottom: 110px;
+            left: 20px;
+            z-index: 20;
+            display: flex;
+            align-items: flex-end;
+            gap: 5px;
+        }
+
+        .eko-avatar {
+            width: 85px;
+            height: auto;
+            cursor: pointer;
+            transition: transform 0.2s;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+        }
+
+        .eko-avatar img {
+            width: 100%;
+            height: auto;
+            filter: drop-shadow(0 5px 5px rgba(0, 0, 0, 0.5));
+        }
+
+        .eko-avatar:hover {
+            transform: scale(1.1) rotate(-5deg);
+        }
+
+        .eko-bubble {
+            background: white;
+            color: #333;
+            padding: 10px 15px;
+            border-radius: 15px;
+            border-bottom-left-radius: 0;
+            font-size: 12px;
+            font-weight: 500;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            max-width: 180px;
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            margin-bottom: 30px;
+        }
+
+        @keyframes popIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8) translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
 
         /* MENÚ INFERIOR (NUEVO ORDEN) */
-        .bottom-nav { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 400px; background: rgba(20, 20, 20, 0.6); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 50px; display: flex; justify-content: space-around; padding: 15px 0; z-index: 1000; box-shadow: 0 10px 40px rgba(0,0,0,0.4); }
-        .nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; color: rgba(255,255,255,0.5); text-decoration: none; cursor: pointer; font-size: 10px; transition: all 0.3s; position: relative; }
-        .nav-item:hover i { transform: translateY(-3px); color: white; }
-        .nav-item i { font-size: 20px; margin-bottom: 4px; transition: transform 0.3s; }
-        .nav-item.active { color: #4ade80; font-weight: 600; }
-        .nav-item.active i { transform: translateY(-2px); }
-        .nav-item.active::after { content: ''; position: absolute; bottom: -8px; width: 5px; height: 5px; background-color: #4ade80; border-radius: 50%; box-shadow: 0 0 10px #4ade80; }
+        .bottom-nav {
+            position: fixed;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 400px;
+            background: rgba(20, 20, 20, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+            z-index: 1000;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+        }
 
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.5);
+            text-decoration: none;
+            cursor: pointer;
+            font-size: 10px;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .nav-item:hover i {
+            transform: translateY(-3px);
+            color: white;
+        }
+
+        .nav-item i {
+            font-size: 20px;
+            margin-bottom: 4px;
+            transition: transform 0.3s;
+        }
+
+        .nav-item.active {
+            color: #4ade80;
+            font-weight: 600;
+        }
+
+        .nav-item.active i {
+            transform: translateY(-2px);
+        }
+
+        .nav-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            width: 5px;
+            height: 5px;
+            background-color: #4ade80;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #4ade80;
+        }
+
+
+        @keyframes rotar {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .ocultar {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* PARA LOS ICONOS DEL MAPA*/
+        .icono-eco-base {
+            text-align: center;
+            line-height: 40px;
+            font-size: 20px;
+            color: white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+        }
+
+        /* Basura (Gris Oscuro/Neutral) */
+        .icono-basura {
+            background-color: #525252;
+            border: 3px solid #333333;
+        }
+
+        /* Voluntariado (Azul Cielo/Marino) */
+        .icono-voluntariado {
+            background-color: #6ea3ee;
+            border: 3px solid #432893;
+        }
+
+        /* Parques / Naturaleza (Verde Bosque) */
+        .icono-parque {
+            background-color: #166534;
+            border: 3px solid #0c4a1e;
+        }
+
+        /* Rutas / Puntos de Encuentro (Contraste) */
+        .icono-ruta {
+            background-color: #f59e0b;
+            border: 3px solid #b45309;
+        }
+
+        /* Reciclaje / Puntos Limpios (Verde principal) */
+        .icono-reciclaje {
+            background-color: #4ade80;
+            border: 3px solid #3c8f5e;
+        }
+
+        /* Ajuste para el botón de ubicación en el mapa de Leaflet [+ | -]*/
+        .leaflet-control-zoom {
+            left: 429px !important;
+            right: auto !important;
+            top: 100px !important;
+            z-index: 100;
+        }
+
+        /* AÑADIDO RECIENTEMENTE */
+
+        /* SISTEMA DE NOTIFICACIONES */
+        .success-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            background: rgb(56, 144, 87);
+            padding: 20px;
+            border-radius: 20px;
+            border: transparent;
+            text-align: center;
+            z-index: 3000;
+            opacity: 0;
+            pointer-events: none;
+
+            visibility: hidden;
+            transition: all 0.3s ease-out;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.386);
+            width: 80%;
+            max-width: 280px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .success-modal.active {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+            pointer-events: auto;
+            visibility: visible;
+        }
+
+        .success-icon {
+            font-size: 40px;
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .success-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 8px;
+        }
+
+        .success-text {
+            font-size: 12px;
+            color: #f0f0f0;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        .success-btn {
+            background: #4ade80;
+            color: #000;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .success-btn:hover {
+            background: #6efea2;
+            transform: scale(1.05);
+        }
+
+        /* CONTENEDOR DE TARJETAS DE RETOS */
+
+        .activities-overlay {
+            position: absolute;
+            bottom: 170px;
+            /* Encima del bottom-nav */
+            left: 0;
+            width: 100%;
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            pointer-events: none;
+        }
+
+        .single-card-container {
+            width: 90%;
+            max-width: 350px;
+            pointer-events: auto;
+            display: flex;
+            justify-content: center;
+        }
+
+        .activity-card {
+
+            background: rgb(45, 139, 78);
+            border-radius: 18px;
+            /* AÑADE ESTO */
+            padding: 15px;
+            /* AÑADE ESTO */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            /* AÑADE ESTO */
+            color: white;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            border: transparent;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .icon-box {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .header-text h3 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .header-text span {
+            font-size: 12px;
+            color: #d1f7c4;
+            font-weight: 500;
+        }
+
+        .card-desc {
+            font-size: 13px;
+            color: #f0f0f0;
+            line-height: 1.4;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 5px;
+        }
+
+        .btn-card {
+            border: none;
+            padding: 10px 15px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .btn-completar {
+            background: #4ade80;
+            color: black;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 12px;
+            margin-top: 8px;
+            width: 100%;
+            transition: all 0.2s;
+        }
+
+        .btn-completar:hover {
+            background: #22c55e;
+            transform: scale(1.03);
+        }
+
+        .btn-completar-popup {
+            background: #4ade80;
+            color: black;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 12px;
+            margin-top: 8px;
+            width: 100%;
+            transition: all 0.2s;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .btn-completar-popup:hover {
+            background: #58ff95;
+            transform: scale(1.03);
+        }
+
+        .btn-accept {
+            flex: 1;
+            background-color: #4ade80;
+            color: #ffffff;
+            box-shadow: 0 2px 6px rgba(74, 222, 128, 0.15);
+        }
+
+        .btn-accept:hover {
+            background-color: #58ff95;
+        }
+
+        .btn-dismiss {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #ccc;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            width: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-dismiss:hover {
+            color: #ff4444;
+            border-color: #ff4444;
+        }
+
+        /* EKO BURBUJA - VERSIÓN SIMPLIFICADA */
+        .eko-bubble {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(5px);
+            color: #333;
+            padding: 8px 12px;
+            border-radius: 12px;
+            border-bottom-left-radius: 0;
+            font-size: 11px;
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            max-width: 160px;
+            animation: popIn 0.3s ease-out;
+            margin-bottom: 30px;
+            transition: opacity 0.3s ease;
+            /* Transición suave */
+            opacity: 0;
+        }
+
+        @keyframes popIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9) translateY(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        /* ICONO DEL RETO ACTIVO (PULSANTE) */
+        .icono-reto-activo {
+            animation: pulse 2s infinite !important;
+            box-shadow: 0 0 0 5px rgba(74, 222, 128, 0.3) !important;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.6);
+            }
+
+            70% {
+                box-shadow: 0 0 0 15px rgba(74, 222, 128, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(74, 222, 128, 0);
+            }
+        }
+
+        /* AÑADIDO PARA LAS RUTAS COMPLETAS*/
+
+        /* Mejorar visualización de la ruta activa */
+        .leaflet-interactive {
+            cursor: pointer !important;
+        }
+
+        /* Info adicional en tarjetas de ruta */
+        .ruta-info {
+            font-size: 11px;
+            color: #c6f6d5;
+            margin: 5px 0;
+            padding: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Animación para el marcador de inicio */
+        @keyframes bounce {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .icono-ruta {
+            animation: bounce 2s infinite;
+        }
+
+        /* Estilo para popups de rutas */
+        .leaflet-popup-content-wrapper {
+            background: rgba(255, 255, 255, 0.95) !important;
+            backdrop-filter: blur(10px);
+            border-radius: 15px !important;
+            border: 2px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .leaflet-popup-content {
+            font-family: 'Poppins', sans-serif !important;
+            font-size: 13px !important;
+            color: #333 !important;
+            min-width: 200px;
+            line-height: 1.4;
+        }
+
+        .leaflet-popup-content b {
+            font-weight: 700;
+        }
+
+        .leaflet-popup-tip {
+            background: rgba(255, 255, 255, 0.95) !important;
+        }
+
+        /* Estilo para línea de ruta más visible */
+        .leaflet-interactive {
+            cursor: pointer !important;
+            transition: opacity 0.3s;
+        }
+
+        .leaflet-interactive:hover {
+            opacity: 0.8;
+        }
+
+
+        /* === AJUSTE DEL CONTENEDOR DE ZOOM === */
+
+        /* 1. Contenedor de los botones de Zoom (Hacemos que parezca un rectángulo flotante) */
+        .leaflet-control-zoom {
+            /* Posicionamiento: Mantenido para que se alinee con el resto de floating-controls */
+            background: transparent !important;
+            border-radius: 20px !important;
+            /* Bordes suaves */
+            box-shadow: none !important;
+            padding: 0;
+            margin: 0 !important;
+
+            /* El contenedor Leaflet por defecto es flotante, lo usamos para el bloque */
+            width: 50px;
+            /* Ancho para contener los botones */
+            height: auto;
+            border: none !important;
+            top: 170px !important;
+        }
+
+        /* 2. Estilo de los Botones Individuales (+ y -) */
+        .leaflet-control-zoom a {
+            /* Aquí aplicamos el estilo BLUR al botón y le quitamos los bordes internos */
+            width: 50px !important;
+            height: 50px !important;
+            line-height: 50px !important;
+            font-size: 20px !important;
+
+            background: rgba(27, 89, 14, 0.5) !important;
+            /* Color Verde Oscuro BLUR */
+            backdrop-filter: blur(15px);
+            border: none !important;
+            /* Quitamos bordes Leaflet */
+            color: white !important;
+            border-radius: 50% !important;
+            /* Se eliminan los bordes individuales */
+            box-shadow: none !important;
+            margin-bottom: 12px !important;
+            padding: 0 !important;
+        }
+
+        /* 3. Redondeo de la Caja Contenedora */
+        /* Redondeamos solo la parte superior del botón '+' y la parte inferior del botón '-' */
+        .leaflet-control-zoom-in {
+            border-top-left-radius: 12px !important;
+            border-top-right-radius: 12px !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+            /* Línea divisoria */
+        }
+
+        .leaflet-control-zoom-out {
+            border-bottom-left-radius: 12px !important;
+            border-bottom-right-radius: 12px !important;
+        }
+
+        /* Estilo al pasar el ratón (Hover) */
+        .leaflet-control-zoom a:hover {
+            background: rgba(74, 222, 128, 0.8) !important;
+            /* Verde Econnect más brillante */
+            transform: scale(1.05);
+        }
+
+
+
+        /* Ajuste para el botón de Zoom In (+) */
+        .leaflet-control-zoom-in {
+            border-bottom-right-radius: 50% !important;
+            border-bottom-left-radius: 50% !important;
+        }
+
+        /* Ajuste para el botón de Zoom Out (-) */
+        .leaflet-control-zoom-out {
+            border-top-right-radius: 50% !important;
+            border-top-left-radius: 50% !important;
+            margin-top: 5px !important;
+            /* Asegura un espacio limpio */
+        }
+
+        /* Estilo para que la línea se mueva */
+        .ruta-animada {
+            /* La animación se llama 'flow' dura 1 segundo, es lineal y se repite infinitamente */
+            animation: flow 1s linear infinite;
+        }
+
+        /* Regla @keyframes para definir el movimiento */
+        @keyframes flow {
+
+            /* Mueve el patrón discontinuo de derecha a izquierda */
+            to {
+                stroke-dashoffset: -20;
+            }
+        }
     </style>
 </head>
+
 <body>
 
-<div class="app-container">
-    <div id="mapid"></div> 
 
-    <div class="ui-layer">
-        
-        <div class="sidebar" id="sidebar">
-            <div class="toggle-btn" onclick="toggleSidebar()"><i class="fa-solid fa-bars" id="toggle-icon"></i></div>
-            <div class="sidebar-header">
-                <h2 class="sidebar-title">Menú</h2>
-                <span class="sidebar-subtitle">Opciones Econnect</span>
+
+    <div class="app-container">
+
+        <div id="mapid"></div>
+
+        <div class="ui-layer">
+
+            <div class="sidebar" id="sidebar">
+
+                <div class="toggle-btn" onclick="toggleSidebar()"><i class="fa-solid fa-chevron-right"></i></div>
+
+
+                <div class="sidebar-nav">
+                    <div class="sidebar-item active-link" onclick="location.href='mapa.html';"><i
+                            class="fa-solid fa-map-location-dot sidebar-icon"></i> <span class="sidebar-text">Mapa de
+                            Acción</span></div>
+                    <div class="sidebar-item" onclick="location.href='perfil_ajustes.html';"><i
+                            class="fa-solid fa-user sidebar-icon"></i> <span class="sidebar-text">Mi Perfil</span></div>
+                    <div class="sidebar-item" onclick="location.href='rutas.html';"><i
+                            class="fa-solid fa-route sidebar-icon"></i> <span class="sidebar-text">Ver Rutas</span>
+                    </div>
+                    <div class="sidebar-item" onclick="location.href='voluntariado.html';"><i
+                            class="fa-solid fa-handshake-angle sidebar-icon"></i> <span
+                            class="sidebar-text">Voluntariado</span></div>
+                    <div class="sidebar-item" onclick="location.href='informacion.html';"><i
+                            class="fa-solid fa-circle-info sidebar-icon"></i> <span
+                            class="sidebar-text">Información</span></div>
+                    <div class="sidebar-item" onclick="location.href='chatbot.html';"><i
+                            class="fa-solid fa-robot sidebar-icon"></i> <span class="sidebar-text">Chatbot Eko</span>
+                    </div>
+                </div>
             </div>
-            <div class="sidebar-item" onclick="location.href='perfil_ajustes.html';"><i class="fa-solid fa-user sidebar-icon"></i> <span class="sidebar-text">Mi Perfil</span></div>
-            <div class="sidebar-item" onclick="location.href='rutas.html';"><i class="fa-solid fa-signs-post sidebar-icon" style="color: #4ade80;"></i> <span class="sidebar-text">Ver Rutas</span></div>
-            <div class="sidebar-item" onclick="location.href='voluntariado.html';"><i class="fa-solid fa-hand-holding-heart sidebar-icon" style="color: #fbbf24;"></i> <span class="sidebar-text">Voluntariado</span></div>
-            <div class="sidebar-item" onclick="location.href='informacion.html';"><i class="fa-solid fa-circle-info sidebar-icon" style="color: #9ca3af;"></i> <span class="sidebar-text">Información</span></div>
-            <div class="sidebar-item" onclick="location.href='chatbot.html';"><i class="fa-solid fa-robot sidebar-icon" style="color: #a78bfa;"></i> <span class="sidebar-text">Chatbot Eko</span></div>
-        </div>
 
-        <div class="floating-controls">
-            <div class="float-btn" onclick="centerMap()"><i class="fa-solid fa-location-crosshairs"></i></div>
-            <div class="float-btn"><i class="fa-solid fa-layer-group"></i></div>
-            <div class="float-btn active-route"><i class="fa-solid fa-route" style="margin-right:5px;"></i> CV-828</div>
-        </div>
+            <div class="floating-controls">
+                <div class="float-btn" onclick="centerMap()"><i class="fa-solid fa-location-crosshairs"></i></div>
+                <div class="float-btn" id="themeToggleBtn" title="Cambiar tema"><i class="fa-solid fa-moon"></i></div>
+            </div>
 
-        <div class="eko-container">
-            <div class="eko-avatar" onclick="location.href='chatbot.html'"><img src="eko.png" alt="Eko"></div>
-            <div class="eko-bubble">¡Hola! Soy Eko. ¿Exploramos hoy? 🌿</div>
-        </div>
+            <div class="success-modal" id="success-modal">
+                <i class="fa-solid fa-circle-check success-icon"></i>
+                <div class="success-title">¡Reto Aceptado!</div>
+                <div class="success-text">Te hemos marcado la ubicación en el mapa. ¡A por ello!</div>
+                <button class="success-btn" onclick="cerrarModal()">Entendido</button>
+            </div>
 
-        <nav class="bottom-nav">
-            <div class="nav-item active" onclick="location.href='mapa.html'"><i class="fa-solid fa-map-location-dot"></i><span>Mapa</span></div>
-            <div class="nav-item" onclick="location.href='retos.html'"><i class="fa-solid fa-trophy"></i><span>Retos</span></div>
-            <div class="nav-item" onclick="location.href='home.html'"><i class="fa-solid fa-users-line"></i><span>Social</span></div>
-            <div class="nav-item" onclick="location.href='amigos.html'"><i class="fa-solid fa-user-group"></i><span>Amigos</span></div>
-            <div class="nav-item" onclick="location.href='perfil.html'"><i class="fa-solid fa-user"></i><span>Perfil</span></div>
-        </nav>
+            <div class="activities-overlay" id="activities-overlay">
+                <div class="single-card-container" id="card-container"></div>
+            </div>
+
+            <div class="eko-container">
+                <div class="eko-avatar" onclick="location.href='chatbot.html'"><img src="eko.png" alt="Eko"></div>
+                <div class="eko-bubble">¡Hola! Soy Eko. ¿Exploramos algún lugar hoy? 🌿</div>
+            </div>
+
+            <nav class="bottom-nav">
+                <div class="nav-item active" onclick="location.href='mapa.html'"><i class="fa-solid fa-map-location-dot"></i><span>Mapa</span></div>
+                <div class="nav-item" onclick="location.href='retos.html'"><i class="fa-solid fa-trophy"></i><span>Retos</span></div>
+                <div class="nav-item" onclick="location.href='home.html'"><i class="fa-solid fa-users-line"></i><span>Social</span></div>
+                <div class="nav-item" onclick="location.href='amigos.html'"><i class="fa-solid fa-user-group"></i><span>Amigos</span></div>
+                <div class="nav-item" onclick="location.href='perfil.html'"><i class="fa-solid fa-user"></i><span>Perfil</span></div>
+            </nav>
+        </div>
     </div>
-</div>
 
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-    
-    let mymap; // Variable global para el mapa
-    const sanVicenteCoords = [38.4000, -0.5233]; // Coordenadas de San Vicente del Raspeig
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
+    <script>
 
+        // ===== VARIABLES GLOBALES =====
+        let mymap;
+        let retoActivo = null;
+        let buscandoReto = false;
+        const sanVicenteCoords = [38.4069, -0.5283];
 
-        // 1. INICIALIZACIÓN DEL MAPA
-        mymap = L.map('mapid').setView(sanVicenteCoords, 14); // Centrado en San Vicente, Zoom 14
-
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'
-        }).addTo(mymap);
-
-        // 2. SIMULACIÓN DE DATOS LOCALES EN SAN VICENTE
-        // Punto Limpio
-        L.marker([38.4035, -0.5300]).addTo(mymap)
-            .bindPopup("<b>Punto Limpio</b><br>Reciclaje de residuos especiales.");
-            
-        // Inicio de Ruta Ecológica
-        // Usamos un ícono personalizado de Font Awesome para las rutas
-        const routeIcon = L.divIcon({
-            className: 'route-icon', 
-            html: '<i class="fa-solid fa-signs-post" style="color:#4ade80; font-size:24px; background:rgba(255,255,255,0.8); border-radius:50%; padding: 5px;"></i>', 
-            iconSize: [34, 34]
-        });
-        L.marker([38.3970, -0.5200], {icon: routeIcon}).addTo(mymap)
-            .bindPopup("<b>Ruta Ecológica:</b><br>Inicio del camino verde CV-828.");
-
-
-        // 3. Lógica de re-centrado (Botón de localización)
-        window.centerMap = function() {
-            // Recentra el mapa en San Vicente
-            mymap.setView(sanVicenteCoords, 14); 
-            alert('Mapa recentrado en San Vicente del Raspeig.');
+        /**
+        * Crea un icono DIV personalizado de Leaflet (L.divIcon) con estilos dinámicos.
+        * @param {string} faIcon - La clase de Font Awesome (ej: 'fa-recycle').
+        * @param {string} color - El código de color de fondo (ej: '#4ade80').
+        * @param {string} extraClass - Clase CSS adicional para efectos (ej: 'icono-reto-activo').
+        * @returns {L.DivIcon} Objeto de icono Leaflet.
+        */
+        function crearIconoPersonalizado(faIcon, color = '#4ade80', extraClass = '') {
+            return L.divIcon({
+                className: 'icono-eco-base ' + extraClass,
+                html: `
+            <div style="
+                background-color: ${color};
+                color: white;
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border: 3px solid ${color === '#4ade80' ? '#3c8f5e' : 'rgba(255,255,255,0.3)'};
+            ">
+                <i class="fa-solid ${faIcon}"></i>
+            </div>
+            `,
+                iconSize: [40, 40],
+                iconAnchor: [20, 40],
+                popupAnchor: [0, -40]
+            });
         }
-        
-    // Lógica de Firebase y Auth (sin cambios)
-    const firebaseConfig = { apiKey: "AIzaSyA5lPDFaH8W-miDJHB3sDKdD5fiJt8d9-8", authDomain: "ecconect-ae607.firebaseapp.com", projectId: "ecconect-ae607", storageBucket: "ecconect-ae607.firebasestorage.app", messagingSenderId: "241708782882", appId: "1:241708782882:web:514d895119f9f7c3fa817b", measurementId: "G-KJ3FLCHZCG" };
-    const app = initializeApp(firebaseConfig); 
-    const auth = getAuth(app);
-    onAuthStateChanged(auth, (user) => { if (!user) window.location.href = "index.html"; });
 
-    // Lógica de Sidebar (sin cambios)
-    window.toggleSidebar = function() { 
-        const sidebar = document.getElementById('sidebar'); 
-        const icon = document.getElementById('toggle-icon'); 
-        sidebar.classList.toggle('open'); 
-        if (sidebar.classList.contains('open')) { 
-            icon.classList.remove('fa-bars'); 
-            icon.classList.add('fa-xmark'); 
-        } else { 
-            icon.classList.remove('fa-xmark'); 
-            icon.classList.add('fa-bars'); 
-        } 
-    }
-</script>
-<script>
-    if (localStorage.getItem('darkMode') === 'enabled') {
-        document.body.classList.add('dark-theme');
-    }
-</script>
+        /**
+        * Genera el HTML para un icono de contenedor pequeño, usado en los popups agrupados.
+        * @param {string} tipo - El tipo de contenedor (ej: 'Orgánico (🟤)').
+        * @param {string} color - El código de color de fondo.
+        * @returns {string} Fragmento HTML del icono pequeño.
+        */
+        function getContainerIconHTML(tipo, color) {
+            let iconClass = tipo.includes("Orgánico") || tipo.includes("Resto") ? 'fa-trash' : 'fa-recycle';
+            return `<div style="background-color: ${color}; color: white; display: flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 50%; margin: 2px;">
+                <i class="fa-solid ${iconClass}"></i>
+            </div>`;
+        }
+
+
+        /**
+        * Carga los datos de los POIs, Contenedores, Estaciones de Bici y Rutas desde el JSON
+        * y los dibuja en el mapa de Leaflet.
+        * @param {L.Map} mapa - La instancia global de tu mapa (mymap).
+        */
+        async function cargarDatosDesdeJson(mapa) {
+            console.log("🔄 Cargando datos desde cargar_data.json...");
+            try {
+                const response = await fetch("cargar_data.json");
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+
+                // --- A. CONTENEDORES AGRUPADOS ---
+                const ubicacionesAgrupadas = new Map();
+                for (const contenedor of data.contenedores || []) {
+                    const coordKey = `${contenedor.lat},${contenedor.lon}`;
+                    if (!ubicacionesAgrupadas.has(coordKey)) {
+                        ubicacionesAgrupadas.set(coordKey, { lat: contenedor.lat, lon: contenedor.lon, tipos: [], iconosHTML: [], direccion: contenedor.direccion });
+                    }
+                    const grupo = ubicacionesAgrupadas.get(coordKey);
+                    grupo.tipos.push(contenedor.tipo);
+                    grupo.iconosHTML.push(getContainerIconHTML(contenedor.tipo, contenedor.color));
+                }
+
+                for (const [key, grupo] of ubicacionesAgrupadas) {
+                    const iconoPrincipal = crearIconoPersonalizado('fa-recycle', '#4ade80');
+                    const contenidoPopup = `
+                <div style="font-family: 'Poppins', sans-serif;">
+                    <b>${grupo.direccion}</b>
+                    <div style="display: flex; flex-wrap: wrap; margin-top: 5px;">${grupo.iconosHTML.join('')}</div>
+                    <small style="display: block; margin-top: 5px;">Tipos: ${grupo.tipos.map(t => t.split(' ')[0]).join(', ')}</small>
+                </div>
+            `;
+                    L.marker([grupo.lat, grupo.lon], { icon: iconoPrincipal }).addTo(mapa).bindPopup(contenidoPopup);
+                }
+
+                // --- B. PUNTOS DE INTERÉS (POIs) ---
+                if (data.puntos_de_interes) {
+                    for (const poi of data.puntos_de_interes) {
+                        // Asignación de color según el tipo, similar al CSS que tenías
+                        const color = poi.color || (poi.tipo === 'Reciclaje' ? '#22c55e' : (poi.tipo === 'Parque' ? '#166534' : '#fbbf24'));
+                        const poiIcon = crearIconoPersonalizado(poi.icono_fa, color);
+                        L.marker([poi.lat, poi.lon], { icon: poiIcon }).addTo(mapa).bindPopup(`<b>${poi.nombre}</b><br>${poi.descripcion}`);
+                    }
+                }
+
+                // --- C. ESTACIONES BICISANVI ---
+                if (data.estacion_bicisanvi) {
+                    for (const estacion of data.estacion_bicisanvi) {
+                        const bikeIcon = crearIconoPersonalizado(estacion.icono_fa, estacion.color || '#c05c3b');
+                        L.marker([estacion.lat, estacion.lon], { icon: bikeIcon }).addTo(mapa).bindPopup(`<b>${estacion.nombre}</b><br>${estacion.descripcion}`);
+                    }
+                }
+
+                // --- D. RUTAS (Polilíneas estáticas) ---
+                if (data.rutas) {
+                    for (const ruta of data.rutas) {
+                        L.polyline(ruta.puntos, {
+                            color: ruta.color,
+                            weight: 4,
+                            opacity: 0.7
+                        }).addTo(mapa).bindPopup(`<b>Ruta: ${ruta.nombre}</b>`);
+                    }
+                }
+
+                console.log("✅ Datos del JSON cargados y dibujados correctamente.");
+
+            } catch (error) {
+                console.error("❌ ERROR FATAL al cargar el JSON:", error);
+                mostrarMensajeEko("Error cargando datos del mapa. Revisa 'cargar_data.json'.", 6000);
+            }
+        }
+
+
+        // ===== BASE DE DATOS DE RETOS (SIMPLIFICADA) =====
+        const retosDB = [
+            {
+                id: 1, titulo: "Ruta Campus UA", tipo: "Bicicleta", distancia: "5.7 km", descripcion: "Cicloruta para conocer los alrededores de la Universidad de Alicante.", icono: "fa-person-biking", color: "#f97316", img: "https://web.ua.es/es/bici.jpg", lat: 38.38608, lon: -0.51073, es_ruta_completa: true, puntos_ruta: [
+                    [38.38608, -0.51073],
+                    [38.38702, -0.51107],
+                    [38.38852, -0.51313],
+                    [38.38622, -0.51807],
+                    [38.38223, -0.51619],
+                    [38.38265, -0.51432],
+                    [38.38177, -0.51125],
+                    [38.38283, -0.50925],
+                    [38.38458, -0.51024],
+                    [38.38608, -0.51073]
+                ]
+            },
+            { id: 2, titulo: "Limpieza Parque", tipo: "Voluntariado", distancia: "800 m", descripcion: "Recogida de plásticos exprés.", icono: "fa-trash-can", color: "#3b82f6", lat: 38.4035, lon: -0.5300 },
+            { id: 3, titulo: "Ecopunto", tipo: "Reciclaje", distancia: "1.2 km", descripcion: "Tira tus pilas usadas aquí.", icono: "fa-recycle", color: "#4ade80", lat: 38.3995, lon: -0.5260 },
+            {
+                id: 4, titulo: "Caminata Verde", tipo: "Senderismo", distancia: "3.5 km", descripcion: "Paseo por la zona norte.", icono: "fa-person-hiking", color: "#4ade80", lat: 38.4100, lon: -0.5250, es_ruta_completa: true, puntos_ruta: [
+                    [38.4069, -0.5201],
+                    [38.409, -0.518],
+                    [38.4115, -0.5205],
+                    [38.413, -0.523],
+                    [38.414, -0.527],
+                    [38.4069, -0.5201]
+                ]
+            },
+            { id: 5, titulo: "Busca 3 fuentes", tipo: "Busqueda", distancia: "0 km", descripcion: "Encuentra tres fuentes de agua potable.", icono: "fa-faucet-drip", color: "#3b82f6", lat: 38.4000, lon: -0.5230 },
+            // Nuevas Rutas
+            {
+                id: 6, titulo: "Ruta Ciclista Verde", tipo: "Bicicleta", distancia: "12 km", descripcion: "Ruta larga ideal para fin de semana.", icono: "fa-bicycle", color: "#22c55e", lat: 38.3950, lon: -0.5150, es_ruta_completa: true, puntos_ruta: [
+                    [38.3950, -0.5150], [38.3980, -0.5120], [38.4010, -0.5140], [38.4050, -0.5100], [38.4080, -0.5120]
+                ]
+            },
+            {
+                id: 7, titulo: "Parque Norte", tipo: "Caminata", distancia: "2.5 km", descripcion: "Paseo relajante por el parque norte.", icono: "fa-tree", color: "#166534", lat: 38.4150, lon: -0.5300, es_ruta_completa: true, puntos_ruta: [
+                    [38.4150, -0.5300], [38.4170, -0.5320], [38.4190, -0.5300], [38.4170, -0.5280]
+                ]
+            }
+        ];
+
+
+
+        // NUEVAS FUNCIONES GLOBALES PARA LOS BOTONES
+        window.aceptarRetoDesdeBoton = function () {
+            console.log("🎯 Botón 'Ver en mapa' CLICKEADO");
+
+            if (!retoActivo) {
+                console.error("❌ No hay reto activo para aceptar");
+                mostrarMensajeEko("No hay reto seleccionado", 2000);
+                return;
+            }
+
+            // Ocultar tarjeta suavemente
+            const card = document.querySelector('.activity-card');
+            if (card) {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    document.getElementById('card-container').innerHTML = '';
+                }, 300);
+            }
+
+            // Llamar a la función principal
+            aceptarReto();
+        };
+
+        window.rechazarRetoDesdeBoton = function () {
+            console.log("❌ Botón 'X' CLICKEADO");
+            rechazarReto();
+        };
+
+        // ===== FUNCIONES PARA EKO =====
+        function mostrarMensajeEko(mensaje, duracion = 4000) {
+            const ekoBubble = document.querySelector('.eko-bubble');
+            if (!ekoBubble) return;
+
+            ekoBubble.textContent = mensaje;
+            ekoBubble.style.opacity = '1';
+
+            // Limpiar timeout anterior
+            if (ekoBubble.timeoutId) clearTimeout(ekoBubble.timeoutId);
+
+            // Ocultar después del tiempo
+            ekoBubble.timeoutId = setTimeout(() => {
+                ekoBubble.style.opacity = '0';
+            }, duracion);
+        }
+
+        // ===== SISTEMA DE RETOS =====
+        function mostrarRetoAleatorio() {
+
+            const container = document.getElementById('card-container');
+
+            if (container.children.length > 0) return;
+
+            const index = Math.floor(Math.random() * retosDB.length);
+            const act = retosDB[index];
+
+            retoActivo = act;
+
+            mostrarMensajeEko("¿Qué te parece este reto? 🤔", 6000);
+
+            // Inyecta el HTML de la tarjeta
+            container.innerHTML = `
+            <div class="activity-card" id="active-card">
+                <div class="card-header">
+                    <div class="icon-box" style="background-color: ${act.color};">
+                        <i class="fa-solid ${act.icono}" style="color: white;"></i>
+                    </div>
+                    <div class="header-text">
+                        <h3>${act.titulo}</h3>
+                        <span>${act.distancia} • ${act.tipo}</span>
+                    </div>
+                </div>
+                <div class="card-desc">${act.descripcion}</div>
+                <div class="card-actions">
+                    <button class="btn-card btn-accept" onclick="window.confirmarReto()">Aceptar</button>
+                    <button class="btn-card btn-dismiss" onclick="window.rechazarYEsperar()"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+            </div>
+        `;
+        }
+
+        // Confirmación del Reto
+        window.confirmarReto = function () {
+            const card = document.getElementById('active-card');
+
+            if (retoActivo) {
+                aceptarReto(false);
+
+                // 2. MOSTRAR LA NOTIFICACIÓN DE ACEPTACIÓN
+                const modal = document.getElementById('success-modal');
+                if (modal) {
+                    // Reestablecer el mensaje de ACEPTADO y activarlo.
+                    modal.querySelector('.success-title').textContent = "¡Reto Aceptado!";
+                    modal.querySelector('.success-text').textContent = "Te hemos marcado la ubicación en el mapa. ¡A por ello!";
+                    modal.classList.add('active');
+                }
+                // 1. Crear icono especial para el Reto
+                const colorReto = retoActivo.color;
+                const iconoReto = retoActivo.icono;
+
+                const retoIconHTML = `
+                <div style="background-color: ${colorReto}; color: white; font-size: 20px;width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 4px solid ${colorReto === '#4ade80' ? '#3c8f5e' : 'rgba(255,255,255,0.3)'};">
+                    <i class="fa-solid ${iconoReto}"></i>
+                </div>`;
+
+                const retoIcon = L.divIcon({
+                    html: retoIconHTML,
+                    className: 'eco-marker-base reto-icon-pulsating',
+                    iconSize: [48, 48],
+                    iconAnchor: [24, 48],
+                    popupAnchor: [0, -48]
+                });
+
+                // LÓGICA DE REDIRECCIÓN CONDICIONAL
+                let urlDestino = 'retos.html'; // Destino por defecto (para retos generales/Ecopunto)
+                let textoEnlace = 'Ver Detalles del Reto >>';
+
+                if (retoActivo.tipo === 'Bicicleta' || retoActivo.tipo === 'Senderismo') {
+                    urlDestino = 'rutas.html';
+                    textoEnlace = 'Ver Ruta en Detalle >>';
+                }
+                // Si el tipo es 'Voluntariado', podrías redirigir a 'voluntariado.html'
+                // else if (retoActivo.tipo === 'Voluntariado') { urlDestino = 'voluntariado.html'; }
+
+                // 2. Crear y añadir el marcador del reto
+                L.marker([retoActivo.lat, retoActivo.lon], { icon: retoIcon })
+                    .addTo(mymap)
+                    .bindPopup(`
+                <b>RETO ACTIVO: ${retoActivo.titulo}</b><br>
+                Distancia: ${retoActivo.distancia}<br>
+                <a href="${urlDestino}?reto_id=${retoActivo.id}" style="color: #4ade80; font-weight: bold;">
+                    ${textoEnlace}
+                </a>
+            `)
+                    .openPopup();
+
+                // 3. Centrar el mapa en la ubicación del reto
+                mymap.setView([retoActivo.lat, retoActivo.lon], 16);
+            }
+
+            // Ocultar UI y mostrar éxito
+            card.style.opacity = '0';
+            setTimeout(() => card.remove(), 300);
+
+            //document.getElementById('success-modal').classList.add('active');
+            mostrarMensajeEko("¡A por ello! 🔥", 3000);
+
+            // Reinicia el ciclo de retos después del cooldown
+            setTimeout(() => {
+                window.mostrarRetoAleatorio();
+            }, 6000);
+        }
+
+        // Rechazar Reto
+        window.rechazarYEsperar = function () {
+            const card = document.getElementById('active-card');
+
+            if (card) {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+
+                mostrarMensajeEko("¡Estoy buscándote más retos por tu zona! 🌍", 60000); // Mensaje de 1 minuto
+
+                setTimeout(() => {
+                    card.remove();
+                    setTimeout(() => {
+                        window.mostrarRetoAleatorio();
+                    }, 6000); // Cooldown de 1 minuto
+                }, 300);
+            }
+        }
+
+        window.cerrarModal = function () {
+            document.getElementById('success-modal').classList.remove('active');
+        }
+
+        function crearTarjetaReto(reto) {
+
+            const container = document.getElementById('card-container');
+
+            // Limpiar primero completamente
+            container.innerHTML = '';
+
+            container.innerHTML = `
+                    <div class="activity-card" id="reto-card-actual">
+                        <div class="card-header">
+                            <div class="icon-box" style="background: ${reto.colorIcono}20; border: 2px solid ${reto.colorIcono}">
+                                <i class="fa-solid ${reto.icono}" style="color: ${reto.colorIcono}"></i>
+                            </div>
+                            <div class="header-text">
+                                <h3>${reto.titulo}</h3>
+                                <span>${reto.distancia} • ${reto.tipo}</span>
+                            </div>
+                        </div>
+                        <div class="card-desc">${reto.descripcion}</div>
+                        <div class="card-actions">
+                            <button class="btn-card btn-accept" id="btn-aceptar-reto">Ver en mapa</button>
+                            <button class="btn-card btn-dismiss" id="btn-rechazar-reto">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+            // ASIGNAR EVENTOS DIRECTAMENTE (forma más segura)
+            document.getElementById('btn-aceptar-reto').addEventListener('click', function (e) {
+                e.stopPropagation();
+                console.log("✅ Botón ACEPTAR clickeado directamente");
+                aceptarReto();
+            });
+
+            document.getElementById('btn-rechazar-reto').addEventListener('click', function (e) {
+                e.stopPropagation();
+                console.log("❌ Botón RECHAZAR clickeado directamente");
+                rechazarReto();
+            });
+
+            // Auto-ocultar después de 30 segundos (opcional)
+            setTimeout(() => {
+                if (retoActivo && document.getElementById('reto-card-actual')) {
+                    console.log("⏰ Auto-ocultando tarjeta después de 30s");
+                    rechazarReto();
+                }
+            }, 30000);
+        }
+
+        function crearIconoPersonalizado(faIcon, color = '#4ade80') {
+
+            return L.divIcon({
+                className: 'icono-eco-base',
+                html: `
+                        <div style="
+                            background-color: ${color};
+                            color: white;
+                            width: 40px;
+                            height: 40px;
+                            border-radius: 50%;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            border: 3px solid ${color === '#4ade80' ? '#3c8f5e' : 'rgba(255,255,255,0.3)'};
+                        ">
+                            <i class="fa-solid ${faIcon}"></i>
+                        </div>
+                    `,
+                iconSize: [40, 40],
+                iconAnchor: [20, 40],
+                popupAnchor: [0, -40]
+            });
+        }
+
+        function aceptarReto(isSilentStart = false) {
+
+            console.log("🎯 ===== INICIANDO aceptarReto() =====");
+            console.log("📌 Reto activo:", retoActivo ? retoActivo.titulo : "NULO");
+
+            if (!retoActivo) {
+                console.error("❌ ERROR: No hay reto activo para aceptar");
+                mostrarMensajeEko("No hay reto seleccionado", 2000);
+                return;
+            }
+
+            if (!isSilentStart) {
+                // Ocultar tarjeta suavemente
+                const card = document.getElementById('reto-card-actual');
+                if (card) {
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(20px)';
+                    setTimeout(() => {
+                        document.getElementById('card-container').innerHTML = '';
+                    }, 300);
+                }
+            }
+
+            if (!isSilentStart) {
+                mostrarMensajeEko(`✅ Aceptado: ${retoActivo.titulo}`, 2000);
+            }
+
+            //limpiar mapa anterior
+            limpiarRetoActual();
+
+            //mostrar mensaje de confirmacion
+            //mostrarMensajeEko(`✅ Aceptado: ${retoActivo.titulo}`, 2000);
+
+            // ===== PARA RUTAS COMPLETAS =====
+            //  PARA RUTAS COMPLETAS (con línea)
+            if (retoActivo.es_ruta_completa && retoActivo.puntos_ruta) {
+
+                console.log("🗺️ Dibujando ruta completa...");
+                dibujarRutaCompleta(retoActivo);
+
+            } else {
+
+                console.log("📍 Marcando punto único...");
+                marcarPuntoUnico(retoActivo);
+            }
+
+            console.log("✅ ===== aceptarReto() COMPLETADO =====");
+        }
+
+        function dibujarRutaCompleta(reto) {
+            const puntos = reto.puntos_ruta;
+            const inicio = puntos[0];
+            const fin = puntos[puntos.length - 1];
+
+            // Marcar inicio
+            window.marcadorInicio = L.marker(inicio, {
+                icon: crearIconoPersonalizado('fa-play', reto.color || '#4ade80')
+            }).addTo(mymap)
+                .bindPopup(`
+                    <b>📍 Inicio: ${reto.titulo}</b><br>
+                    <button onclick="window.completarReto()" class="btn-completar-popup">
+                        Marcar como completado
+                    </button>
+                `);
+
+            // Dibujar ruta
+            window.rutaActiva = L.polyline(puntos, {
+                color: reto.colorLinea || reto.color || '#666666',
+                weight: 4,
+                opacity: 0.7,
+                dashArray: '10, 10',
+                className: 'ruta-animada'
+            }).addTo(mymap);
+
+            // Marcar fin
+            window.marcadorFin = L.marker(fin, {
+                icon: crearIconoPersonalizado('fa-flag-checkered', reto.color || '#4ade80')
+            }).addTo(mymap)
+                .bindPopup(`
+                    <b>🏁 Fin: ${reto.titulo}</b><br>
+                    <button onclick="window.completarReto()" class="btn-completar-popup">
+                        Marcar como completado
+                    </button>
+                `);
+
+            // Ajustar vista
+            const bounds = L.latLngBounds(puntos);
+            mymap.flyToBounds(bounds, { padding: [50, 50], duration: 1.5 });
+        }
+
+        function marcarPuntoUnico(reto) {
+            window.marcadorReto = L.marker(
+                [reto.lat, reto.lon],
+                { icon: crearIconoPersonalizado(reto.icono, reto.color) }
+            ).addTo(mymap)
+                .bindPopup(`
+                    <b>${reto.titulo}</b><br>
+                    ${reto.descripcion}<br>
+                    <button onclick="window.completarReto()" class="btn-completar-popup">
+                        ¡Completado!
+                    </button>
+                `).openPopup();
+
+            mymap.flyTo([reto.lat, reto.lon], 16, { duration: 1.5 });
+        }
+
+        function rechazarReto() {
+
+            console.log("❌ ===== INICIANDO rechazarReto() =====");
+
+            const card = document.getElementById('reto-card-actual');
+            if (card) {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    document.getElementById('card-container').innerHTML = '';
+                }, 300);
+            }
+
+            retoActivo = null;
+            buscandoReto = false;
+
+            mostrarMensajeEko("Vale, te sugiero otro en un momento 😊", 2500);
+
+            setTimeout(() => {
+                mostrarRetoAleatorio();
+            }, 10000);
+
+            console.log("✅ ===== rechazarReto() COMPLETADO =====");
+        }
+
+        // ===== FUNCIONES GLOBALES PARA HTML =====
+        window.cerrarModal = function () {
+            document.getElementById('success-modal').classList.remove('active');
+        }
+
+        function limpiarRetoActual() {
+            // Limpiar mapa
+            if (window.rutaActiva) {
+                mymap.removeLayer(window.rutaActiva);
+                window.rutaActiva = null;
+            }
+            if (window.marcadorInicio) {
+                mymap.removeLayer(window.marcadorInicio);
+                window.marcadorInicio = null;
+            }
+            if (window.marcadorFin) {
+                mymap.removeLayer(window.marcadorFin);
+                window.marcadorFin = null;
+            }
+            if (window.marcadorReto) {
+                mymap.removeLayer(window.marcadorReto);
+                window.marcadorReto = null;
+            }
+
+            // Cerrar todos los popups
+            mymap.closePopup();
+
+            // Limpiar tarjeta
+            const container = document.getElementById('card-container');
+            if (container) container.innerHTML = '';
+
+        }
+
+        function completarReto() {
+
+            if (!retoActivo) {
+                console.warn("⚠️ No hay reto activo para completar");
+                return;
+            }
+
+            // 1. MENSAJE DE EKO
+            mostrarMensajeEko("🎉 ¡Perfecto! Puntos sumados", 3000);
+
+            // 2. CERRAR POPUP
+            if (mymap) mymap.closePopup();
+
+            // 3.LIMPIAR DE RETOS
+            limpiarRetoActual();
+
+            // 4. MOSTRAR MODAL DE ÉXITO
+            const modal = document.getElementById('success-modal');
+            if (modal) {
+
+                modal.querySelector('.success-title').textContent = "¡Reto Completado!";
+                modal.querySelector('.success-text').textContent = `Has completado "${retoActivo.titulo}". ¡Buen trabajo!`;
+                modal.classList.add('active');
+            }
+
+
+            // 5. LIMPIAR VARIABLES
+            retoActivo = null;
+
+            // 6. VOLVER A CENTRAR
+            if (mymap) {
+                mymap.flyTo(sanVicenteCoords, 14, { duration: 1.5 });
+            }
+
+            // 7. NUEVO RETO EN 8 SEGUNDOS
+            setTimeout(() => {
+                mostrarMensajeEko("¿Listo para otro desafío? 🌟", 3000);
+                setTimeout(mostrarRetoAleatorio, 15000);
+            }, 8000);
+        }
+
+        window.completarReto = completarReto;
+
+        // --- MAPA Y TEMAS ---
+        let darkLayer;
+        let lightLayer;
+        let currentTheme = 'light';
+
+        function toggleTheme() {
+            const themeBtn = document.getElementById('themeToggleBtn');
+            if (currentTheme === 'dark') {
+                mymap.removeLayer(darkLayer);
+                lightLayer.addTo(mymap);
+                currentTheme = 'light';
+                themeBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
+            } else {
+                mymap.removeLayer(lightLayer);
+                darkLayer.addTo(mymap);
+                currentTheme = 'dark';
+                themeBtn.innerHTML = '<i class="fa-solid fa-moon"></i>';
+            }
+        }
+
+        //  INICIALIZACIÓN DEL MAPA 
+        document.addEventListener('DOMContentLoaded', async () => {
+
+
+
+            // Inicializar mapa
+            mymap = L.map('mapid').setView(sanVicenteCoords, 14);
+
+            // Definición de Capas del Mapa
+            lightLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; OpenStreetMap'
+            })
+
+            darkLayer = L.tileLayer(
+                "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
+                { maxZoom: 18, attribution: '© OpenStreetMap, © CARTO' }
+            );
+
+            lightLayer.addTo(mymap); // Capa inicial: Oscura
+
+            // Configurar el botón de cambio de tema
+            const themeButton = document.getElementById("themeToggleBtn");
+            themeButton.addEventListener("click", toggleTheme);
+
+            // ************************************************************
+            // ** LLAMADA CLAVE: CARGA EL JSON Y DIBUJA TODOS LOS PUNTOS **
+            // ************************************************************
+            await cargarDatosDesdeJson(mymap);
+
+
+            // ----------------------------------------------------
+            // ** NUEVA LÓGICA DE INICIO AUTOMÁTICO DE RETO **
+            // ----------------------------------------------------
+            const urlParams = new URLSearchParams(window.location.search);
+            const retoIniciadoId = urlParams.get('reto_iniciado_id');
+
+            if (retoIniciadoId) {
+                // 1. Convertir el ID a número ya que URLSearchParams devuelve un string
+                const idNumerico = parseInt(retoIniciadoId);
+
+                // 2. Buscar el reto correspondiente en la base de datos
+                const retoAIniciar = retosDB.find(r => r.id === idNumerico);
+
+                if (retoAIniciar) {
+                    // 3. Establecer el reto como activo globalmente
+                    retoActivo = retoAIniciar;
+
+                    // 4. Ejecutar la lógica para marcarlo en el mapa (aceptarReto)
+                    // Nota: Asegúrate de que 'aceptarReto' esté disponible globalmente.
+                    aceptarReto(true);
+
+                    // Opcional: Centrar y mostrar un mensaje de Eko
+                    mostrarMensajeEko(`¡Bienvenido! Iniciando reto: ${retoAIniciar.titulo}`, 4000);
+
+                } else {
+                    console.warn(`⚠️ Reto con ID ${retoIniciadoId} no encontrado en retosDB.`);
+                }
+
+                // 5. Limpiar el parámetro de la URL después de usarlo (opcional, para evitar re-inicios)
+                history.replaceState(null, null, window.location.pathname);
+            }
+
+            setTimeout(() => {
+                mostrarMensajeEko("¡Hola! Soy Eko. ¿Exploramos algún lugar hoy? 🌿", 4000);
+            }, 2000);
+
+
+            // Iniciar sistema de retos
+            setTimeout(() => {
+                mostrarMensajeEko("¡Hola! Buscando retos cerca de ti... 🌍", 3000);
+                setTimeout(mostrarRetoAleatorio, 10000);
+            }, 6000);
+
+
+            // Geolocalizacion
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(pos => {
+                    const { latitude, longitude } = pos.coords;
+
+                    // ✅ CORREGIDO: Usando la función global crearIconoPersonalizado
+                    const iconoUsuario = crearIconoPersonalizado('fa-solid fa-location-crosshairs', '#3b82f6');
+
+                    L.marker([latitude, longitude], { icon: iconoUsuario })
+                        .addTo(mymap)
+                        .bindPopup("<b>Tu ubicación</b><br>¡Estás aquí!");
+                });
+            }
+
+            // Funcion para centrar mapa
+            window.centerMap = function () {
+
+                // Limpiar todo
+                limpiarRetoActual();
+
+                retoActivo = null;
+
+                // Centrar
+                mymap.flyTo(sanVicenteCoords, 14, { duration: 1.5 });
+
+
+                // Mensaje tranquilo
+                mostrarMensajeEko("Mapa reiniciado 🗺️", 2000);
+
+                // Sugerir nuevo reto en 5 segundos
+                setTimeout(mostrarRetoAleatorio, 10000);
+            };
+        });
+
+        // SIDEBAR 
+        document.addEventListener('click', function (event) {
+            const sidebar = document.getElementById('sidebar');
+            if (sidebar.classList.contains('open') && !sidebar.contains(event.target)) {
+                toggleSidebar();
+            }
+        });
+
+        window.toggleSidebar = function () {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('open');
+        };
+
+        // FIREBASE 
+        const firebaseConfig = {
+            apiKey: "AIzaSyDeIyDCNlBnBIDpcvLfsjiqjEX7Kk8561g",
+            authDomain: "ecconect-ae607.firebaseapp.com",
+            projectId: "ecconect-ae607",
+            storageBucket: "ecconect-ae607.firebasestorage.app",
+            messagingSenderId: "241708782882",
+            appId: "1:241708782882:web:514d895119f9f7c3fa817b",
+            measurementId: "G-KJ3FLCHZCG"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+
+        firebase.auth().onAuthStateChanged((user) => {
+
+            if (!user) window.location.href = "index.html";
+        });
+
+        console.log("✅ Sistema de retos y notificaciones listo");
+
+        // DEBUG: Verificar que todo carga correctamente
+        window.addEventListener('load', function () {
+            console.log("✅ Página completamente cargada");
+            console.log("🔍 Elementos críticos encontrados:");
+            console.log("- card-container:", document.getElementById('card-container') ? "✓" : "✗");
+            console.log("- success-modal:", document.getElementById('success-modal') ? "✓" : "✗");
+
+            // Test rápido: Verificar que los botones funcionan
+            setTimeout(() => {
+                console.log("🧪 Test: Si ves un reto, haz clic en 'Ver en mapa'");
+                console.log("🧪 Deberías ver '✅ Botón ACEPTAR clickeado directamente' en consola");
+            }, 5000);
+        });
+
+
+    </script>
 </body>
+
 </html>

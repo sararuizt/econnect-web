@@ -1,160 +1,395 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <link rel="manifest" href="manifest.json">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Econnect - Rutas</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
     <style>
-        body { margin: 0; padding: 0; font-family: 'Poppins', sans-serif; background: linear-gradient(rgba(10, 30, 15, 0.85), rgba(10, 30, 15, 0.95)), url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=2074&auto=format&fit=crop'); background-size: cover; background-position: center; background-attachment: fixed; color: white; min-height: 100vh; display: flex; justify-content: center; }
-        
-        .app-container { width: 100%; max-width: 500px; padding: 20px; padding-bottom: 110px; box-sizing: border-box; }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(rgba(34, 85, 45, 0.5), rgba(10, 40, 20, 0.75)),
+            url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=2074&auto=format&fit=crop'); background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+        }
+
+        body.dark-theme {
+            background: linear-gradient(rgba(10, 30, 15, 0.8), rgba(10, 30, 15, 0.9)), 
+                                url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=2074&auto=format&fit=crop') !important;
+            background-size: cover !important;
+            background-position: center !important;
+            background-attachment: fixed !important;
+        }
+
+        /* Ajuste CRUCIAL: El cristal ahora es NEGRO translúcido, no blanco */
+               /* TEMA OSCURO (Tu código corregido) */
+               body.dark-theme { background: linear-gradient(rgba(10, 30, 15, 0.8), rgba(10, 30, 15, 0.9)), url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=2074&auto=format&fit=crop') !important; background-size: cover !important; background-position: center !important; background-attachment: fixed !important; }
+        body.dark-theme .glass-card, body.dark-theme .challenge-card, body.dark-theme .mini-challenge, body.dark-theme .tabs-header, body.dark-theme .nav-item, body.dark-theme .modal-content, body.dark-theme .ranking-list, body.dark-theme .podium-block { background: rgba(0, 0, 0, 0.4) !important; border: 1px solid rgba(255,255,255,0.05) !important; }
+        body.dark-theme .bottom-nav { background: rgba(20, 20, 20, 0.95) !important; border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 -5px 20px rgba(0,0,0,0.5); }
+        body.dark-theme .modal-box, body.dark-theme .app-container.modal-view { background: #181818 !important; border: 1px solid rgba(255,255,255,0.15); box-shadow: 0 0 50px rgba(0,0,0,0.8); }
+        body.dark-theme h1, body.dark-theme h2, body.dark-theme strong, body.dark-theme .item-text { color: #ffffff !important; }
+        body.dark-theme p, body.dark-theme .section-label, body.dark-theme .desc { color: #bbbbbb !important; }
+        /* Corrección botones menú */
+        body.dark-theme .nav-item { background: transparent !important; border: none !important; box-shadow: none !important; }
+
+
+        .app-container {
+            width: 100%;
+            max-width: 500px;
+            padding: 20px;
+            padding-bottom: 110px;
+            box-sizing: border-box;
+        }
 
         /* CABECERA */
-        .header-section { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; margin-top: 10px; }
-        h1 { font-size: 26px; font-weight: 700; color: white; margin: 0; }
-        .close-icon { font-size: 24px; color: rgba(255,255,255,0.7); cursor: pointer; transition: color 0.2s; }
-        .close-icon:hover { color: white; }
+        .header-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            margin-top: 10px;
+        }
+
+        h1 {
+            font-size: 26px;
+            font-weight: 700;
+            color: white;
+            margin: 0;
+        }
+
+        .close-icon {
+            font-size: 24px;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .close-icon:hover {
+            color: white;
+        }
 
         /* FILTROS (CÁPSULAS) */
-        .filters-container { display: flex; gap: 10px; margin-bottom: 25px; overflow-x: auto; padding-bottom: 5px; scrollbar-width: none; }
-        .filters-container::-webkit-scrollbar { display: none; }
-        .filter-chip { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.1); padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.8); cursor: pointer; white-space: nowrap; transition: all 0.2s; display: flex; align-items: center; gap: 8px; }
-        .filter-chip:hover { background: rgba(255,255,255,0.2); }
-        .filter-chip.active { background: #4ade80; color: #064e3b; border-color: #4ade80; font-weight: 600; }
+        .filters-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+            scrollbar-width: none;
+        }
+
+        .filters-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .filter-chip {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.8);
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .filter-chip:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .filter-chip.active {
+            background: #4ade80;
+            color: #064e3b;
+            border-color: #4ade80;
+            font-weight: 600;
+        }
 
         /* LISTA DE RUTAS */
-        .routes-list { display: flex; flex-direction: column; gap: 20px; }
+        .routes-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
 
         /* TARJETA DE RUTA (CRISTAL) */
-        .route-card { background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border-radius: 25px; overflow: hidden; transition: transform 0.2s; cursor: pointer; }
-        .route-card:hover { transform: translateY(-5px); background: rgba(255, 255, 255, 0.12); }
-        
-        .route-img { width: 100%; height: 160px; object-fit: cover; }
-        
-        .route-info { padding: 20px; }
-        .route-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .route-title { font-size: 18px; font-weight: 600; color: white; }
-        .route-rating { font-size: 13px; color: #facc15; font-weight: 600; display: flex; align-items: center; gap: 4px; background: rgba(0,0,0,0.3); padding: 4px 8px; border-radius: 10px; }
+        .route-card {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            overflow: hidden;
+            transition: transform 0.2s;
+            cursor: pointer;
+        }
 
-        .route-details { display: flex; align-items: center; gap: 15px; font-size: 13px; color: rgba(255,255,255,0.7); margin-bottom: 20px; }
-        .detail-item { display: flex; align-items: center; gap: 5px; }
+        .route-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .route-img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+        }
+
+        .route-info {
+            padding: 20px;
+        }
+
+        .route-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .route-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: white;
+        }
+
+        .route-rating {
+            font-size: 13px;
+            color: #facc15;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 4px 8px;
+            border-radius: 10px;
+        }
+
+        .route-details {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 20px;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
 
         /* BADGES */
-        .badge { padding: 4px 10px; border-radius: 8px; font-size: 10px; font-weight: 700; text-transform: uppercase; }
-        .badge.easy { background: rgba(74, 222, 128, 0.2); color: #4ade80; }
-        .badge.medium { background: rgba(250, 204, 21, 0.2); color: #facc15; }
+        .badge {
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .badge.easy {
+            background: rgba(74, 222, 128, 0.2);
+            color: #4ade80;
+        }
+
+        .badge.medium {
+            background: rgba(250, 204, 21, 0.2);
+            color: #facc15;
+        }
 
         /* BOTÓN INICIAR */
-        .start-route-btn { width: 100%; padding: 15px; background: #4ade80; color: #064e3b; border: none; border-radius: 15px; font-weight: 600; font-size: 14px; cursor: pointer; transition: all 0.2s; font-family: 'Poppins', sans-serif; display: flex; justify-content: center; align-items: center; gap: 8px; }
-        .start-route-btn:hover { background: #22c55e; transform: scale(1.02); }
+        .start-route-btn {
+            width: 100%;
+            padding: 15px;
+            background: #4ade80;
+            color: #064e3b;
+            border: none;
+            border-radius: 15px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .start-route-btn:hover {
+            background: #22c55e;
+            transform: scale(1.02);
+        }
 
         /* MENÚ FLOTANTE */
-        .bottom-nav { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 400px; background: rgba(20, 20, 20, 0.6); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 50px; display: flex; justify-content: space-around; padding: 15px 0; z-index: 1000; box-shadow: 0 10px 40px rgba(0,0,0,0.4); }
-        .nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; color: rgba(255,255,255,0.5); text-decoration: none; cursor: pointer; font-size: 10px; transition: all 0.3s; position: relative; }
-        .nav-item:hover i { transform: translateY(-3px); color: white; }
-        .nav-item i { font-size: 20px; margin-bottom: 4px; transition: transform 0.3s; }
-        .nav-item.active { color: #4ade80; font-weight: 600; }
-        .nav-item.active i { transform: translateY(-2px); }
-        .nav-item.active::after { content: ''; position: absolute; bottom: -8px; width: 5px; height: 5px; background-color: #4ade80; border-radius: 50%; box-shadow: 0 0 10px #4ade80; }
+        .bottom-nav {
+            position: fixed;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 400px;
+            background: rgba(20, 20, 20, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+            z-index: 1000;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+        }
 
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.5);
+            text-decoration: none;
+            cursor: pointer;
+            font-size: 10px;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .nav-item:hover i {
+            transform: translateY(-3px);
+            color: white;
+        }
+
+        .nav-item i {
+            font-size: 20px;
+            margin-bottom: 4px;
+            transition: transform 0.3s;
+        }
+
+        .nav-item.active {
+            color: #4ade80;
+            font-weight: 600;
+        }
+
+        .nav-item.active i {
+            transform: translateY(-2px);
+        }
+
+        .nav-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            width: 5px;
+            height: 5px;
+            background-color: #4ade80;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #4ade80;
+        }
     </style>
 </head>
+
 <body>
 
-<div class="app-container">
-    
-    <div class="header-section">
-        <h1>Explorar Rutas</h1>
-        <i class="fa-solid fa-xmark close-icon" onclick="location.href='mapa.html'"></i>
-    </div>
+    <div class="app-container">
 
-    <div class="filters-container">
-        <div class="filter-chip active"><i class="fa-solid fa-person-walking"></i> Caminata</div>
-        <div class="filter-chip"><i class="fa-solid fa-bicycle"></i> Bici</div>
-        <div class="filter-chip"><i class="fa-solid fa-person-running"></i> Running</div>
-        <div class="filter-chip"><i class="fa-solid fa-mountain"></i> Senderismo</div>
-    </div>
-
-    <div class="routes-list">
-
-        <div class="route-card" onclick="verRuta('Sendero del Campus')">
-            <img src="https://picsum.photos/seed/path/400/200" class="route-img">
-            <div class="route-info">
-                <div class="route-header">
-                    <span class="route-title">Sendero del Campus</span>
-                    <span class="route-rating"><i class="fa-solid fa-star"></i> 4.8</span>
-                </div>
-                <div class="route-details">
-                    <div class="detail-item"><i class="fa-regular fa-clock"></i> 45 min</div>
-                    <div class="detail-item"><i class="fa-solid fa-ruler-horizontal"></i> 3.2 km</div>
-                    <div class="badge easy">Fácil</div>
-                </div>
-                <button class="start-route-btn"><i class="fa-solid fa-location-arrow"></i> Iniciar Ruta</button>
-            </div>
+        <div class="header-section">
+            <h1>Explorar Rutas</h1>
+            <i class="fa-solid fa-xmark close-icon" onclick="location.href='mapa.html'"></i>
         </div>
 
-        <div class="route-card" onclick="verRuta('Ruta Ciclista Verde')">
-            <img src="https://picsum.photos/seed/cycling/400/200" class="route-img">
-            <div class="route-info">
-                <div class="route-header">
-                    <span class="route-title">Ruta Ciclista Verde</span>
-                    <span class="route-rating"><i class="fa-solid fa-star"></i> 4.5</span>
-                </div>
-                <div class="route-details">
-                    <div class="detail-item"><i class="fa-regular fa-clock"></i> 1h 20m</div>
-                    <div class="detail-item"><i class="fa-solid fa-ruler-horizontal"></i> 12 km</div>
-                    <div class="badge medium">Media</div>
-                </div>
-                <button class="start-route-btn"><i class="fa-solid fa-location-arrow"></i> Iniciar Ruta</button>
-            </div>
+        <div class="filters-container">
+            <div class="filter-chip active"><i class="fa-solid fa-person-walking"></i> Caminata</div>
+            <div class="filter-chip"><i class="fa-solid fa-bicycle"></i> Bici</div>
+            <div class="filter-chip"><i class="fa-solid fa-person-running"></i> Running</div>
+            <div class="filter-chip"><i class="fa-solid fa-mountain"></i> Senderismo</div>
         </div>
 
-        <div class="route-card" onclick="verRuta('Parque Norte')">
-            <img src="https://picsum.photos/seed/park/400/200" class="route-img">
-            <div class="route-info">
-                <div class="route-header">
-                    <span class="route-title">Parque Norte</span>
-                    <span class="route-rating"><i class="fa-solid fa-star"></i> 4.9</span>
+        <div class="routes-list">
+
+            <div class="route-card" onclick="iniciarRuta(1)">
+                <img src="https://web.ua.es/es/ecocampus/imagenes/biodiversidad/flora/senda-paisajistica/15-bosque-ilustrado.jpg" class="route-img">
+                <div class="route-info">
+                    <div class="route-header">
+                        <span class="route-title">Sendero del Campus</span>
+                        <span class="route-rating"><i class="fa-solid fa-star"></i> 4.8</span>
+                    </div>
+                    <div class="route-details">
+                        <div class="detail-item"><i class="fa-regular fa-clock"></i> 45 min</div>
+                        <div class="detail-item"><i class="fa-solid fa-ruler-horizontal"></i> 5.7 km</div>
+                        <div class="badge easy">Fácil</div>
+                    </div>
+                    <button class="start-route-btn"><i class="fa-solid fa-location-arrow"></i> Iniciar Ruta</button>
                 </div>
-                <div class="route-details">
-                    <div class="detail-item"><i class="fa-regular fa-clock"></i> 30 min</div>
-                    <div class="detail-item"><i class="fa-solid fa-ruler-horizontal"></i> 2.5 km</div>
-                    <div class="badge easy">Fácil</div>
-                </div>
-                <button class="start-route-btn"><i class="fa-solid fa-location-arrow"></i> Iniciar Ruta</button>
             </div>
+
+            <div class="route-card" onclick="iniciarRuta(6)">
+                <img src="https://d2exd72xrrp1s7.cloudfront.net/www/collection/3131452/1T3SRj" class="route-img">
+                <div class="route-info">
+                    <div class="route-header">
+                        <span class="route-title">Ruta Ciclista Verde</span>
+                        <span class="route-rating"><i class="fa-solid fa-star"></i> 4.5</span>
+                    </div>
+                    <div class="route-details">
+                        <div class="detail-item"><i class="fa-regular fa-clock"></i> 1h 20m</div>
+                        <div class="detail-item"><i class="fa-solid fa-ruler-horizontal"></i> 12 km</div>
+                        <div class="badge medium">Media</div>
+                    </div>
+                    <button class="start-route-btn"><i class="fa-solid fa-location-arrow"></i> Iniciar Ruta</button>
+                </div>
+            </div>
+
+            <div class="route-card" onclick="iniciarRuta(7)">
+                <img src="https://raspeig.es/wp-content/uploads/2024/06/torrent_1728_500.jpg" class="route-img">
+                <div class="route-info">
+                    <div class="route-header">
+                        <span class="route-title">Parque Norte</span>
+                        <span class="route-rating"><i class="fa-solid fa-star"></i> 4.9</span>
+                    </div>
+                    <div class="route-details">
+                        <div class="detail-item"><i class="fa-regular fa-clock"></i> 30 min</div>
+                        <div class="detail-item"><i class="fa-solid fa-ruler-horizontal"></i> 2.5 km</div>
+                        <div class="badge easy">Fácil</div>
+                    </div>
+                    <button class="start-route-btn"><i class="fa-solid fa-location-arrow"></i> Iniciar Ruta</button>
+                </div>
+            </div>
+
         </div>
 
+        <nav class="bottom-nav">
+            <div class="nav-item" onclick="location.href='mapa.html'"><i class="fa-solid fa-map-location-dot"></i><span>Mapa</span></div>
+            <div class="nav-item" onclick="location.href='retos.html'"><i class="fa-solid fa-trophy"></i><span>Retos</span></div>
+            <div class="nav-item" onclick="location.href='home.html'"><i class="fa-solid fa-users-line"></i><span>Social</span></div>
+            <div class="nav-item" onclick="location.href='amigos.html'"><i class="fa-solid fa-user-group"></i><span>Amigos</span></div>
+            <div class="nav-item" onclick="location.href='perfil.html'"><i class="fa-solid fa-user"></i><span>Perfil</span></div>
+        </nav>
     </div>
 
-    <nav class="bottom-nav">
-        <div class="nav-item" onclick="location.href='home.html'"><i class="fa-solid fa-house"></i><span>Inicio</span></div>
-        <div class="nav-item active" onclick="location.href='mapa.html'"><i class="fa-solid fa-map-location-dot"></i><span>Mapa</span></div>
-        <div class="nav-item" onclick="location.href='amigos.html'"><i class="fa-solid fa-user-group"></i><span>Amigos</span></div>
-        <div class="nav-item" onclick="location.href='racha.html'"><i class="fa-solid fa-fire"></i><span>Racha</span></div>
-        <div class="nav-item" onclick="location.href='perfil.html'"><i class="fa-solid fa-user"></i><span>Perfil</span></div>
-    </nav>
-</div>
+    <script>
+        // Función simple para redirigir al mapa con el ID
+        function iniciarRuta(id) {
+            location.href = `mapa.html?reto_iniciado_id=${id}`;
+        }
 
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        // Modo oscuro
+        if (localStorage.getItem('darkMode') === 'enabled') {
+            document.body.classList.add('dark-theme');
+        }
+    </script>
 
-    const firebaseConfig = { apiKey: "AIzaSyA5lPDFaH8W-miDJHB3sDKdD5fiJt8d9-8", authDomain: "ecconect-ae607.firebaseapp.com", projectId: "ecconect-ae607", storageBucket: "ecconect-ae607.firebasestorage.app", messagingSenderId: "241708782882", appId: "1:241708782882:web:514d895119f9f7c3fa817b", measurementId: "G-KJ3FLCHZCG" };
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    onAuthStateChanged(auth, (user) => { if (!user) window.location.href = "index.html"; });
-
-    window.verRuta = function(nombre) {
-        // Aquí podrías redirigir al mapa con la ruta cargada
-        // location.href = "mapa.html?ruta=" + encodeURIComponent(nombre);
-        alert("🗺️ Cargando ruta: " + nombre);
-        location.href = "mapa.html";
-    }
-</script>
 </body>
 </html>

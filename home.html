@@ -13,19 +13,17 @@
         body { 
             margin: 0; padding: 0; 
             font-family: 'Poppins', sans-serif; 
-            /* Fondo de imagen fijo con superposición oscura para que resalte el contenido */
             background: linear-gradient(rgba(34, 85, 45, 0.5), rgba(10, 40, 20, 0.75)),
-            url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=2074&auto=format&fit=crop');
+                        url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=2074&auto=format&fit=crop');
             background-size: cover;
             background-position: center;
-            background-attachment: fixed; /* El fondo no se mueve al hacer scroll */
+            background-attachment: fixed;
             color: white; 
             min-height: 100vh;
-            padding-bottom: 100px; /* Espacio extra para que el menú flotante no tape el final */
+            padding-bottom: 100px; 
         }
-
-        /* --- TEMA OSCURO (CORREGIDO: CRISTAL NEGRO) --- */
-body.dark-theme {
+        
+        body.dark-theme {
     /* Fondo bosque muy oscuro */
     background: linear-gradient(rgba(10, 30, 15, 0.8), rgba(10, 30, 15, 0.9)), 
                         url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=2074&auto=format&fit=crop') !important;
@@ -81,229 +79,193 @@ body.dark-theme .section-label,
 body.dark-theme .desc {
     color: #bbbbbb !important;
 }
-        
-        /* Contenedor central limitado para móviles */
+
         .app-container {
             max-width: 500px;
             margin: 0 auto;
             padding: 10px;
+            position: relative;
         }
 
-        /* --- CLASE REUTILIZABLE: EFECTO CRISTAL (GLASSMORPHISM) --- */
+        /* --- CLASE REUTILIZABLE: EFECTO CRISTAL --- */
         .glass-card {
-            background: rgba(255, 255, 255, 0.08); /* Blanco muy transparente */
-            backdrop-filter: blur(12px); /* Difuminado */
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 25px;
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
         }
 
-        /* --- 1. CABECERA --- */
-        header {
-            padding: 20px 10px 10px 10px;
-            margin-bottom: 10px;
-        }
+        /* --- CABECERA --- */
+        header { padding: 20px 10px 10px 10px; margin-bottom: 10px; }
+        .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .avatar-circle { width: 50px; height: 50px; background: rgba(255, 255, 255, 0.2); border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; font-size: 22px; border: 2px solid rgba(255,255,255,0.3); backdrop-filter: blur(5px); object-fit: cover; overflow: hidden; }
+        .avatar-circle img { width: 100%; height: 100%; }
         
-        .header-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        
-        .avatar-circle {
-            width: 50px; height: 50px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            display: flex; justify-content: center; align-items: center;
-            color: white; font-size: 22px;
-            border: 2px solid rgba(255,255,255,0.3);
-            backdrop-filter: blur(5px);
-        }
-
-        .menu-icon { 
-            font-size: 26px; 
-            color: white; 
-            cursor: pointer;
-            width: 45px; height: 45px;
-            display: flex; justify-content: center; align-items: center;
-            border-radius: 50%;
-            transition: background 0.3s;
-        }
+        .menu-icon { font-size: 26px; color: white; cursor: pointer; width: 45px; height: 45px; display: flex; justify-content: center; align-items: center; border-radius: 50%; transition: background 0.3s; }
         .menu-icon:hover { background: rgba(255,255,255,0.1); }
-
         h1 { margin: 0; font-size: 26px; font-weight: 700; color: white; letter-spacing: 0.5px; }
         .subtitle { color: rgba(255,255,255,0.7); font-size: 14px; margin-top: 5px; font-weight: 300; }
 
-        /* --- 2. BUSCADOR (Píldora de cristal) --- */
-        .search-container { padding: 0 10px; margin-bottom: 30px; }
-        .search-input {
-            width: 100%;
-            padding: 15px 25px;
-            border-radius: 50px; /* Píldora completa */
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            font-size: 16px;
-            background: rgba(255, 255, 255, 0.15); /* Semi-transparente */
-            backdrop-filter: blur(10px);
-            box-sizing: border-box;
-            color: white;
-            font-family: 'Poppins', sans-serif;
-            transition: all 0.3s;
+        /* --- MENÚ DESPLEGABLE --- */
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 75px; 
+            right: 20px;
+            background: rgba(20, 20, 20, 0.95);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 10px;
+            width: 200px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            z-index: 3000;
+            flex-direction: column;
+            gap: 5px;
+            animation: fadeIn 0.2s ease-out;
         }
-        .search-input::placeholder { color: rgba(255, 255, 255, 0.6); }
-        .search-input:focus {
-            outline: none;
-            background: rgba(255, 255, 255, 0.25);
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+        .dropdown-menu.show { display: flex; }
+        .menu-option {
+            display: flex; align-items: center; gap: 12px; padding: 12px 15px;
+            color: white; font-size: 14px; font-weight: 500; cursor: pointer;
+            border-radius: 12px; transition: background 0.2s;
         }
+        .menu-option:hover { background: rgba(255, 255, 255, 0.1); }
+        .menu-option i { width: 20px; text-align: center; color: #4ade80; font-size: 16px; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- 3. FEED (POSTS DE CRISTAL) --- */
-        .post { 
-            /* Aplicamos el efecto cristal a cada post individualmente */
-            padding: 20px; 
-            margin-bottom: 25px; 
-            border-radius: 30px; /* Bordes muy redondos */
+        /* --- MODAL DE PUBLICACIÓN --- */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(5px);
+            z-index: 4000; display: none; justify-content: center; align-items: center;
+            padding: 20px; box-sizing: border-box;
         }
+        .modal-overlay.active { display: flex; animation: fadeIn 0.3s; }
         
+        .publish-modal {
+            background: #1e1e1e; width: 100%; max-width: 400px;
+            border-radius: 25px; padding: 25px;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .modal-title { font-weight: 700; font-size: 18px; }
+        .close-modal { cursor: pointer; color: #aaa; font-size: 20px; }
+        
+        .publish-textarea {
+            width: 100%; background: rgba(255,255,255,0.05); border: none;
+            border-radius: 15px; padding: 15px; color: white; font-family: 'Poppins', sans-serif;
+            font-size: 14px; resize: none; box-sizing: border-box; outline: none;
+            min-height: 100px; margin-bottom: 15px;
+        }
+        .publish-textarea:focus { background: rgba(255,255,255,0.1); }
+
+        .image-preview-container {
+            width: 100%; height: 150px; background: rgba(255,255,255,0.05);
+            border-radius: 15px; border: 2px dashed rgba(255,255,255,0.2);
+            display: none; justify-content: center; align-items: center;
+            margin-bottom: 20px; cursor: pointer; overflow: hidden; position: relative;
+        }
+        .image-preview-container.show { display: flex; }
+        .preview-img { width: 100%; height: 100%; object-fit: cover; display: none; }
+        .upload-placeholder { text-align: center; color: #aaa; font-size: 12px; }
+        .upload-placeholder i { font-size: 24px; margin-bottom: 5px; display: block; color: #4ade80; }
+
+        .publish-btn {
+            width: 100%; background: #4ade80; color: #064e3b; border: none;
+            padding: 12px; border-radius: 50px; font-weight: 700; cursor: pointer;
+            font-size: 15px; transition: transform 0.2s;
+        }
+        .publish-btn:hover { transform: scale(1.02); }
+
+        /* --- FEED --- */
+        .post { padding: 20px; margin-bottom: 25px; border-radius: 30px; animation: slideDown 0.5s ease-out; }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+
         .post-header { display: flex; align-items: center; margin-bottom: 15px; }
         .post-avatar { width: 45px; height: 45px; border-radius: 50%; margin-right: 12px; object-fit: cover; border: 2px solid rgba(255,255,255,0.2); }
-        
         .post-info { font-size: 14px; }
-        .username { color: #4ade80; font-weight: 600; } /* Verde neón suave */
+        .username { color: #4ade80; font-weight: 600; display: flex; align-items: center; gap: 5px; }
         .action-text { color: rgba(255,255,255,0.9); font-weight: 500; }
         .time-text { color: rgba(255,255,255,0.5); font-size: 11px; display: block; margin-top: 2px; }
-
-        /* Imagen del post */
-        .post-image {
-            width: 100%;
-            height: 220px;
-            object-fit: cover;
-            border-radius: 20px;
-            margin-bottom: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-
-        /* Caja de texto (Comentarios) */
-        .post-content-box {
-            background-color: rgba(0, 0, 0, 0.3); /* Fondo oscuro semitransparente */
-            padding: 15px;
-            border-radius: 15px;
-            font-size: 13px;
-            line-height: 1.5;
-            margin-bottom: 15px;
-            color: rgba(255,255,255,0.9);
-            border-left: 3px solid #4ade80;
-        }
-        .post-link { color: #64b5f6; text-decoration: none; word-break: break-all; }
-
-        /* Iconos de acción */
+        .post-image { width: 100%; height: 220px; object-fit: cover; border-radius: 20px; margin-bottom: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        
+        .post-content-box { background-color: rgba(0, 0, 0, 0.3); padding: 15px; border-radius: 15px; font-size: 14px; line-height: 1.5; margin-bottom: 15px; color: rgba(255,255,255,0.95); border-left: 3px solid #4ade80; }
+        
         .post-actions { display: flex; align-items: center; gap: 20px; margin-bottom: 5px; }
         .action-icon { font-size: 22px; color: white; cursor: pointer; transition: transform 0.2s; opacity: 0.8; }
         .action-icon:hover { transform: scale(1.2); opacity: 1; }
-        
-        /* Animación del corazón */
-        @keyframes heartbeat {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.4); }
-            100% { transform: scale(1); }
-        }
-        .heart-active {
-            color: #ff4081 !important; /* Rosa intenso para destacar sobre oscuro */
-            animation: heartbeat 0.3s ease-in-out;
-            opacity: 1;
-        }
-        
         .likes-text { font-size: 12px; color: rgba(255,255,255,0.6); margin-left: auto; }
+        
+        .heart-active { color: #ff4081 !important; animation: heartbeat 0.3s ease-in-out; opacity: 1; }
+        @keyframes heartbeat { 0% { transform: scale(1); } 50% { transform: scale(1.4); } 100% { transform: scale(1); } }
 
-        /* --- 4. SUGERENCIAS (CARRUSEL) --- */
-        .suggestions-section { margin-top: 10px; padding-bottom: 10px; }
-        .section-title { padding: 0 10px; font-size: 18px; font-weight: 600; margin-bottom: 20px; color: white; }
-
-        .carousel {
-            display: flex;
-            overflow-x: auto;
-            padding: 0 10px;
-            gap: 15px;
-            scrollbar-width: none; 
-            padding-bottom: 10px; /* Espacio para la sombra */
+        /* Estilos Respuesta */
+        .replies-container { display: none; animation: fadeIn 0.3s ease; }
+        
+        .post-reply { 
+            margin-top: 10px; margin-left: 45px; padding: 10px 12px; 
+            background: rgba(255, 255, 255, 0.05); border-radius: 15px; 
+            border-left: 2px solid #facc15; font-size: 13px; 
         }
-        .carousel::-webkit-scrollbar { display: none; } 
+        .post-reply .post-avatar { width: 32px; height: 32px; border: 1px solid rgba(255,255,255,0.2); }
+        .post-reply .username { font-size: 13px; }
+        .post-reply .action-text { font-size: 12px; }
+        .post-reply .comment-text { font-size: 13px; line-height: 1.3; color: rgba(255,255,255,0.85); margin-bottom: 5px; }
+        .post-reply .action-icon { font-size: 14px !important; }
 
-        .suggestion-card {
-            min-width: 130px;
-            background: rgba(255,255,255,0.1); /* Cristal */
-            border: 1px solid rgba(255,255,255,0.1);
-            backdrop-filter: blur(5px);
-            border-radius: 20px;
-            overflow: hidden;
-            text-align: center;
-            padding-bottom: 12px;
-            transition: transform 0.3s;
+        .verified-badge { color: #3b82f6; font-size: 14px; }
+
+        /* Buscador y Sugerencias */
+        .search-container { padding: 0 10px; margin-bottom: 30px; }
+        .search-input { width: 100%; padding: 15px 25px; border-radius: 50px; border: 1px solid rgba(255, 255, 255, 0.2); font-size: 16px; background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(10px); box-sizing: border-box; color: white; transition: all 0.3s; outline: none; }
+        .search-input:focus { background: rgba(255, 255, 255, 0.25); box-shadow: 0 0 15px rgba(255, 255, 255, 0.1); }
+        
+        /* --- ESTILOS COMUNIDADES (NUEVO) --- */
+        .suggestions-section { margin-top: 10px; padding-bottom: 10px; }
+        .section-title { padding: 0 10px; font-size: 16px; font-weight: 600; margin-bottom: 15px; color: white; }
+        .carousel { display: flex; overflow-x: auto; padding: 0 10px; gap: 15px; scrollbar-width: none; padding-bottom: 10px; }
+        .carousel::-webkit-scrollbar { display: none; } 
+        
+        .suggestion-card { 
+            min-width: 120px; 
+            max-width: 120px;
+            background: rgba(255,255,255,0.1); 
+            border: 1px solid rgba(255,255,255,0.1); 
+            backdrop-filter: blur(5px); 
+            border-radius: 20px; 
+            overflow: hidden; 
+            text-align: center; 
+            padding-bottom: 12px; 
+            transition: transform 0.2s;
         }
         .suggestion-card:hover { transform: translateY(-5px); background: rgba(255,255,255,0.15); }
-        
-        .suggestion-img { width: 100%; height: 110px; object-fit: cover; }
-        .suggestion-name { font-size: 12px; margin-top: 10px; color: white; font-weight: 500; }
+        .suggestion-img { width: 100%; height: 90px; object-fit: cover; }
+        .suggestion-name { font-size: 11px; margin-top: 8px; color: white; font-weight: 600; padding: 0 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-        /* --- 5. MENÚ FLOTANTE (INNOVADOR) --- */
-        .bottom-nav {
-            position: fixed;
-            bottom: 25px; /* Separado del borde inferior */
-            left: 50%;
-            transform: translateX(-50%); /* Centrado horizontalmente */
-            width: 90%; max-width: 400px;
-            
-            /* Estilo Cristal Intenso */
-            background: rgba(20, 20, 20, 0.6); /* Oscuro transparente */
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 50px; /* Píldora gigante */
-            
-            display: flex;
-            justify-content: space-around;
-            padding: 15px 0;
-            z-index: 1000;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
-        }
-
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: rgba(255,255,255,0.5);
-            text-decoration: none;
-            cursor: pointer;
-            font-size: 10px;
-            transition: all 0.3s;
-            position: relative;
-        }
-        
-        .nav-item i { 
-            font-size: 20px; 
-            margin-bottom: 4px;
-            transition: transform 0.3s;
-        }
-        
-        /* Efecto Hover */
+        /* --- MENÚ FLOTANTE --- */
+        .bottom-nav { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 400px; background: rgba(20, 20, 20, 0.6); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 50px; display: flex; justify-content: space-around; padding: 15px 0; z-index: 1000; box-shadow: 0 10px 40px rgba(0,0,0,0.4); }
+        .nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; color: rgba(255,255,255,0.5); text-decoration: none; cursor: pointer; font-size: 10px; transition: all 0.3s; position: relative; }
+        .nav-item i { font-size: 20px; margin-bottom: 4px; transition: transform 0.3s; }
         .nav-item:hover i { transform: translateY(-3px); color: white; }
-
-        /* Estado activo */
         .nav-item.active { color: #4ade80; font-weight: 600; }
         .nav-item.active i { transform: translateY(-2px); }
-        
-        /* Indicador luminoso debajo del activo */
-        .nav-item.active::after {
-            content: '';
-            position: absolute;
-            bottom: -8px;
-            width: 5px; height: 5px;
-            background-color: #4ade80;
-            border-radius: 50%;
-            box-shadow: 0 0 10px #4ade80;
-        }
+        .nav-item.active::after { content: ''; position: absolute; bottom: -8px; width: 5px; height: 5px; background-color: #4ade80; border-radius: 50%; box-shadow: 0 0 10px #4ade80; }
+
+/* Mensaje de no resultados */
+#no-results-feed {
+    display: none; 
+    text-align: center; 
+    padding: 20px;
+    color: rgba(255,255,255,0.6); 
+    font-size: 14px;
+    background: rgba(255,255,255,0.05); 
+    border-radius: 20px; 
+    margin: 0 10px;
+}
 
     </style>
 </head>
@@ -313,69 +275,226 @@ body.dark-theme .desc {
         
         <header>
             <div class="header-top">
-                <div class="avatar-circle"><i class="fa-solid fa-user"></i></div>
-                <div class="menu-icon"><i class="fa-solid fa-bars"></i></div>
+                <div class="avatar-circle">
+                    <img id="user-avatar-header" src="https://api.dicebear.com/7.x/avataaars/svg?seed=User" alt="User">
+                </div>
+                <div class="menu-icon" onclick="toggleMenu()"><i class="fa-solid fa-bars"></i></div>
             </div>
             <h1 id="user-greeting">¡Hola!</h1>
             <div class="subtitle">Sigue haciendo la diferencia</div>
         </header>
 
+        <div class="dropdown-menu" id="main-menu">
+            <div class="menu-option" onclick="abrirModal('comentario')">
+                <i class="fa-regular fa-comment-dots"></i> Subir Comentario
+            </div>
+            <div class="menu-option" onclick="abrirModal('post')">
+                <i class="fa-regular fa-image"></i> Subir Post
+            </div>
+        </div>
+
+        <div class="modal-overlay" id="publish-modal">
+            <div class="publish-modal">
+                <div class="modal-header">
+                    <span class="modal-title" id="modal-title-text">Nuevo Post</span>
+                    <i class="fa-solid fa-xmark close-modal" onclick="cerrarModal()"></i>
+                </div>
+                
+                <textarea class="publish-textarea" id="post-text" placeholder="¿Qué estás pensando? 🌱"></textarea>
+                
+                <div class="image-preview-container" id="img-upload-area" onclick="document.getElementById('file-input').click()">
+                    <div class="upload-placeholder" id="upload-placeholder">
+                        <i class="fa-solid fa-cloud-arrow-up"></i>
+                        Toca para añadir foto
+                    </div>
+                    <img id="preview-img" class="preview-img">
+                </div>
+                <input type="file" id="file-input" accept="image/*" style="display: none;" onchange="previewImage(this)">
+
+                <button class="publish-btn" onclick="publicarContenido()">Publicar</button>
+            </div>
+        </div>
+
         <div class="search-container">
-            <input type="text" class="search-input" placeholder="🔍  Buscar personas, temas, eco-tips...">
+            <input type="text" class="search-input" id="search-input" placeholder="🔍  Buscar personas, temas, eco-tips..." onkeyup="filtrarFeed()">
         </div>
 
-        <div class="post glass-card">
-            <div class="post-header">
-                <img src="https://i.pravatar.cc/150?u=sun" class="post-avatar" alt="avatar">
-                <div class="post-info">
-                    <span class="username">Expertos_reciclaje</span> <span class="action-text">agregó una foto</span>
-                    <span class="time-text">Hace 3 minutos</span>
+        <div id="feed-container">
+
+            <div class="post glass-card">
+                <div class="post-header">
+                    <img src="rufian.jpeg" class="post-avatar" alt="Rufian" onerror="this.src='https://i.pravatar.cc/150?u=rufian'">
+                    <div class="post-info">
+                        <span class="username">GabrielRufian <i class="fa-solid fa-circle-check verified-badge"></i></span> 
+                        <span class="action-text">comentó</span>
+                        <span class="time-text">Hace 15 min</span>
+                    </div>
+                </div>
+                <div class="post-content-box" style="border-left-color: #4ade80;">
+                    Encantando de que estudiantes saquen proyectos como este adelante 👏🌱
+                </div>
+                <div class="post-actions">
+                    <i class="fa-solid fa-heart action-icon" onclick="toggleLike(this)"></i>
+                    <i class="fa-solid fa-comment action-icon" onclick="toggleComments(this)"></i>
+                    <i class="fa-solid fa-share-nodes action-icon"></i> 
+                    <span class="likes-text">2 respuestas</span>
+                </div>
+
+                <div class="replies-container">
+                    <div class="post-reply">
+                        <div class="post-header">
+                            <img src="saraperfil.jpeg" class="post-avatar" onerror="this.src='https://i.pravatar.cc/150?u=sara'">
+                            <div class="post-info">
+                                <span class="username">@sararuuiiiz__</span> <span class="action-text">respondió</span>
+                                <span class="time-text">Hace 10 min</span>
+                            </div>
+                        </div>
+                        <div class="comment-text">cuantos dias de racha tienes?</div>
+                        <div class="post-actions" style="margin-top: 5px;">
+                            <i class="fa-solid fa-heart action-icon" onclick="toggleLike(this)"></i>
+                        </div>
+                    </div>
+                    <div class="post-reply">
+                        <div class="post-header">
+                            <img src="vito.jpg" class="post-avatar" onerror="this.src='https://i.pravatar.cc/150?u=vito'">
+                            <div class="post-info">
+                                <span class="username">@Vitoquiles</span> <span class="action-text">respondió</span>
+                                <span class="time-text">Hace 5 min</span>
+                            </div>
+                        </div>
+                        <div class="comment-text">👀👀👀</div>
+                        <div class="post-actions" style="margin-top: 5px;">
+                            <i class="fa-solid fa-heart action-icon" onclick="toggleLike(this)"></i>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <img src="inicio1.jpg" class="post-image" alt="post" onerror="this.src='https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?q=80&w=2070&auto=format&fit=crop'"> <div class="post-actions">
-                <i class="fa-solid fa-heart action-icon" onclick="toggleLike(this)"></i>
-                <i class="fa-solid fa-comment action-icon"></i>
-                <i class="fa-solid fa-share-nodes action-icon"></i> <span class="likes-text">SaraRuiz y 8 más</span>
-            </div>
-        </div>
 
-        <div class="post glass-card">
-            <div class="post-header">
-                <img src="https://i.pravatar.cc/150?u=cat" class="post-avatar" alt="avatar">
-                <div class="post-info">
-                    <span class="username">FabulasdeunGato</span> <span class="action-text">comentó</span>
-                    <span class="time-text">Hace 7 horas</span>
+            <div class="post glass-card">
+                <div class="post-header">
+                    <img src="illojuanperfil.png" class="post-avatar" alt="IlloJuan" onerror="this.src='https://api.dicebear.com/7.x/avataaars/svg?seed=IlloJuan'">
+                    <div class="post-info">
+                        <span class="username">IlloJuan</span> <span class="action-text">comentó</span>
+                        <span class="time-text">Hace 1 hora</span>
+                    </div>
+                </div>
+                <div class="post-content-box" style="border-left-color: #facc15;">
+                    Oye alguien sabe donde hay una papelera de pilas cerca de la UA??? 🔋🤔
+                </div>
+                <div class="post-actions">
+                    <i class="fa-solid fa-heart action-icon" onclick="toggleLike(this)"></i>
+                    <i class="fa-solid fa-comment action-icon" onclick="toggleComments(this)"></i>
+                    <i class="fa-solid fa-share-nodes action-icon"></i> 
+                    <span class="likes-text">1 respuesta</span>
+                </div>
+                
+                <div class="replies-container">
+                    <div class="post-reply">
+                        <div class="post-header">
+                            <img src="alexperfil.jpg" class="post-avatar" alt="Alex" onerror="this.src='https://i.pravatar.cc/150?u=alex'">
+                            <div class="post-info">
+                                <span class="username">Alexrodriigo_</span> <span class="action-text">respondió</span>
+                                <span class="time-text">Hace 55 min</span>
+                            </div>
+                        </div>
+                        <div class="comment-text">Cerca de la biblio me suena que había una papelera de pilas</div>
+                        <div class="post-actions" style="margin-top: 5px;">
+                            <i class="fa-solid fa-heart action-icon" onclick="toggleLike(this)"></i>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="post-content-box">
-                Si estás interesado en alguno de nuestros gatitos: Contacta por WhatsApp o mediante <a href="#" class="post-link">adopta@gatos.com</a>
-            </div>
-            <div class="post-actions">
-                <i class="fa-solid fa-heart action-icon" onclick="toggleLike(this)"></i>
-                <i class="fa-solid fa-comment action-icon"></i>
-                <i class="fa-solid fa-share-nodes action-icon"></i>
-                <span class="likes-text">Manu34 y 6 más</span>
-            </div>
-        </div>
 
-        <div class="suggestions-section">
-            <div class="section-title">Gente que quizás conozcas</div>
+            <div class="post glass-card">
+                <div class="post-header">
+                    <img src="adaperfil.jpg" class="post-avatar" alt="Ada" onerror="this.src='https://i.pravatar.cc/150?u=ada'">
+                    <div class="post-info">
+                        <span class="username">@adaagratoo_</span> <span class="action-text">compartió una foto</span>
+                        <span class="time-text">Hace 2 horas</span>
+                    </div>
+                </div>
+                <div class="post-content-box" style="background:transparent; padding:0 0 10px 0; border:none;">
+                    Para q veáis lo que hemos recogido hoy en la Playa del Postiguet, flipas. 😱🚬
+                </div>
+                <img src="colillas.png" class="post-image" alt="Limpieza playa">
+                
+                <div class="post-actions">
+                    <i class="fa-solid fa-heart action-icon" onclick="toggleLike(this)"></i>
+                    <i class="fa-solid fa-comment action-icon" onclick="toggleComments(this)"></i>
+                    <i class="fa-solid fa-share-nodes action-icon"></i> 
+                    <span class="likes-text">2 respuestas</span>
+                </div>
+
+                <div class="replies-container">
+                    <div class="post-reply">
+                        <div class="post-header">
+                            <img src="melanyperfil.jpg" class="post-avatar" alt="Melany" onerror="this.src='https://i.pravatar.cc/150?u=melany'">
+                            <div class="post-info">
+                                <span class="username">@mmchellx_av</span> <span class="action-text">respondió</span>
+                                <span class="time-text">Hace 1 hora</span>
+                            </div>
+                        </div>
+                        <div class="comment-text">Luego los niños juegan en la arena, pobrecitos...</div>
+                        <div class="post-actions" style="margin-top: 5px;">
+                            <i class="fa-solid fa-heart action-icon" onclick="toggleLike(this)"></i>
+                        </div>
+                    </div>
+
+                    <div class="post-reply">
+                        <div class="post-header">
+                            <img src="danielaperfil.jpg" class="post-avatar" alt="Daniela" onerror="this.src='https://i.pravatar.cc/150?u=daniela'">
+                            <div class="post-info">
+                                <span class="username">@danielagp_10</span> <span class="action-text">respondió</span>
+                                <span class="time-text">Hace 30 min</span>
+                            </div>
+                        </div>
+                        <div class="comment-text">Cuando volvéis a quedar para recoger basura de la playa???</div>
+                        <div class="post-actions" style="margin-top: 5px;">
+                            <i class="fa-solid fa-heart action-icon" onclick="toggleLike(this)"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="post glass-card">
+                <div class="post-header">
+                    <img src="https://i.pravatar.cc/150?u=sun" class="post-avatar">
+                    <div class="post-info">
+                        <span class="username">Expertos_reciclaje</span> <span class="action-text">agregó una foto</span>
+                        <span class="time-text">Hace 3 horas</span>
+                    </div>
+                </div>
+                <img src="inicio1.jpg" class="post-image" onerror="this.src='https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?q=80&w=2070&auto=format&fit=crop'"> 
+                <div class="post-actions">
+                    <i class="fa-solid fa-heart action-icon" onclick="toggleLike(this)"></i>
+                    <i class="fa-solid fa-comment action-icon" onclick="toggleComments(this)"></i>
+                    <i class="fa-solid fa-share-nodes action-icon"></i> <span class="likes-text">SaraRuiz y 8 más</span>
+                </div>
+            </div>
+
+            <div id="no-results-feed">
+                <i class="fa-solid fa-magnifying-glass" style="margin-bottom:10px; font-size:20px;"></i><br>
+                No se encontraron publicaciones.
+            </div>
+
+        </div> <div class="suggestions-section">
+            <div class="section-title">¡Únete a las comunidades de tu zona!</div>
             <div class="carousel">
                 <div class="suggestion-card">
-                    <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=2070&auto=format&fit=crop" class="suggestion-img">
-                    <div class="suggestion-name">@RubyExplorer</div>
+                    <img src="UA.png" class="suggestion-img" onerror="this.src='https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=2070&auto=format&fit=crop'">
+                    <div class="suggestion-name">EcoUA</div>
                 </div>
                 <div class="suggestion-card">
-                    <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=1976&auto=format&fit=crop" class="suggestion-img">
-                    <div class="suggestion-name">@ClaraFit</div>
+                    <img src="playas.png" class="suggestion-img" onerror="this.src='https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=2073&auto=format&fit=crop'">
+                    <div class="suggestion-name">Playas sin humo</div>
                 </div>
                 <div class="suggestion-card">
-                    <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=1974&auto=format&fit=crop" class="suggestion-img">
-                    <div class="suggestion-name">@Sam_Natura</div>
+                    <img src="inforeciclaje.png" class="suggestion-img" onerror="this.src='https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?q=80&w=2070&auto=format&fit=crop'">
+                    <div class="suggestion-name">InfoReciclaje</div>
                 </div>
                  <div class="suggestion-card">
-                    <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1976&auto=format&fit=crop" class="suggestion-img">
-                    <div class="suggestion-name">@EcoWarrior</div>
+                    <img src="econoticias.png" class="suggestion-img" onerror="this.src='https://images.unsplash.com/photo-1504711434969-e33886168f5c?q=80&w=2070&auto=format&fit=crop'">
+                    <div class="suggestion-name">EcoNoticias</div>
                 </div>
             </div>
         </div>
@@ -394,16 +513,172 @@ body.dark-theme .desc {
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+// Función de Filtrado de Publicaciones
+window.filtrarFeed = function() {
+    const input = document.getElementById('search-input');
+    const filter = input.value.toUpperCase().trim();
+    const feedContainer = document.getElementById('feed-container');
+    const posts = feedContainer.getElementsByClassName('post');
+    const noResults = document.getElementById('no-results-feed');
+    let visibleCount = 0;
 
+    for (let i = 0; i < posts.length; i++) {
+        // Busca en el nombre de usuario y en el contenido del texto
+        const usernameEl = posts[i].querySelector('.username');
+        const contentEl = posts[i].querySelector('.post-content-box'); 
+        
+        // (Opcional) Si tienes posts solo con foto, puedes añadirles un div oculto con clase .search-content con palabras clave
+        const hiddenContentEl = posts[i].querySelector('.search-content'); 
 
-        // ANIMACIÓN ME GUSTA
+        let textToSearch = "";
+        if (usernameEl) textToSearch += usernameEl.textContent + " ";
+        if (contentEl) textToSearch += contentEl.textContent + " ";
+        if (hiddenContentEl) textToSearch += hiddenContentEl.textContent;
+
+        if (textToSearch.toUpperCase().indexOf(filter) > -1) {
+            posts[i].style.display = ""; // Mostrar
+            visibleCount++;
+        } else {
+            posts[i].style.display = "none"; // Ocultar
+        }
+    }
+
+    // Mostrar mensaje si no hay coincidencias
+    if (visibleCount === 0 && filter !== "") {
+        noResults.style.display = 'block';
+    } else {
+        noResults.style.display = 'none';
+    }
+}
+
         window.toggleLike = function(element) {
             element.classList.toggle('heart-active');
         }
 
+        // --- FUNCIÓN PARA MOSTRAR/OCULTAR COMENTARIOS ---
+        window.toggleComments = function(icon) {
+            const post = icon.closest('.post');
+            const replies = post.querySelector('.replies-container');
+            if (replies) {
+                if (replies.style.display === 'block') {
+                    replies.style.display = 'none';
+                } else {
+                    replies.style.display = 'block';
+                }
+            }
+        }
+
+        // --- LÓGICA DE PUBLICACIÓN ---
+        let currentUserName = "Usuario";
+        let currentUserAvatar = "https://api.dicebear.com/7.x/avataaars/svg?seed=User";
+        let currentPostType = 'comentario';
+
+        window.toggleMenu = function() {
+            document.getElementById('main-menu').classList.toggle('show');
+        }
+
+        window.abrirModal = function(tipo) {
+            currentPostType = tipo;
+            const modal = document.getElementById('publish-modal');
+            const title = document.getElementById('modal-title-text');
+            const imgArea = document.getElementById('img-upload-area');
+            const textarea = document.getElementById('post-text');
+
+            toggleMenu(); 
+            
+            textarea.value = ""; 
+            document.getElementById('preview-img').style.display = 'none';
+            document.getElementById('upload-placeholder').style.display = 'block';
+            document.getElementById('file-input').value = "";
+
+            if (tipo === 'post') {
+                title.textContent = "Crear Post con Foto";
+                imgArea.classList.add('show');
+            } else {
+                title.textContent = "Escribir Comentario";
+                imgArea.classList.remove('show');
+            }
+            modal.classList.add('active');
+        }
+
+        window.cerrarModal = function() {
+            document.getElementById('publish-modal').classList.remove('active');
+        }
+
+        window.previewImage = function(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.getElementById('preview-img');
+                    img.src = e.target.result;
+                    img.style.display = 'block';
+                    document.getElementById('upload-placeholder').style.display = 'none';
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        window.publicarContenido = function() {
+            const text = document.getElementById('post-text').value;
+            const imgSrc = document.getElementById('preview-img').src;
+            const hasImage = currentPostType === 'post' && document.getElementById('file-input').files.length > 0;
+
+            if (!text && !hasImage) {
+                alert("Escribe algo o sube una foto 🌱");
+                return;
+            }
+
+            const feed = document.getElementById('feed-container');
+            const newPost = document.createElement('div');
+            newPost.className = 'post glass-card';
+
+            let contentHTML = '';
+            if (hasImage) {
+                contentHTML = `
+                    <div class="post-header">
+                        <img src="${currentUserAvatar}" class="post-avatar">
+                        <div class="post-info">
+                            <span class="username">${currentUserName}</span> <span class="action-text">compartió un momento</span>
+                            <span class="time-text">Ahora mismo</span>
+                        </div>
+                    </div>
+                    <div class="post-content-box" style="background:transparent; padding:0 0 10px 0; border:none;">
+                        ${text}
+                    </div>
+                    <img src="${imgSrc}" class="post-image">
+                `;
+            } else {
+                contentHTML = `
+                    <div class="post-header">
+                        <img src="${currentUserAvatar}" class="post-avatar">
+                        <div class="post-info">
+                            <span class="username">${currentUserName}</span> <span class="action-text">comentó</span>
+                            <span class="time-text">Ahora mismo</span>
+                        </div>
+                    </div>
+                    <div class="post-content-box" style="border-left-color: #4ade80;">
+                        ${text}
+                    </div>
+                `;
+            }
+
+            contentHTML += `
+                <div class="post-actions">
+                    <i class="fa-solid fa-heart action-icon" onclick="toggleLike(this)"></i>
+                    <i class="fa-solid fa-comment action-icon"></i>
+                    <i class="fa-solid fa-share-nodes action-icon"></i>
+                    <span class="likes-text">Sé el primero en responder</span>
+                </div>
+            `;
+
+            newPost.innerHTML = contentHTML;
+            feed.prepend(newPost);
+            cerrarModal();
+        }
+
         // FIREBASE
         const firebaseConfig = {
-            apiKey: "AIzaSyA5lPDFaH8W-miDJHB3sDKdD5fiJt8d9-8",
+            apiKey: "AIzaSyDeIyDCNlBnBIDpcvLfsjiqjEX7Kk8561g",
             authDomain: "ecconect-ae607.firebaseapp.com",
             projectId: "ecconect-ae607",
             storageBucket: "ecconect-ae607.firebasestorage.app",
@@ -416,7 +691,6 @@ body.dark-theme .desc {
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // CARGAR NOMBRE USUARIO
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 try {
@@ -425,13 +699,16 @@ body.dark-theme .desc {
 
                     if (docSnap.exists()) {
                         const data = docSnap.data();
+                        currentUserName = data.nombre;
                         document.getElementById("user-greeting").textContent = "¡Hola, " + data.nombre + "!";
+                        currentUserAvatar = `https://api.dicebear.com/7.x/avataaars/svg?seed=${data.nombre}`;
+                        document.getElementById("user-avatar-header").src = currentUserAvatar;
                     }
                 } catch (e) {
                     console.log("Error cargando perfil", e);
                 }
             } else {
-                window.location.href = "index.html"; // Protección: si no hay login, fuera
+                window.location.href = "index.html"; 
             }
         });
     </script>
